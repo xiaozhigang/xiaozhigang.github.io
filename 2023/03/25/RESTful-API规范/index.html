@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>DDD分层架构规范 | Hexo</title>
-  <meta name="keywords" content=" DDD ">
-  <meta name="description" content="DDD分层架构规范 | Hexo">
+  <title>RESTful-API规范 | Hexo</title>
+  <meta name="keywords" content=" RESTful-API ">
+  <meta name="description" content="RESTful-API规范 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="分层架构图 简述 Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里； Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理 Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算； I">
 <meta property="og:type" content="article">
@@ -392,9 +392,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-DDD分层架构规范" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-RESTful-API规范" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">DDD分层架构规范</h1>
+        <h1 class="article-title">RESTful-API规范</h1>
     
     <div class="article-meta">
         
@@ -412,14 +412,14 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">DDD</a>
+            <a class="color2">RESTful-API</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 21:25:30'>2024-03-25 20:09</time>
+            Created At : <time class="date" title='Updated At: 2024-03-25 22:48:06'>2023-03-25 22:25</time>
         
     </div>
     <div class="article-meta">
@@ -441,7 +441,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">分层架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-text">分层说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%A0%B9%E5%92%8C%E5%AE%9E%E4%BD%93"><span class="toc-text">聚合根和实体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1"><span class="toc-text">领域服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">传输对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">无状态</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#REST"><span class="toc-text">REST</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E9%A3%8E%E6%A0%BC"><span class="toc-text">接口风格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97%E5%92%8C%E7%89%88%E6%9C%AC%E8%AF%B4%E6%98%8E"><span class="toc-text">模块和版本说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AC%E5%85%B1%E5%8F%82%E6%95%B0"><span class="toc-text">公共参数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Headers"><span class="toc-text">Headers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Cookies"><span class="toc-text">Cookies</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#JWT-OAuth2"><span class="toc-text">JWT &amp; OAuth2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90"><span class="toc-text">权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E7%A0%81%E8%AF%B4%E6%98%8E"><span class="toc-text">状态码说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-text">参数传递</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6Rate-Limiting"><span class="toc-text">速率限制Rate Limiting</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">安全注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7"><span class="toc-text">测试工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E6%A1%A3%E7%94%9F%E6%88%90%E5%B7%A5%E5%85%B7"><span class="toc-text">文档生成工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">调用示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#API%E6%A8%A1%E5%9D%97%E4%BF%A1%E6%81%AF%E8%8E%B7%E5%8F%96"><span class="toc-text">API模块信息获取</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -457,51 +457,144 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</li>
-<li>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</li>
-<li>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</li>
-<li>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</li>
+        <h2 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h2><hr>
+<p><em>RESTful本身是一种风格而不是规范，本文为该风格的规范实现的最佳实践，本文档详细说明了HTTP RESTful API的定义和使用规范，作为接口调用者和实现者的重要参考。</em></p>
+<h2 id="接口风格"><a href="#接口风格" class="headerlink" title="接口风格"></a>接口风格</h2><p>遵循RESTful设计风格，同时控制复杂度及易于使用，仅遵循大部分原则。 遵循原则：</p>
+<ul>
+<li>使用https协议</li>
+<li>版本号放入URL或Header</li>
+<li>只提供json返回格式</li>
+<li>post,put上使用json作为输入</li>
+<li>使用http状态码作为错误提示</li>
+<li>Path（路径）尽量使用名词，不使用动词，把每个URL看成一个资源</li>
+<li>使用HTTP动词（GET,POST,PUT,DELETE）作为action操作URL资源</li>
+<li>过滤信息<ul>
+<li>limit：指定返回记录数量</li>
+<li>offset：记录开始位置</li>
+<li>direction：请求数据的方向，取值prev-上一页数据；next-下一页数据</li>
+<li>page：第几页</li>
+<li>per_page：每页条数</li>
+<li>total_count：总记录数</li>
+<li>total_pages：总页数，等于page时，表示当前是最后一页</li>
+<li>sort：column1,column2排序字段</li>
+<li>orderby：排序规则，desc或asc</li>
+<li>q：搜索关键字（uri encode之后的）</li>
+</ul>
+</li>
+<li>返回结果<ul>
+<li>GET：返回资源对象</li>
+<li>POST：返回新生成的资源对象</li>
+<li>PUT：返回完整的资源对象</li>
+<li>DELETE：返回一个空文档</li>
+</ul>
+</li>
+<li>速率限制<ul>
+<li>X-RateLimit-Limit: 每个IP每个时间窗口最大请求数</li>
+<li>X-RateLimit-Remaining: 当前时间窗口剩余请求数</li>
+<li>X-RateLimit-Reset: 下次更新时间窗口的时间（UNIX时间戳），达到下个时间窗口时，Remaining恢复为Limit</li>
+</ul>
+</li>
+</ul>
+<p>未遵循原则：</p>
+<ul>
+<li>Hypermedia API（HATEOAS），通过接口URL获取接口地址及帮助文档地址信息</li>
+<li>限制返回值的域，fields&#x3D;id,subject,customer_name</li>
+<li>缓存，使用ETag和Last-Modified</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.github.com/v3/">GitHub api </a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html">ruanyifeng blog</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api">best-practices-for-a-pragmatic-restful-api</a></li>
+</ul>
+<h2 id="模块和版本说明"><a href="#模块和版本说明" class="headerlink" title="模块和版本说明"></a>模块和版本说明</h2><p>接口模块相互对立且有版本管理，模块名作为APP配置项进行存储，每个模块的版本号version和endpoint在应用初始化时调用api模块信息接口（通过传递客户端应用名称和版本号获取各个API模块的endpoint和version）获取并存储。</p>
+<ul>
+<li>示例模块及最新版本号：</li>
+</ul>
+<p>模块模块用途最新版本号account帐户v1sms短信v1open一些开放接口，不需要公共参数v1</p>
+<h2 id="公共参数"><a href="#公共参数" class="headerlink" title="公共参数"></a>公共参数</h2><h4 id="Headers"><a href="#Headers" class="headerlink" title="Headers"></a>Headers</h4><p>公共请求参数是指每个接口都可能需要传递的参数，公共参数通过header传递。</p>
+<p>参数是否必须说明及header格式app所有接口必须请求客户端应用标识，取值<code>*-ios、*-android、*-pc、*-h5</code><br>header格式：<br><code>X-Co-App: $app</code>user_idApp登录后所有接口都传，<br>Web通过session机制获取用户标识<br>header格式：<br><code>Authorization: CoAPI base64(user_id:token)</code>tokenApp登录后所有接口都传，<br>Web通过session机制获取授权访问令牌<br>header格式：<br><code>Authorization: CoAPI base64(user_id:token)</code></p>
+<ul>
+<li>Web应用通过cookies传递session id，user_id和token无需传递，接口会从session自动获取；</li>
+<li>同一token值在App和Web各应用间通用（token即为session id）；</li>
+<li>APP修改user-agent，在原有user-agent的尾部添加<code>$app/$version</code>和<code>NetType/$value</code>。如：<ul>
+<li><code>Dalvik/2.1.0 (Linux; U; Android 6.0.1; MI 4LTE MIUI/V7.5.3.0.MXGCNDE) $app-android/3.0.0 NetType/4G</code></li>
+<li><code>Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_2 like Mac OS X) AppleWebKit/603.2.4 (KHTML, like Gecko) $app-ios/3.0.0 NetType/WIFI</code></li>
+</ul>
+</li>
+<li>app取值及释义示例</li>
+</ul>
+<p>app取值客户端名称【域名】admin-pc管理中心PC网页版【admin.url.com】admin-h5管理中心手机网页版【admin.url.com】admin-ios管理中心iOS版admin-android管理中心Android版</p>
+<h4 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h4><ul>
+<li>用于告知服务端是否支持Webp的Cookie：cookie name是<code>supportWebp</code>，取值是1（支持）和0（不支持），未传递时服务端默认取值为0。</li>
+<li>Webview植入Session的Cookie：</li>
+</ul>
+<h4 id="JWT-OAuth2"><a href="#JWT-OAuth2" class="headerlink" title="JWT &amp; OAuth2"></a>JWT &amp; OAuth2</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://jwt.io/">Json Web Token</a>可用于替代session-cookie机制。但会存在一些问题，比如为过期token强制失效问题（用户修改了密码后，无法强制其他的终端token全部失效）。</li>
+<li><a target="_blank" rel="noopener" href="https://oauth.net/2/">OAuth2</a>是授权其他开发者访问自己应用有限权限的授权机制。</li>
+</ul>
+<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><ul>
+<li>权限分为<ul>
+<li><code>none</code>：无需任何授权；</li>
+<li><code>token</code>：需要用户登录授权，可通过<code>header Authorization</code>和<code>Cookie CoSID</code>传递；</li>
+<li><code>admintoken</code>：需要管理员登录授权，可通过<code>header Authorization</code>和<code>Cookie CoCPSID</code>传递；</li>
+<li><code>token || admintoken</code>：用户登录授权或管理员登录授权都可以；<img src="/../images/RESTful-API/token.png" alt="DDD"></li>
+<li><code>sign</code>：需要签名，一般用于服务端内部相互调用。</li>
+</ul>
+</li>
+</ul>
+<h2 id="状态码说明"><a href="#状态码说明" class="headerlink" title="状态码说明"></a>状态码说明</h2><p>正确<br>接口正常访问情况下，服务器返回2××的HTTP状态码。</p>
+<p>HTTP状态码200 OK - 表示已在响应中发出、资源更改成功（GET、PUT）201 Created - 新资源被创建（POST）204 No Content - 资源被删除（DELETE）</p>
+<p>错误<br>当用户访问接口出错时，服务器会返回给一个合适的4××或者5××的HTTP状态码；以及一个application&#x2F;json格式的消息体，消息体中包含错误码code和错误说明message。</p>
+<ul>
+<li>5××错误(<code>500=&lt;status code</code>)为服务器或程序出错，客户端只需要提示“服务异常，请稍后重试”即可，该类错误不在每个接口中列出。</li>
+<li>4××错误(<code>400=&lt;status code&lt;500</code>)为客户端的请求错误，需要根据具体的code做相应的提示和逻辑处理，message仅供开发时参考，不建议作为用户提示。</li>
+<li>部分错误示例：</li>
+</ul>
+<p>codemessageHTTP状态码InvalidToken未登录或授权过期，请登录401 UnauthorizedValidationError输入字段验证出错，缺少字段或字段格式有误422 Unprocessable EntityAccountNotExist账户名不存在404 Not FoundInvalidPassword密码错误401 UnauthorizedNotFound请求的资源不存在404 Not FoundAccountHasExist账户名已经存在409 ConflictMobileHasBinded手机号已经绑定其他账户409 ConflictInvalidSign参数签名验证未通过403 ForbiddenInvalidSMSCode短信验证码错误403 ForbiddenExpiredSMSCode过期的短信验证码403 ForbiddenFrequencyLimit发送过于频繁，请稍后再试403 ForbiddenTimesExceeded达到最大发送次数限制，请明天再试403 ForbiddenVerifyTimesExceeded达到最大校验次数，请明天再试403 ForbiddenRateLimitExceeded接口调用次数超过限制，请稍后再试429 Too Many Requests   InternalError服务异常，请稍后再试500 Internal Server Error</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://baike.baidu.com/item/HTTP%E7%8A%B6%E6%80%81%E7%A0%81">HTTP状态码参考</a><img src="/../images/RESTful-API/http-status.png" alt="DDD"></li>
+</ul>
+<h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><p>遵循RESTful规范，使用了GET, POST, PUT, DELETE共4种请求方法。</p>
+<ol>
+<li>GET：请求资源，返回资源对象</li>
+<li>POST：新建资源，返回新生成的资源对象</li>
+<li>PUT：新建&#x2F;更新资源，返回完整的资源对象</li>
+<li>DELETE：删除资源，返回body为空</li>
 </ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
-</ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
-</ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
 <ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+<li>GET请求不允许有body， 所有参数通过拼接在URL之后传递，所有的请求参数都要进行遵循<a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>的URL Encode。</li>
+<li>DELETE删除单个资源时，资源标识通过path传递，批量删除时，通过在body中传递JSON。</li>
+<li>POST, PUT请求，所有参数通过JSON传递，<em>可选的请求参数，只传有值的，无值的不要传递</em>，contentType为application&#x2F;json。</li>
 </ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
-<ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
+<p><em>4种请求动作中，GET、PUT、DELETE是幂等的；只有POST是非幂等的。幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。</em> 是非幂等是判断接口使用POST还是PUT的决定条件</p>
+<p>注意： APP端获取json数据时，对于数值类型字段必须以数值类型转换，无论传递过来的值是否带引号。<img src="/../images/RESTful-API/success.png" alt="DDD"><img src="/../images/RESTful-API/success-channel.png" alt="DDD"></p>
+<h2 id="速率限制Rate-Limiting"><a href="#速率限制Rate-Limiting" class="headerlink" title="速率限制Rate Limiting"></a>速率限制Rate Limiting</h2><ul>
+<li>为了防止API被恶意调用，对API调用进行速率限制。</li>
+<li>速率限制为每IP每15分钟5000次（dev&#x2F;qa为10W）调用（15分钟是一个时间窗口）。</li>
+<li>限制是针对所有接口模块一起计算的（Redis key为<code>APIRL:&#123;IP&#125;</code>），暂时没有特殊的模块或单个接口（未来可能有）。</li>
+<li>你可以通过每个接口返回的HTTP headers了解当前速率限制的情况:<ul>
+<li>X-RateLimit-Limit: 每个IP每个时间窗口最大请求数</li>
+<li>X-RateLimit-Remaining: 当前时间窗口剩余请求数</li>
+<li>X-RateLimit-Reset: 下次更新时间窗口的时间（UNIX时间戳），达到下个时间窗口时，Remaining恢复为Limit</li>
 </ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
+</li>
+<li>超出速率限制，返回以下错误<img src="/../images/RESTful-API/rate-limit.png" alt="DDD"></li>
 </ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
+<h2 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h2><ul>
+<li>用户登录后用户的token；aliyun OSS的bucket、AccessKey ID与AccessKey secret；微视频的appid、sign、bucket；这些关键数据通过调用接口获得，需要在客户端以安全的方式存储。</li>
+<li>音频视频在APP内的存储，不允许被拷贝（即使越狱或root后拿走也无法使用）。</li>
+</ul>
+<h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><p>推荐Chrome浏览器插件Postman作为接口测试工具， <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop">Postman下载地址</a><br><img src="/../images/RESTful-API/postman.png" alt="DDD"></p>
+<h2 id="文档生成工具"><a href="#文档生成工具" class="headerlink" title="文档生成工具"></a>文档生成工具</h2><ul>
+<li>生成的工具为apidoc，详细阅读官方文档：<a target="_blank" rel="noopener" href="http://apidocjs.com/">http://apidocjs.com</a></li>
+</ul>
+<h2 id="调用示例"><a href="#调用示例" class="headerlink" title="调用示例"></a>调用示例</h2><ul>
+<li>伪代码<img src="/../images/RESTful-API/code.png" alt="DDD"></li>
+<li>PHP<img src="/../images/RESTful-API/php.png" alt="DDD"></li>
+</ul>
+<h2 id="API模块信息获取"><a href="#API模块信息获取" class="headerlink" title="API模块信息获取"></a>API模块信息获取</h2><ul>
+<li>App配置文件中仅存储api模块名，App初始化时请求<a target="_blank" rel="noopener" href="https://apidev.baobaobooks.net/docs/open/#api-basicGroup-get_basic_apis">获取api模块信息</a>，获取各个api模块的信息（endpoint和version）。</li>
 </ul>
 
       
