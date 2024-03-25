@@ -91,14 +91,62 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/images/tapd_39034059_1621152827_39.png"></p>
+<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
+<li>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</li>
+<li>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</li>
+<li>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</li>
+<li>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</li>
+</ol>
+<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
+<li>APP层采用CQE模型，查询和命令分离</li>
+<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
+<li>AppService和DomainService均为无状态服务</li>
+<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
+<li>DomainService封装所有跨实体的业务逻辑</li>
+<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+</ul>
+<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
+<li>按聚合根分包，和包名一样的实体为聚合根</li>
+<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
+<li>聚合根的一致性由自己保障</li>
+<li>跨实体的操作放到领域服务中</li>
+</ul>
+<blockquote>
+<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
+</blockquote>
+<ul>
+<li>实体都有自己的唯一标识通常</li>
+<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+</ul>
+<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
+<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
+</blockquote>
+<ul>
+<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
+<li>放在实体的静态方法上有悖DDD</li>
+<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
+<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
+</ul>
+<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
+<li>DTO：接受Controller层发来的请求，返回结果</li>
+<li>Entity ：将DTO转换为要操作的领域层对象</li>
+</ul>
+<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
+<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
+<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
+<li>无状态服务的优势在于可以很方便地水平伸缩</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/" data-id="clu6yjo4z000050wv39s6910p" data-title="DDD分层架构规范" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/" data-id="clu6yvi2100003gwv8mld6vw3" data-title="DDD分层架构规范" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li></ul>
+
     </footer>
   </div>
   
@@ -146,7 +194,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2024/03/25/hello-world/" data-id="clu6yjo59000150wve7vkc09t" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      <a data-url="http://example.com/2024/03/25/hello-world/" data-id="clu6yvi2800013gwv52gcbc38" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
       
       
@@ -168,9 +216,23 @@
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/DDD/" rel="tag">DDD</a></li></ul>
+    </div>
+  </div>
+
 
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/DDD/" style="font-size: 10px;">DDD</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
