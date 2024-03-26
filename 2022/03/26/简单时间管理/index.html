@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>DDD分层架构规范 | Hexo</title>
-  <meta name="keywords" content=" DDD ">
-  <meta name="description" content="DDD分层架构规范 | Hexo">
+  <title>简单时间管理 | Hexo</title>
+  <meta name="keywords" content=" 效率 ">
+  <meta name="description" content="简单时间管理 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="分层架构图 简述 Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里； Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理 Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算； I">
 <meta property="og:type" content="article">
@@ -449,34 +449,26 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-DDD分层架构规范" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-简单时间管理" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">DDD分层架构规范</h1>
+        <h1 class="article-title">简单时间管理</h1>
     
     <div class="article-meta">
         
         
         
-        <span class="book">
-            <i class="iconfont icon-category"></i>
-            
-            
-            <a  data-rel="JAVA">JAVA</a>
-            
-        </span>
-        
         
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">DDD</a>
+            <a class="color3">效率</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 21:25:30'>2024-03-25 20:09</time>
+            Created At : <time class="date" title='Updated At: 2024-03-26 08:04:31'>2022-03-26 07:59</time>
         
     </div>
     <div class="article-meta">
@@ -498,7 +490,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">分层架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-text">分层说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%A0%B9%E5%92%8C%E5%AE%9E%E4%BD%93"><span class="toc-text">聚合根和实体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1"><span class="toc-text">领域服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">传输对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">无状态</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86"><span class="toc-text">时间管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E6%84%9F"><span class="toc-text">目标感</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%9D%97"><span class="toc-text">时间块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%BA%E5%8C%96%E6%97%A5%E7%A8%8B"><span class="toc-text">固化日程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E5%92%8C%E6%96%B9%E6%B3%95%E8%AE%BA"><span class="toc-text">工具和方法论</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -514,52 +506,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</li>
-<li>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</li>
-<li>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</li>
-<li>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</li>
+        <h1 id="时间管理"><a href="#时间管理" class="headerlink" title="时间管理"></a>时间管理</h1><h2 id="目标感"><a href="#目标感" class="headerlink" title="目标感"></a>目标感</h2><ol>
+<li>给每件事情设定deadline</li>
+<li>给长期的事情设置周期循环事项</li>
 </ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+<h2 id="时间块"><a href="#时间块" class="headerlink" title="时间块"></a>时间块</h2><ul>
+<li>30分钟刻度划分<br>一般管理人员的时间快划分可以到30分钟或者1小时</li>
+<li>半天刻度划分<br>研发人员会按照半天来划分时间，涉及到写代码、用例、测试计划、编译、部署等具体工作，需要时间来思考及实现，所以有效的时间块划分是半天或者一天。</li>
 </ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
-</ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
+<h2 id="固化日程"><a href="#固化日程" class="headerlink" title="固化日程"></a>固化日程</h2><p>固化日程即养成好的习惯，使得时间利用率高，事情处理效率高。<br>有些固定模板可套用，如：</p>
 <ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+<li><strong>上班后&#x2F;下班前处理今日事项和明日规划</strong></li>
+<li><strong>早会及总结</strong></li>
+<li><strong>上午做需求评审，下午写代码，晚上做分享</strong></li>
 </ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
-<ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
-</ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
-</ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
-</ul>
+<p>个人日程示例：<br>    <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">8.45-9.00：查看日程，规划今天事务</span><br><span class="line">9.15-9.30： 早会</span><br><span class="line">9.30-9.45：整理项目的进度和风险</span><br><span class="line">10.00-11.00： 检视930版本需求</span><br><span class="line">11.00-11.50： XX技术方案/需求评审会议</span><br><span class="line">———————————————————</span><br><span class="line">1.30-3.00：写代码</span><br><span class="line">3.15-6.00： 接口设计</span><br><span class="line">7.00-8.45：  小组分享</span><br><span class="line">8.45-9.00： 今日事项总结，明日事项规划</span><br></pre></td></tr></table></figure></p>
+<h2 id="工具和方法论"><a href="#工具和方法论" class="headerlink" title="工具和方法论"></a>工具和方法论</h2><p>工具：microsoft todo、滴答清单、calendar<br>方法论：GTD(Get things done)</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>

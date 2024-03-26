@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>DDD分层架构规范 | Hexo</title>
-  <meta name="keywords" content=" DDD ">
-  <meta name="description" content="DDD分层架构规范 | Hexo">
+  <title>Git仓库的子目录独立成新仓库 | Hexo</title>
+  <meta name="keywords" content=" Git ">
+  <meta name="description" content="Git仓库的子目录独立成新仓库 | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="分层架构图 简述 Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里； Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理 Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算； I">
 <meta property="og:type" content="article">
@@ -449,34 +449,26 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-DDD分层架构规范" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Git仓库的子目录独立成新仓库" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">DDD分层架构规范</h1>
+        <h1 class="article-title">Git仓库的子目录独立成新仓库</h1>
     
     <div class="article-meta">
         
         
         
-        <span class="book">
-            <i class="iconfont icon-category"></i>
-            
-            
-            <a  data-rel="JAVA">JAVA</a>
-            
-        </span>
-        
         
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">DDD</a>
+            <a class="color4">Git</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 21:25:30'>2024-03-25 20:09</time>
+            Created At : <time class="date" title='Updated At: 2024-03-26 19:23:47'>2023-05-13 08:25</time>
         
     </div>
     <div class="article-meta">
@@ -498,7 +490,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">分层架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-text">分层说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%A0%B9%E5%92%8C%E5%AE%9E%E4%BD%93"><span class="toc-text">聚合根和实体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1"><span class="toc-text">领域服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">传输对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">无状态</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9C%80%E6%B1%82%E6%8F%8F%E8%BF%B0"><span class="toc-text">需求描述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%96%BD%E6%AD%A5%E9%AA%A4"><span class="toc-text">实施步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Clone%E5%8E%9F%E6%9C%89%E4%BB%93%E5%BA%93%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">1. Clone原有仓库到本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9C%A8%E6%9C%AC%E5%9C%B0%E5%88%9B%E5%BB%BA%E9%9C%80%E8%A6%81%E4%BF%9D%E7%95%99%E7%9A%84%E5%88%86%E6%94%AF"><span class="toc-text">2. 在本地创建需要保留的分支</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%8F%96%E6%B6%88%E8%BF%9C%E7%A8%8B%E5%BA%93%E7%9A%84%E5%85%B3%E8%81%94"><span class="toc-text">3. 取消远程库的关联</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%88%A0%E9%99%A4%E6%89%80%E6%9C%89tag"><span class="toc-text">4. 删除所有tag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E4%BF%9D%E7%95%99%E9%9C%80%E8%A6%81%E7%9A%84%E7%9B%AE%E5%BD%95%E5%92%8Cgit%E5%8E%86%E5%8F%B2"><span class="toc-text">5. 保留需要的目录和git历史</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%B8%85%E7%90%86%E4%BB%93%E5%BA%93%E5%B9%B6%E5%87%8F%E5%B0%8F%E4%BD%93%E7%A7%AF"><span class="toc-text">6. 清理仓库并减小体积</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E5%85%B3%E8%81%94%E5%88%B0%E6%96%B0%E7%9A%84%E8%BF%9C%E7%A8%8B%E5%BA%93-%E7%A9%BA%E4%BB%93%E5%BA%93-%EF%BC%8C%E5%B9%B6%E6%8E%A8%E9%80%81%E4%BB%A3%E7%A0%81%E5%88%B0%E8%BF%9C%E7%AB%AF"><span class="toc-text">7. 关联到新的远程库(空仓库)，并推送代码到远端</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -514,52 +506,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</li>
-<li>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</li>
-<li>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</li>
-<li>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</li>
-</ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
-</ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
-</ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
-<ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
-</ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
-<ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
-</ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
-</ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
-</ul>
+        <h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
+
+<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>DDD分层架构规范 | Hexo</title>
-  <meta name="keywords" content=" DDD ">
-  <meta name="description" content="DDD分层架构规范 | Hexo">
+  <title>COLA | Hexo</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="COLA | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="分层架构图 简述 Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里； Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理 Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算； I">
 <meta property="og:type" content="article">
@@ -449,34 +449,19 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-DDD分层架构规范" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-COLA" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">DDD分层架构规范</h1>
+        <h1 class="article-title">COLA</h1>
     
     <div class="article-meta">
         
         
         
-        <span class="book">
-            <i class="iconfont icon-category"></i>
-            
-            
-            <a  data-rel="JAVA">JAVA</a>
-            
-        </span>
-        
-        
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color4">DDD</a>
-            
-        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 21:25:30'>2024-03-25 20:09</time>
+            Created At : <time class="date" title='Updated At: 2024-03-26 08:16:18'>2023-08-26 08:10</time>
         
     </div>
     <div class="article-meta">
@@ -498,7 +483,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">分层架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-text">分层说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%A0%B9%E5%92%8C%E5%AE%9E%E4%BD%93"><span class="toc-text">聚合根和实体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1"><span class="toc-text">领域服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">传输对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">无状态</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-text">组件说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E5%85%B3%E7%B3%BB"><span class="toc-text">调用关系</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -514,52 +499,50 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</li>
-<li>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</li>
-<li>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</li>
-<li>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</li>
+        <h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
+<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
+<ol>
+<li>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</li>
+<li>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</li>
+<li>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</li>
+<li>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</li>
 </ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
+<li>gateway是为了防腐</li>
+<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
+<li>第三方服务的调用在Infra层</li>
+<li>为了易于理解可以把Adapter改为Controller</li>
+</ol>
+<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
+<ol>
+<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
+<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
+<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
+</ol>
+<p>调用过程及对象使用</p>
+<ol>
+<li>Client<br>定义如下对象<ul>
+<li>VO(View Object)，Adapter层使用</li>
+<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
+<li>DomainEvent，Infra层发布领域事件使用</li>
+<li>ServiceI，APP层实现该服务对外提供应用API</li>
 </ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
+</li>
+<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
+<li>APP层<br>ServiceImpl接收Command<ul>
+<li>直接&#x2F;间接传给Mapper</li>
+<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
 </ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
-<ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
-</ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
-<ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
-</ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
-</ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
-</ul>
+</li>
+<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
+<li>Infa<ol>
+<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
+<li>调用第三方服务封装DO和Mapper，返回DO</li>
+<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
+<li>DomainEvent的发布</li>
+</ol>
+</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>

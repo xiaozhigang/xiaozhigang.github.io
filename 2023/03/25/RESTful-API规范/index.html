@@ -246,7 +246,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(3)</small>
+                <small>(8)</small>
             
         </div>
     </li>
@@ -286,7 +286,7 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="3">
+<input type="hidden" id="yelog_site_posts_number" value="8">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -333,7 +333,19 @@
     <div class="tag-wrapper">
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>效率</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>DDD</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ELK</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Git</a>
             </li>
         
             <li class="article-tag-list-item">
@@ -366,12 +378,57 @@
         </a>
         
         
+        <a  class="All "
+           href="/2023/10/20/ELK%E6%90%AD%E5%BB%BA/"
+           data-tag="ELK"
+           data-author="" >
+            <span class="post-title" title="ELK搭建">ELK搭建</span>
+            <span class="post-date" title="2023-10-20 18:18:40">2023/10/20</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2023/08/26/COLA/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="COLA">COLA</span>
+            <span class="post-date" title="2023-08-26 08:10:50">2023/08/26</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/"
+           data-tag="Git"
+           data-author="" >
+            <span class="post-title" title="Git仓库的子目录独立成新仓库">Git仓库的子目录独立成新仓库</span>
+            <span class="post-date" title="2023-05-13 08:25:10">2023/05/13</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2023/04/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/"
+           data-tag="Git"
+           data-author="" >
+            <span class="post-title" title="Git分支模型(参考阿里Aone Flow)">Git分支模型(参考阿里Aone Flow)</span>
+            <span class="post-date" title="2023-04-16 15:28:52">2023/04/16</span>
+        </a>
+        
+        
         <a  class="All JAVA "
            href="/2023/03/25/RESTful-API%E8%A7%84%E8%8C%83/"
            data-tag="RESTful-API"
            data-author="" >
             <span class="post-title" title="RESTful-API规范">RESTful-API规范</span>
             <span class="post-date" title="2023-03-25 22:25:37">2023/03/25</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2022/03/26/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/"
+           data-tag="效率"
+           data-author="" >
+            <span class="post-title" title="简单时间管理">简单时间管理</span>
+            <span class="post-date" title="2022-03-26 07:59:42">2022/03/26</span>
         </a>
         
         <div id="no-item-tips">
@@ -419,7 +476,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 22:48:06'>2023-03-25 22:25</time>
+            Created At : <time class="date" title='Updated At: 2024-03-26 08:04:26'>2023-03-25 22:25</time>
         
     </div>
     <div class="article-meta">
@@ -538,7 +595,7 @@
 <li><code>none</code>：无需任何授权；</li>
 <li><code>token</code>：需要用户登录授权，可通过<code>header Authorization</code>和<code>Cookie CoSID</code>传递；</li>
 <li><code>admintoken</code>：需要管理员登录授权，可通过<code>header Authorization</code>和<code>Cookie CoCPSID</code>传递；</li>
-<li><code>token || admintoken</code>：用户登录授权或管理员登录授权都可以；<img src="/../images/RESTful-API/token.png" alt="DDD"></li>
+<li><code>token || admintoken</code>：用户登录授权或管理员登录授权都可以；<img src="/../images/RESTful-API/token.png"></li>
 <li><code>sign</code>：需要签名，一般用于服务端内部相互调用。</li>
 </ul>
 </li>
@@ -553,7 +610,7 @@
 </ul>
 <p>codemessageHTTP状态码InvalidToken未登录或授权过期，请登录401 UnauthorizedValidationError输入字段验证出错，缺少字段或字段格式有误422 Unprocessable EntityAccountNotExist账户名不存在404 Not FoundInvalidPassword密码错误401 UnauthorizedNotFound请求的资源不存在404 Not FoundAccountHasExist账户名已经存在409 ConflictMobileHasBinded手机号已经绑定其他账户409 ConflictInvalidSign参数签名验证未通过403 ForbiddenInvalidSMSCode短信验证码错误403 ForbiddenExpiredSMSCode过期的短信验证码403 ForbiddenFrequencyLimit发送过于频繁，请稍后再试403 ForbiddenTimesExceeded达到最大发送次数限制，请明天再试403 ForbiddenVerifyTimesExceeded达到最大校验次数，请明天再试403 ForbiddenRateLimitExceeded接口调用次数超过限制，请稍后再试429 Too Many Requests   InternalError服务异常，请稍后再试500 Internal Server Error</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="http://baike.baidu.com/item/HTTP%E7%8A%B6%E6%80%81%E7%A0%81">HTTP状态码参考</a><img src="/../images/RESTful-API/http-status.png" alt="DDD"></li>
+<li><a target="_blank" rel="noopener" href="http://baike.baidu.com/item/HTTP%E7%8A%B6%E6%80%81%E7%A0%81">HTTP状态码参考</a><img src="/../images/RESTful-API/http-status.png"></li>
 </ul>
 <h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><p>遵循RESTful规范，使用了GET, POST, PUT, DELETE共4种请求方法。</p>
 <ol>
@@ -568,7 +625,7 @@
 <li>POST, PUT请求，所有参数通过JSON传递，<em>可选的请求参数，只传有值的，无值的不要传递</em>，contentType为application&#x2F;json。</li>
 </ul>
 <p><em>4种请求动作中，GET、PUT、DELETE是幂等的；只有POST是非幂等的。幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。</em> 是非幂等是判断接口使用POST还是PUT的决定条件</p>
-<p>注意： APP端获取json数据时，对于数值类型字段必须以数值类型转换，无论传递过来的值是否带引号。<img src="/../images/RESTful-API/success.png" alt="DDD"><img src="/../images/RESTful-API/success-channel.png" alt="DDD"></p>
+<p>注意： APP端获取json数据时，对于数值类型字段必须以数值类型转换，无论传递过来的值是否带引号。<img src="/../images/RESTful-API/success.png"><img src="/../images/RESTful-API/success-channel.png"></p>
 <h2 id="速率限制Rate-Limiting"><a href="#速率限制Rate-Limiting" class="headerlink" title="速率限制Rate Limiting"></a>速率限制Rate Limiting</h2><ul>
 <li>为了防止API被恶意调用，对API调用进行速率限制。</li>
 <li>速率限制为每IP每15分钟5000次（dev&#x2F;qa为10W）调用（15分钟是一个时间窗口）。</li>
@@ -579,19 +636,19 @@
 <li>X-RateLimit-Reset: 下次更新时间窗口的时间（UNIX时间戳），达到下个时间窗口时，Remaining恢复为Limit</li>
 </ul>
 </li>
-<li>超出速率限制，返回以下错误<img src="/../images/RESTful-API/rate-limit.png" alt="DDD"></li>
+<li>超出速率限制，返回以下错误<img src="/../images/RESTful-API/rate-limit.png"></li>
 </ul>
 <h2 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h2><ul>
 <li>用户登录后用户的token；aliyun OSS的bucket、AccessKey ID与AccessKey secret；微视频的appid、sign、bucket；这些关键数据通过调用接口获得，需要在客户端以安全的方式存储。</li>
 <li>音频视频在APP内的存储，不允许被拷贝（即使越狱或root后拿走也无法使用）。</li>
 </ul>
-<h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><p>推荐Chrome浏览器插件Postman作为接口测试工具， <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop">Postman下载地址</a><br><img src="/../images/RESTful-API/postman.png" alt="DDD"></p>
+<h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><p>推荐Chrome浏览器插件Postman作为接口测试工具， <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop">Postman下载地址</a><br><img src="/../images/RESTful-API/postman.png"></p>
 <h2 id="文档生成工具"><a href="#文档生成工具" class="headerlink" title="文档生成工具"></a>文档生成工具</h2><ul>
 <li>生成的工具为apidoc，详细阅读官方文档：<a target="_blank" rel="noopener" href="http://apidocjs.com/">http://apidocjs.com</a></li>
 </ul>
 <h2 id="调用示例"><a href="#调用示例" class="headerlink" title="调用示例"></a>调用示例</h2><ul>
-<li>伪代码<img src="/../images/RESTful-API/code.png" alt="DDD"></li>
-<li>PHP<img src="/../images/RESTful-API/php.png" alt="DDD"></li>
+<li>伪代码<img src="/../images/RESTful-API/code.png"></li>
+<li>PHP<img src="/../images/RESTful-API/php.png"></li>
 </ul>
 <h2 id="API模块信息获取"><a href="#API模块信息获取" class="headerlink" title="API模块信息获取"></a>API模块信息获取</h2><ul>
 <li>App配置文件中仅存储api模块名，App初始化时请求<a target="_blank" rel="noopener" href="https://apidev.baobaobooks.net/docs/open/#api-basicGroup-get_basic_apis">获取api模块信息</a>，获取各个api模块的信息（endpoint和version）。</li>

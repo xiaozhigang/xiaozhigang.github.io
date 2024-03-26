@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>DDD分层架构规范 | Hexo</title>
-  <meta name="keywords" content=" DDD ">
-  <meta name="description" content="DDD分层架构规范 | Hexo">
+  <title>Git分支模型(参考阿里Aone Flow) | Hexo</title>
+  <meta name="keywords" content=" Git ">
+  <meta name="description" content="Git分支模型(参考阿里Aone Flow) | Hexo">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="分层架构图 简述 Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里； Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理 Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算； I">
 <meta property="og:type" content="article">
@@ -449,34 +449,26 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-DDD分层架构规范" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-Git分支模型" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">DDD分层架构规范</h1>
+        <h1 class="article-title">Git分支模型(参考阿里Aone Flow)</h1>
     
     <div class="article-meta">
         
         
         
-        <span class="book">
-            <i class="iconfont icon-category"></i>
-            
-            
-            <a  data-rel="JAVA">JAVA</a>
-            
-        </span>
-        
         
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">DDD</a>
+            <a class="color4">Git</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 21:25:30'>2024-03-25 20:09</time>
+            Created At : <time class="date" title='Updated At: 2024-03-26 19:21:02'>2023-04-16 15:28</time>
         
     </div>
     <div class="article-meta">
@@ -498,7 +490,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-text">分层架构图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E8%BF%B0"><span class="toc-text">简述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-text">分层说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%9A%E5%90%88%E6%A0%B9%E5%92%8C%E5%AE%9E%E4%BD%93"><span class="toc-text">聚合根和实体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%86%E5%9F%9F%E6%9C%8D%E5%8A%A1"><span class="toc-text">领域服务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%AF%B9%E8%B1%A1"><span class="toc-text">传输对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A0%E7%8A%B6%E6%80%81"><span class="toc-text">无状态</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E5%AE%9A%E4%B9%89"><span class="toc-text">分支定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%94%AF%E7%AD%96%E7%95%A5"><span class="toc-text">分支策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-text">开发流程</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -514,52 +506,66 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</li>
-<li>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</li>
-<li>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</li>
-<li>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</li>
+        <h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
+<li><p>master</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>release&#x2F;xxx</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">release/test 和 release/prod</span><br><span class="line">既可以为长期分支也可以为短期分支，可能存在于一个或者多个版本之间.</span><br><span class="line"></span><br><span class="line">由测试负责人负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>feature&#x2F;fixbug&#x2F;hotfix</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">临时分支</span><br><span class="line">用于开发的具体功能特性和修复bug的分支，功能完成后删除.</span><br><span class="line">格式为：feature_$date_$name_$description</span><br><span class="line">       fixbug_$date_$name_$description</span><br><span class="line">       hotfix_$date_$name_$description</span><br></pre></td></tr></table></figure></li>
 </ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
-</ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
-</ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
+<h2 id="分支策略"><a href="#分支策略" class="headerlink" title="分支策略"></a>分支策略</h2><ol>
+<li><p>规则1</p>
+<p>开始工作前，从主干创建特性分支</p>
 <ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+<li>每当开始一件新的工作项（比如新的功能或是bug）的时候，从最新已发布版本的主干Master上创建一个以feature(bugfix)&#x2F;前缀命名的特性分支，然后在这个分支上提交代码修改。</li>
+<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/$%7Bfiilename%7D/image-20240326191630681.png" alt="image-20240326191630681"></li>
 </ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
+</li>
+<li><p>规则2</p>
+<p>通过合并特性分支，形成发布分支</p>
 <ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
+<li>从主干上拉出一条新分支，将所有本次要集成或发布的特性分支依次合并过去，从而得到发布分支。发布分支通常以release&#x2F;前缀命名。</li>
+<li>每条发布分支与具体的环境相对应，比如release&#x2F;test分支对应部署测试环境，release&#x2F;prod分支对应线上正式环境等等，并与流水线工具相结合，串联各个环境上的代码质量扫描和自动化测试关卡，将产出的部署包直接发布到相应环境上。</li>
+<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/$%7Bfiilename%7D/image-20240326191812247.png" alt="image-20240326191812247"></li>
 </ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
+</li>
+<li><p>规则3</p>
+<p>发布到线上正式环境后，合并相应的发布分支到主干，在主干添加标签，同时删除该发布分支关联的特性分支</p>
+<ul>
+<li>完成了线上正式环境的部署，就意味着相应的功能真正地发布了，此时应该将这条发布分支合并到主干。</li>
+<li>为了避免在代码仓库里堆积大量历史上的特性分支，还应该清理掉已经上线部分特性分支。</li>
+<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/$%7Bfiilename%7D/image-20240326191852943.png" alt="image-20240326191852943"></li>
 </ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
+</li>
+<li><p>其他</p>
+<ul>
+<li>对于hotfix，可以创建一条新的发布分支对应线上环境（相当于hotfix分支），同时为这个分支创建临时流水线，以保障必要的发布前检查和冒烟测试能够自动执行。</li>
+<li>如果非得修一个历史版本的Bug，在主干分支找到版本标签位置，然后从那个位置创建hotfix分支，这种情况比较少见</li>
 </ul>
+</li>
+</ol>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><ol>
+<li><p>新功能开发时，开发人员从Master拉取代码生成特性分支。</p>
+</li>
+<li><p>单元测试完成后等待测试负责人拉取release&#x2F;test分支，然后提交Pull Request</p>
+</li>
+<li><p>开发负责人或者其他开发人员对Pull Request进行代码Review</p>
+</li>
+<li><p>代码Review完成后，测试负责人合并Pull Request到release&#x2F;test，如果遇到合并冲突，则让相应的开发人员把feature&#x2F;bug&#x2F;hotfix分支重新以master为基准进行提交以及让相应的开发人员协助解决。</p>
+</li>
+<li><p>测试人员使用流水线工具进行代码质量扫描和自动化测试</p>
+</li>
+<li><p>测试人员进行测试</p>
+</li>
+<li><p>完成测试后，查看Master是否比拉取release&#x2F;test时有更新，如果没有直接使用release&#x2F;test上线，否则从最新Master拉取分支release&#x2F;prod分支合并相关PR并进行回归测试</p>
+</li>
+<li><p>提交上线申请上线</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">开发人员A从Master拉取代码生成feature_20190818_A_get_users</span><br><span class="line">开发人员B从Master拉取代码生成feature_20190819_B_login</span><br><span class="line"></span><br><span class="line">测试负责人Y从Master拉取release/test</span><br><span class="line">开发人员A提交Pull Request PR1</span><br><span class="line">开发人员B提交Pull Request PR2</span><br><span class="line"></span><br><span class="line">开发负责人F和开发人员C评审PR1 PR2，评审通过</span><br><span class="line"></span><br><span class="line">测试负责人Y合并代码到release/test</span><br><span class="line">测试人员X进行测试，完成后发现Master和拉取release/test时一样，直接使用release/test进行构建申请发布</span><br></pre></td></tr></table></figure></li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
