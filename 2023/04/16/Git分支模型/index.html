@@ -246,7 +246,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(8)</small>
+                <small>(9)</small>
             
         </div>
     </li>
@@ -286,7 +286,7 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="8">
+<input type="hidden" id="yelog_site_posts_number" value="9">
 
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
@@ -331,6 +331,10 @@
     <div class="tags-list">
     <input id="tag-search" />
     <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>管理</a>
+            </li>
         
             <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>效率</a>
@@ -393,6 +397,15 @@
            data-author="" >
             <span class="post-title" title="COLA">COLA</span>
             <span class="post-date" title="2023-08-26 08:10:50">2023/08/26</span>
+        </a>
+        
+        
+        <a  class="All "
+           href="/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/"
+           data-tag="管理"
+           data-author="" >
+            <span class="post-title" title="带新员工">带新员工</span>
+            <span class="post-date" title="2023-07-26 19:27:38">2023/07/26</span>
         </a>
         
         
@@ -468,7 +481,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-26 19:21:02'>2023-04-16 15:28</time>
+            Created At : <time class="date" title='Updated At: 2024-03-26 19:32:29'>2023-04-16 15:28</time>
         
     </div>
     <div class="article-meta">
@@ -521,7 +534,7 @@
 <p>开始工作前，从主干创建特性分支</p>
 <ul>
 <li>每当开始一件新的工作项（比如新的功能或是bug）的时候，从最新已发布版本的主干Master上创建一个以feature(bugfix)&#x2F;前缀命名的特性分支，然后在这个分支上提交代码修改。</li>
-<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/$%7Bfiilename%7D/image-20240326191630681.png" alt="image-20240326191630681"></li>
+<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/git-model/image-1.png"></li>
 </ul>
 </li>
 <li><p>规则2</p>
@@ -529,7 +542,7 @@
 <ul>
 <li>从主干上拉出一条新分支，将所有本次要集成或发布的特性分支依次合并过去，从而得到发布分支。发布分支通常以release&#x2F;前缀命名。</li>
 <li>每条发布分支与具体的环境相对应，比如release&#x2F;test分支对应部署测试环境，release&#x2F;prod分支对应线上正式环境等等，并与流水线工具相结合，串联各个环境上的代码质量扫描和自动化测试关卡，将产出的部署包直接发布到相应环境上。</li>
-<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/$%7Bfiilename%7D/image-20240326191812247.png" alt="image-20240326191812247"></li>
+<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/git-model/image-2.png"></li>
 </ul>
 </li>
 <li><p>规则3</p>
@@ -537,7 +550,7 @@
 <ul>
 <li>完成了线上正式环境的部署，就意味着相应的功能真正地发布了，此时应该将这条发布分支合并到主干。</li>
 <li>为了避免在代码仓库里堆积大量历史上的特性分支，还应该清理掉已经上线部分特性分支。</li>
-<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/$%7Bfiilename%7D/image-20240326191852943.png" alt="image-20240326191852943"></li>
+<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/git-model/image-3.png"></li>
 </ul>
 </li>
 <li><p>其他</p>
