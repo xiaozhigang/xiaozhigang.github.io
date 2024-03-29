@@ -245,29 +245,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>HashMap和ConcurrentHashMap的put方法详解</title>
-    <url>/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
-<p>计算</p>
-<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
-<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
-<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
-<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
-<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
-<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
-<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
-<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
-<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>HashMap</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git分支模型(参考阿里Aone Flow)</title>
     <url>/2023/04/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
@@ -338,6 +315,29 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HashMap和ConcurrentHashMap的put方法详解</title>
+    <url>/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
+<p>计算</p>
+<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
+<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
+<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
+<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
+<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
+<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
+<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
+<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
+<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>HashMap</tag>
       </tags>
   </entry>
   <entry>
@@ -740,6 +740,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>可以说一下自己参与<strong>开源项目dubbo</strong>，个人学习构建<strong>商城项目</strong>的框架代码，以及个人<strong>博客文章</strong>的分享。</p>
 <p>也可以说一下自己在团队内的定位。</p>
 <p>可以画个<strong>思维导图</strong>，下次按思维导图介绍。</p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240328200205037.png" alt="image-20240328200205037"></p>
 <h2 id="第一个面试官"><a href="#第一个面试官" class="headerlink" title="第一个面试官"></a>第一个面试官</h2><h3 id="MySQL索引"><a href="#MySQL索引" class="headerlink" title="MySQL索引"></a>MySQL索引</h3><p>问：简述一下mysql的索引</p>
 <p>答：索引类似于书的目录，加快查找数据，它的存在空间换时间。空间就不用说了，索引的存在必然消耗空间，时间的话就是提高了查找效率，减少了消耗的时间。索引分为<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，以InnoDB而言，索引以B+数的形式存储，只不过聚簇和非聚簇在存储细节上有所不同。聚簇也就是主键索引，在叶子节点上是以主键和数据一起存放的，而非聚簇索引的叶子节点存储的是普通索引和主键。在查找数据的时候，如果是主键查询责直接通过B+数找到数据，非聚簇索引的话，要通过B+树先找到主键，在通过主键查到数据，这个过程叫做回表。为了提高查找的效率，所以我们一般在查询的时候尽量使用索引，且减少回表。</p>
 <h4 id="回溯-1"><a href="#回溯-1" class="headerlink" title="回溯"></a>回溯</h4><p>点应该都答到了，感觉面试官还比较满意回答，具体的细节和描述的方法可以更提高一点，显得更有条理性。</p>
@@ -748,6 +749,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p>追问：既然说到B+树，说一下10个节点的红黑树需要查询一个节点的时间消耗</p>
 <p>答：时间复杂度O(ln)，红黑树的第一层是一个节点，第二层是2个节点，第三层是4个，第5层是8个。查询的话上来先比较根节点，如果比根节点大往右，否则往左…（简述了一下查询流程）…查询像二分查找，先找中间值，比大小等</p>
 <h4 id="回溯-2"><a href="#回溯-2" class="headerlink" title="回溯"></a>回溯</h4><p>应该是面试官想听到的，现场感觉面试官比较满意，但是自己不是很清楚红黑树，不清楚红黑树的非叶子节点是否保存了数据，还是和B+树一样只做比较。</p>
+<p>增加实际业务中的的案例，走联合索引的案例，调换where中的条件顺序。</p>
 <h3 id="SpringMVC流程"><a href="#SpringMVC流程" class="headerlink" title="SpringMVC流程"></a>SpringMVC流程</h3><p>问：说一下MVC的查询流程</p>
 <p>答：<strong>客户端</strong> 请求到 <strong>DispatcherServlet</strong>， <strong>DispatcherServlet</strong>到<strong>HandlerMapping</strong>，然后返回结果给<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在将handler转发到适配器，适配器会有一些过滤拦截啥的，通过后到处理器，也就是controller-&gt;service-&gt;map，然后结果在原路返回到<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在拿到结果后回去调用视图解析器啥的，去将返回的结果解析渲染。</p>
 <h4 id="回溯-3"><a href="#回溯-3" class="headerlink" title="回溯"></a>回溯</h4><p>回答面试官比较满意，听其语义主要想听到<strong>DispatcherServlet</strong>，但是此流程中记得是在适配器中会有拦截过滤，不是特别确定，已经返回结果后的视图解析渲染，两个组件名称记得不是特别清楚。</p>
@@ -758,6 +760,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p>答：我们的请求不涉及到请求结果的转换，不是那种强依赖。我们模块间的数据交互都是放在数据库的，比如洞察处理完的数据会放在数据库，然后调用评估的模块开始处理，评估模块处理的时候会调用数据库的数据处理，处理的结果会放回数据库，而不是返回给评估模块，这样更解耦。</p>
 <h4 id="回溯-4"><a href="#回溯-4" class="headerlink" title="回溯"></a>回溯</h4><p>其实对这请求调用的方式记得不是特别清楚了，需要复习回顾一下。</p>
 <p><a href="https://blog.csdn.net/Andy19891117/article/details/134981402">https://blog.csdn.net/Andy19891117/article/details/134981402</a></p>
+<p>RPC调用和http调用，RPC基于传输层TCP协议，Http基于应用层http协议，所以RPC调用的传输效率更高。Http规定了返回的格式而RPC没有。</p>
 <h2 id="第二个面试官"><a href="#第二个面试官" class="headerlink" title="第二个面试官"></a>第二个面试官</h2><h3 id="jar包加载"><a href="#jar包加载" class="headerlink" title="jar包加载"></a>jar包加载</h3><p>问：简历中说的到的原子能力编排是怎么理解的，包是spring jar还是啥，编排是怎么理解。</p>
 <p>答：jar包是fast jar，不是那种有启动类的可执行jar包，编排的话，是我们把能力抽取成一个个的jar包，再以可视化配置的方式，类似于链式调用。</p>
 <p>追问：编排的结果，jar包的顺序执行，这个是以什么数据结构存储的。</p>
@@ -772,16 +775,36 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p>答：记得不是特别清了，只记得一个是系统加载，两个是加载外部文件依赖加载。</p>
 <h4 id="回溯-5"><a href="#回溯-5" class="headerlink" title="回溯"></a>回溯</h4><p>面试感觉一般，虽然大部分都答到了，但是还有结果点不熟。</p>
 <p>1、jar包的分类不熟</p>
+<p>fat jar</p>
 <p>2、jar包的加载，了解大概流程，不了解其具体细节。</p>
 <p>3、三个父加载器忘了，没想起来名字。</p>
+<p>4、怎么卸载jar包</p>
+<p>启动类加载器（Bootstrap Class Loader）：也称为根类加载器，它负责加载Java虚拟机的核心类库，如java.lang.Object等。启动类加载器是虚拟机实现的一部分，它通常是由本地代码实现的，不是Java类。</p>
+<p>扩展类加载器（Extension Class Loader）：它是用来加载Java扩展类库的类加载器。扩展类库包括javax和java.util等包，它们位于jre&#x2F;lib&#x2F;ext目录下。</p>
+<p>应用程序类加载器（Application Class Loader）：也称为系统类加载器，它负责加载应用程序的类。它会搜索应用程序的类路径（包括用户定义的类路径和系统类路径），并加载类文件。</p>
 <h3 id="注解加载"><a href="#注解加载" class="headerlink" title="注解加载"></a>注解加载</h3><p>问：注解是怎么加载的</p>
 <p>答：看过源码，记得不是特别清了，spring启动类上会有enable开启注解加载，后面通过一层层的调用，大概3~4层，读取到lib目录下的文件，然后再通过条件判断是否加载。</p>
 <h4 id="回溯-6"><a href="#回溯-6" class="headerlink" title="回溯"></a>回溯</h4><p>回答一般，之前确实看过，现在确实忘了</p>
+<p><strong>自动配置原理</strong>：SpringBoot 项目的核心注解 @SpringBootApplication，这个注解位于启动类上方。@SpringBootApplication 看作是 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解的集合。自动装配核心功能的实现是通过@EnableAutoConfiguration内部的AutoConfigurationImportSelector类。AutoConfigurationImportSelector 类实现了 ImportSelector 接口，也就实现了这个接口中的 selectImports 方法，<strong>该方法主要用于获取所有符合条件的类的全限定类名，需要为这些类创建对象并加载到 IoC 容器中</strong>。@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
+<p>​	@EnableAutoConfiguration：启用 SpringBoot 的自动配置机制。</p>
+<p>​	@Configuration：允许在上下文中注册额外的 bean 或导入其他配置类，作用与 applicationContext.xml 的功能相同。</p>
+<p>​	@ComponentScan： 扫描包下的类中添加了@Component (@Service，@Controller，@Repostory，@RestController)注解的类 ，并添加的到spring的容器中，可以自定义不扫描某些 bean。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">A(SpringBootApplication)--包含--&gt;B(EnableAutoConfiguration)</span><br><span class="line">A--包含--&gt;C(Configuration)</span><br><span class="line">A--包含--&gt;D(ComponentScan )</span><br><span class="line">B--用到--&gt;E(AutoConfigurationImportSelector类)</span><br><span class="line">E--实现--&gt;F(ImportSelector接口selectImports方法)</span><br></pre></td></tr></table></figure>
+
+<p>getAutoConfigurationEntry：</p>
+<p><strong>第 1 步：</strong>判断自动装配开关是否打开。默认 spring.boot.enableautoconfiguration &#x3D; true，可在 application.properties 或 application.yml 中设置</p>
+<p><strong>第 2 步：</strong>用于获取 EnableAutoConfiguration 注解中的 exclude 和 excludeName。</p>
+<p><strong>第 3 步：</strong>从 META-INF&#x2F;spring.factories 读取需要自动装配的所有配置类。</p>
+<p><strong>第 4 步：</strong>这一步有经历了一遍筛选过滤，@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
+<p><a href="https://blog.csdn.net/m0_59749089/article/details/131280769">https://blog.csdn.net/m0_59749089/article/details/131280769</a></p>
 <h2 id="第三个面试官"><a href="#第三个面试官" class="headerlink" title="第三个面试官"></a>第三个面试官</h2><h3 id="bean加载"><a href="#bean加载" class="headerlink" title="bean加载"></a>bean加载</h3><p>问：如果我想再bean初始化时候改变其变量值，或者说再方法前打印一个日志。</p>
 <p>答：使用代理，再调用方法前后打印日志。</p>
 <p>追问：不是代理，是在初始化的时候。</p>
 <p>答：在xml文件中，配置修改，在bean初始化的时候给其赋值。</p>
 <h4 id="回溯-7"><a href="#回溯-7" class="headerlink" title="回溯"></a>回溯</h4><p>貌似这也不是面试官想要的，确实不知道是啥，得查资料研究看看。</p>
+<p>bean的加载过程：</p>
+<p>加载bean信息–&gt;实例化bean–&gt;属性填充–&gt;初始化阶段–&gt;后置处理</p>
+<p><a href="https://blog.csdn.net/m0_46897923/article/details/129850717">https://blog.csdn.net/m0_46897923/article/details/129850717</a></p>
 <h3 id="容器化"><a href="#容器化" class="headerlink" title="容器化"></a>容器化</h3><p>问：你们容器化用的怎么样。</p>
 <p>答：我们部门目前才开始推，我们还没有开始使用容器化，但是自己也搭环境简单使用过容器化，比如部署一个redis、mysql等。</p>
 <h4 id="回溯-8"><a href="#回溯-8" class="headerlink" title="回溯"></a>回溯</h4><p>熟悉了解一下容器化，这方面得了解确实不够，只是简单得使用了一下。</p>
@@ -810,6 +833,8 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p>2、分区和消费者组、消费者的消费关系模型</p>
 <p>3、分区的指定逻辑。</p>
 <p>4、key为null会怎样。</p>
+<p>随机选取一个分区缓存发送，过了分区的缓存时间后在随机选取一个分区缓存发送。</p>
+<p><a href="https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709">https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709</a></p>
 ]]></content>
       <categories>
         <category>面试</category>
