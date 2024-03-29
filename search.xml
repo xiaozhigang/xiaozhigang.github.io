@@ -214,37 +214,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>Git仓库的子目录独立成新仓库</title>
-    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
-
-<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
-<span id="more"></span>
-
-<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Git分支模型(参考阿里Aone Flow)</title>
     <url>/2023/04/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
@@ -318,6 +287,60 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>Git仓库的子目录独立成新仓库</title>
+    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
+
+<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
+<span id="more"></span>
+
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HashMap和ConcurrentHashMap的put方法详解</title>
+    <url>/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
+<p>计算</p>
+<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
+<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
+<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
+<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
+<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
+<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
+<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
+<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
+<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>HashMap</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL两段式提交</title>
     <url>/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/</url>
     <content><![CDATA[<p>两段式提交是MySQL数据持久化的保证。</p>
@@ -379,26 +402,35 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>HashMap和ConcurrentHashMap的put方法详解</title>
-    <url>/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
-<p>计算</p>
-<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
-<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
-<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
-<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
-<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
-<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
-<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
-<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
-<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
+    <title>MySQL的回表</title>
+    <url>/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/</url>
+    <content><![CDATA[<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
+<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
+<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
+<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
+<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
+<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
+<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
+<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
+<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
+<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
+<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
+<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
+<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
+<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
+<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
+<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
+<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
+<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
+<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
+<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
 ]]></content>
       <categories>
-        <category>JAVA</category>
+        <category>MySQL</category>
       </categories>
       <tags>
-        <tag>HashMap</tag>
+        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
@@ -554,38 +586,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>MySQL的回表</title>
-    <url>/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/</url>
-    <content><![CDATA[<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
-<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
-<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
-<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
-<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
-<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
-<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
-<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
-<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
-<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
-<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
-<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
-<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
-<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
-<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
-<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
-<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
-<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
-<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
-<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>索引</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>带新员工</title>
     <url>/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/</url>
     <content><![CDATA[<h2 id="导图"><a href="#导图" class="headerlink" title="导图"></a>导图</h2><p><img src="/../../../../images/new_bird_train.png"></p>
@@ -656,6 +656,29 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>浅谈ChatGPT</title>
+    <url>/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/</url>
+    <content><![CDATA[<p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
+<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
+<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
+<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
+<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
+<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
+<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
+<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
+<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
+<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
+<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>ChatGPT</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>添加聊天办公机器人</title>
     <url>/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/</url>
     <content><![CDATA[<p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
@@ -676,27 +699,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>ChatGPT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>约瑟夫环问题</title>
-    <url>/2020/08/29/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
-<p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
-<p>直到圈内只剩余m人，求胜利者的编号。<br>例如：当n&#x3D;6, k&#x3D;5, m&#x3D;1时，5,4,6,2,3将会被依次处决，而1将会幸免。</p>
-<p>示例代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class JosephProblem &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回活着的人的位置</span><br><span class="line">     *</span><br><span class="line">     * @param total 总人数</span><br><span class="line">     * @param magicNum 报数到该数字的人自杀</span><br><span class="line">     * @param remain 笑着活下去的人</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private List getJosephNumbers(int total, int magicNum, int remain) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; peopleList = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = 1; i &lt;= total; i++) &#123;</span><br><span class="line">            peopleList.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; diedList = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int index = -1;  //当前应该删除的位置</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            index = (index + magicNum) % peopleList.size();</span><br><span class="line"></span><br><span class="line">            diedList.add(peopleList.get(index));</span><br><span class="line">            peopleList.remove(index);</span><br><span class="line"></span><br><span class="line">            //从上一个位置开始计数</span><br><span class="line">            index--;</span><br><span class="line"></span><br><span class="line">            //判断是否剩余m个，如果是的话结束</span><br><span class="line">            if (peopleList.size() == remain) &#123;</span><br><span class="line">                System.out.println(&quot;共&quot; + total + &quot;人，依次报数，当报到&quot; + magicNum + &quot;的人自杀，&quot; + remain + &quot;个人笑着活下去.&quot;);</span><br><span class="line">                System.out.println(&quot;死掉的序号顺序为：&quot; + diedList);</span><br><span class="line">                System.out.println(&quot;笑着活下去序号为：&quot; + peopleList);</span><br><span class="line">                System.out.println(&quot;----------------------------------&quot;);</span><br><span class="line">                return peopleList;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JosephProblem test = new JosephProblem();</span><br><span class="line"></span><br><span class="line">        test.getJosephNumbers(10, 4, 1);</span><br><span class="line">        test.getJosephNumbers(10, 2, 1);</span><br><span class="line">        test.getJosephNumbers(10, 3, 1);</span><br><span class="line">        test.getJosephNumbers(20, 10, 3);</span><br><span class="line">        test.getJosephNumbers(20, 4, 6);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">共10人，依次报数，当报到4的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 2, 7, 3, 10, 9, 1, 6]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到2的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[2, 4, 6, 8, 10, 3, 7, 1, 9]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到3的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[3, 6, 9, 2, 7, 1, 8, 5, 10]</span><br><span class="line">笑着活下去序号为：[4]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到10的人自杀，3个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[10, 20, 11, 2, 14, 6, 19, 15, 9, 7, 5, 8, 13, 18, 12, 4, 17]</span><br><span class="line">笑着活下去序号为：[1, 3, 16]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到4的人自杀，6个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 12, 16, 20, 5, 10, 15, 1, 7, 14, 2, 11, 19]</span><br><span class="line">笑着活下去序号为：[3, 6, 9, 13, 17, 18]</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -725,6 +727,27 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>效率</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>约瑟夫环问题</title>
+    <url>/2022/08/29/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
+<p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
+<p>直到圈内只剩余m人，求胜利者的编号。<br>例如：当n&#x3D;6, k&#x3D;5, m&#x3D;1时，5,4,6,2,3将会被依次处决，而1将会幸免。</p>
+<p>示例代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class JosephProblem &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回活着的人的位置</span><br><span class="line">     *</span><br><span class="line">     * @param total 总人数</span><br><span class="line">     * @param magicNum 报数到该数字的人自杀</span><br><span class="line">     * @param remain 笑着活下去的人</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private List getJosephNumbers(int total, int magicNum, int remain) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; peopleList = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = 1; i &lt;= total; i++) &#123;</span><br><span class="line">            peopleList.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; diedList = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int index = -1;  //当前应该删除的位置</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            index = (index + magicNum) % peopleList.size();</span><br><span class="line"></span><br><span class="line">            diedList.add(peopleList.get(index));</span><br><span class="line">            peopleList.remove(index);</span><br><span class="line"></span><br><span class="line">            //从上一个位置开始计数</span><br><span class="line">            index--;</span><br><span class="line"></span><br><span class="line">            //判断是否剩余m个，如果是的话结束</span><br><span class="line">            if (peopleList.size() == remain) &#123;</span><br><span class="line">                System.out.println(&quot;共&quot; + total + &quot;人，依次报数，当报到&quot; + magicNum + &quot;的人自杀，&quot; + remain + &quot;个人笑着活下去.&quot;);</span><br><span class="line">                System.out.println(&quot;死掉的序号顺序为：&quot; + diedList);</span><br><span class="line">                System.out.println(&quot;笑着活下去序号为：&quot; + peopleList);</span><br><span class="line">                System.out.println(&quot;----------------------------------&quot;);</span><br><span class="line">                return peopleList;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JosephProblem test = new JosephProblem();</span><br><span class="line"></span><br><span class="line">        test.getJosephNumbers(10, 4, 1);</span><br><span class="line">        test.getJosephNumbers(10, 2, 1);</span><br><span class="line">        test.getJosephNumbers(10, 3, 1);</span><br><span class="line">        test.getJosephNumbers(20, 10, 3);</span><br><span class="line">        test.getJosephNumbers(20, 4, 6);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">共10人，依次报数，当报到4的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 2, 7, 3, 10, 9, 1, 6]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到2的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[2, 4, 6, 8, 10, 3, 7, 1, 9]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到3的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[3, 6, 9, 2, 7, 1, 8, 5, 10]</span><br><span class="line">笑着活下去序号为：[4]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到10的人自杀，3个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[10, 20, 11, 2, 14, 6, 19, 15, 9, 7, 5, 8, 13, 18, 12, 4, 17]</span><br><span class="line">笑着活下去序号为：[1, 3, 16]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到4的人自杀，6个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 12, 16, 20, 5, 10, 15, 1, 7, 14, 2, 11, 19]</span><br><span class="line">笑着活下去序号为：[3, 6, 9, 13, 17, 18]</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -838,29 +861,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>复盘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>浅谈ChatGPT</title>
-    <url>/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/</url>
-    <content><![CDATA[<p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
-<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
-<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
-<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
-<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
-<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
-<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
-<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
-<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
-<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
-<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>ChatGPT</tag>
       </tags>
   </entry>
 </search>
