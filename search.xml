@@ -121,6 +121,37 @@
       </tags>
   </entry>
   <entry>
+    <title>Git仓库的子目录独立成新仓库</title>
+    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
+
+<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
+<span id="more"></span>
+
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ELK搭建</title>
     <url>/2023/10/20/ELK%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
@@ -211,37 +242,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>ELK</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git仓库的子目录独立成新仓库</title>
-    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
-
-<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
-<span id="more"></span>
-
-<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -740,7 +740,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>可以说一下自己参与<strong>开源项目dubbo</strong>，个人学习构建<strong>商城项目</strong>的框架代码，以及个人<strong>博客文章</strong>的分享。</p>
 <p>也可以说一下自己在团队内的定位。</p>
 <p>可以画个<strong>思维导图</strong>，下次按思维导图介绍。</p>
-<p><img src="/../images/$%7Bfiilename%7D/image-20240328200205037.png" alt="image-20240328200205037"></p>
+<p><img src="/../images/black-03-27/image-20240328200205037.png"></p>
 <h2 id="第一个面试官"><a href="#第一个面试官" class="headerlink" title="第一个面试官"></a>第一个面试官</h2><h3 id="MySQL索引"><a href="#MySQL索引" class="headerlink" title="MySQL索引"></a>MySQL索引</h3><p>问：简述一下mysql的索引</p>
 <p>答：索引类似于书的目录，加快查找数据，它的存在空间换时间。空间就不用说了，索引的存在必然消耗空间，时间的话就是提高了查找效率，减少了消耗的时间。索引分为<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，以InnoDB而言，索引以B+数的形式存储，只不过聚簇和非聚簇在存储细节上有所不同。聚簇也就是主键索引，在叶子节点上是以主键和数据一起存放的，而非聚簇索引的叶子节点存储的是普通索引和主键。在查找数据的时候，如果是主键查询责直接通过B+数找到数据，非聚簇索引的话，要通过B+树先找到主键，在通过主键查到数据，这个过程叫做回表。为了提高查找的效率，所以我们一般在查询的时候尽量使用索引，且减少回表。</p>
 <h4 id="回溯-1"><a href="#回溯-1" class="headerlink" title="回溯"></a>回溯</h4><p>点应该都答到了，感觉面试官还比较满意回答，具体的细节和描述的方法可以更提高一点，显得更有条理性。</p>
@@ -789,8 +789,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p>​	@EnableAutoConfiguration：启用 SpringBoot 的自动配置机制。</p>
 <p>​	@Configuration：允许在上下文中注册额外的 bean 或导入其他配置类，作用与 applicationContext.xml 的功能相同。</p>
 <p>​	@ComponentScan： 扫描包下的类中添加了@Component (@Service，@Controller，@Repostory，@RestController)注解的类 ，并添加的到spring的容器中，可以自定义不扫描某些 bean。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">A(SpringBootApplication)--包含--&gt;B(EnableAutoConfiguration)</span><br><span class="line">A--包含--&gt;C(Configuration)</span><br><span class="line">A--包含--&gt;D(ComponentScan )</span><br><span class="line">B--用到--&gt;E(AutoConfigurationImportSelector类)</span><br><span class="line">E--实现--&gt;F(ImportSelector接口selectImports方法)</span><br></pre></td></tr></table></figure>
-
+<p><img src="/../images/black-03-27/image-20240329210812763.png" alt="image-20240329210812763"></p>
 <p>getAutoConfigurationEntry：</p>
 <p><strong>第 1 步：</strong>判断自动装配开关是否打开。默认 spring.boot.enableautoconfiguration &#x3D; true，可在 application.properties 或 application.yml 中设置</p>
 <p><strong>第 2 步：</strong>用于获取 EnableAutoConfiguration 注解中的 exclude 和 excludeName。</p>

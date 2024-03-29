@@ -26,14 +26,15 @@
 <meta property="og:site_name" content="xiaozhigang">
 <meta property="og:description" content="简述这次面试场面有点大，6个面试官，但只有3个面试官提问了。前两个面试官回答的还行，后一个面试官直接问懵了。 自我介绍19年毕业，4年多工作经验，华为这边工作。 目前团队业务是以洞察、评估、规划和收益四个部分向运营商提供数字化机会点发现。 项目是以全球数据沙盘项目为基础，业务向外扩展OTN to 楼宇，OTN综合承载等项目。 自己近项目组以来，从构建测试网络开始了解全球数据沙盘项目，到路网算法开始">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/images/$%7Bfiilename%7D/image-20240328200205037.png">
+<meta property="og:image" content="http://example.com/images/black-03-27/image-20240328200205037.png">
 <meta property="og:image" content="http://example.com/images/black-03-27/2474678-20221205141025926-329048743.png">
+<meta property="og:image" content="http://example.com/images/black-03-27/image-20240329210812763.png">
 <meta property="article:published_time" content="2024-03-27T10:39:52.000Z">
-<meta property="article:modified_time" content="2024-03-29T00:33:34.766Z">
+<meta property="article:modified_time" content="2024-03-29T13:09:36.918Z">
 <meta property="article:author" content="xiaozhigang">
 <meta property="article:tag" content="复盘">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/$%7Bfiilename%7D/image-20240328200205037.png">
+<meta name="twitter:image" content="http://example.com/images/black-03-27/image-20240328200205037.png">
 
 
 <link rel="canonical" href="http://example.com/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/">
@@ -230,7 +231,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-29 08:33:34" itemprop="dateModified" datetime="2024-03-29T08:33:34+08:00">2024-03-29</time>
+      <time title="修改时间：2024-03-29 21:09:36" itemprop="dateModified" datetime="2024-03-29T21:09:36+08:00">2024-03-29</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -259,7 +260,7 @@
 <h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>可以说一下自己参与<strong>开源项目dubbo</strong>，个人学习构建<strong>商城项目</strong>的框架代码，以及个人<strong>博客文章</strong>的分享。</p>
 <p>也可以说一下自己在团队内的定位。</p>
 <p>可以画个<strong>思维导图</strong>，下次按思维导图介绍。</p>
-<p><img src="/../images/$%7Bfiilename%7D/image-20240328200205037.png" alt="image-20240328200205037"></p>
+<p><img src="/../images/black-03-27/image-20240328200205037.png"></p>
 <h2 id="第一个面试官"><a href="#第一个面试官" class="headerlink" title="第一个面试官"></a>第一个面试官</h2><h3 id="MySQL索引"><a href="#MySQL索引" class="headerlink" title="MySQL索引"></a>MySQL索引</h3><p>问：简述一下mysql的索引</p>
 <p>答：索引类似于书的目录，加快查找数据，它的存在空间换时间。空间就不用说了，索引的存在必然消耗空间，时间的话就是提高了查找效率，减少了消耗的时间。索引分为<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，以InnoDB而言，索引以B+数的形式存储，只不过聚簇和非聚簇在存储细节上有所不同。聚簇也就是主键索引，在叶子节点上是以主键和数据一起存放的，而非聚簇索引的叶子节点存储的是普通索引和主键。在查找数据的时候，如果是主键查询责直接通过B+数找到数据，非聚簇索引的话，要通过B+树先找到主键，在通过主键查到数据，这个过程叫做回表。为了提高查找的效率，所以我们一般在查询的时候尽量使用索引，且减少回表。</p>
 <h4 id="回溯-1"><a href="#回溯-1" class="headerlink" title="回溯"></a>回溯</h4><p>点应该都答到了，感觉面试官还比较满意回答，具体的细节和描述的方法可以更提高一点，显得更有条理性。</p>
@@ -308,8 +309,7 @@
 <p>​	@EnableAutoConfiguration：启用 SpringBoot 的自动配置机制。</p>
 <p>​	@Configuration：允许在上下文中注册额外的 bean 或导入其他配置类，作用与 applicationContext.xml 的功能相同。</p>
 <p>​	@ComponentScan： 扫描包下的类中添加了@Component (@Service，@Controller，@Repostory，@RestController)注解的类 ，并添加的到spring的容器中，可以自定义不扫描某些 bean。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR;</span><br><span class="line">A(SpringBootApplication)--包含--&gt;B(EnableAutoConfiguration)</span><br><span class="line">A--包含--&gt;C(Configuration)</span><br><span class="line">A--包含--&gt;D(ComponentScan )</span><br><span class="line">B--用到--&gt;E(AutoConfigurationImportSelector类)</span><br><span class="line">E--实现--&gt;F(ImportSelector接口selectImports方法)</span><br></pre></td></tr></table></figure>
-
+<p><img src="/../images/black-03-27/image-20240329210812763.png" alt="image-20240329210812763"></p>
 <p>getAutoConfigurationEntry：</p>
 <p><strong>第 1 步：</strong>判断自动装配开关是否打开。默认 spring.boot.enableautoconfiguration &#x3D; true，可在 application.properties 或 application.yml 中设置</p>
 <p><strong>第 2 步：</strong>用于获取 EnableAutoConfiguration 注解中的 exclude 和 excludeName。</p>
