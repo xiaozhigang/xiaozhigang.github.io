@@ -214,6 +214,127 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>GitHub个人网站搭建</title>
+    <url>/2022/03/29/GitHub%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>整个流程分3个步骤：新建个人仓库，本地hexo搭建，GitHub连接，本地博客搭建，GitHub设置。</p>
+<h2 id="新建个人仓库"><a href="#新建个人仓库" class="headerlink" title="新建个人仓库"></a>新建个人仓库</h2><p>1、登录GitHub，如果没有的话申请一下登录 。</p>
+<p>2、在GitHub上新建一个代码仓。</p>
+<p>3、代码仓命名，一般代码仓名字都是 用户名.github.io，比如我的用户是 xiaozhigang，则代码仓名 xiaozhigang.github.io</p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240329213705691.png"></p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240329213943872.png" alt="image-20240329213943872"></p>
+<h2 id="本地hexo搭建"><a href="#本地hexo搭建" class="headerlink" title="本地hexo搭建"></a>本地hexo搭建</h2><p>代码上传下载需要Git，而hexo是通过node.js搭建的，所以在搭建hexo之前，需要先安装好Git和node.js。如果某个步骤已经安装好了，可以跳过。然后安装hexo以及安装hexo依赖。</p>
+<h3 id="1、Git安装"><a href="#1、Git安装" class="headerlink" title="1、Git安装"></a>1、Git安装</h3><p>1、访问git官方地址，下载对应的安装包，进行安装（简单的点击下一步）。官方地址：<a href="https://git-scm.com/">https://git-scm.com/</a></p>
+<p>2、安装好之后，鼠标右键可以看到：Git Bash Here，点击后打开了。</p>
+<p>3、输入：git –version</p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240329215453993.png" alt="image-20240329215453993"></p>
+<h3 id="2、node-js安装"><a href="#2、node-js安装" class="headerlink" title="2、node.js安装"></a>2、node.js安装</h3><p>1、访问nodejs官方地址，下载对应的安装包，进行安装（简单的点击下一步）。官方地址：<a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
+<p>2、安装好之后，配置环境变量，并在终端里面输入：node -v</p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240329215558404.png" alt="image-20240329215558404"></p>
+<h3 id="3、安装Hexo"><a href="#3、安装Hexo" class="headerlink" title="3、安装Hexo"></a>3、安装Hexo</h3><p> 1、安装命令：npm install hexo -g</p>
+<p>2、测试是否安装成功，命令：hexo -v</p>
+<p>我这已经安装过了，就从网上抄了两个图</p>
+<p><img src="/../images/$%7Bfiilename%7D/ac4d0721eb5f49b2e6d6084dbb502dee.png" alt="img"></p>
+<p><img src="/../images/$%7Bfiilename%7D/a8c8fb1b395c8019c0e6355cdc9e6d11.png" alt="img"></p>
+<h3 id="4、安装hexo依赖"><a href="#4、安装hexo依赖" class="headerlink" title="4、安装hexo依赖"></a>4、安装hexo依赖</h3><p>命令：npm install <code>--</code>save hexo-deployer-git</p>
+<p><img src="/../images/$%7Bfiilename%7D/193527383975cc963ed51eaac05df714.png" alt="img"></p>
+<h2 id="GitHub连接"><a href="#GitHub连接" class="headerlink" title="GitHub连接"></a>GitHub连接</h2><h3 id="git配置SSH-key"><a href="#git配置SSH-key" class="headerlink" title="git配置SSH key"></a>git配置SSH key</h3><p>先看本地是否配置好SSH key（命令：cd ~&#x2F;.ssh），我这已经是配置过的。</p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240329220712861.png" alt="image-20240329220712861"></p>
+<p>输入生成命令：ssh-keygen -t rsa -C “邮件地址”后。连续回车三次即可：</p>
+<p><img src="/../images/$%7Bfiilename%7D/823872b236f421f409a771fc7fae6ff7.png" alt="img"></p>
+<p>可以看到在用户文件夹下生成了一个ssh文件夹：</p>
+<p><img src="/../images/$%7Bfiilename%7D/d6518c53b9c548ffa675835beb2b9041.png" alt="img"></p>
+<p>进入到ssh文件夹，复制id_rsa.pub文件里全部内容：</p>
+<p><img src="/../images/$%7Bfiilename%7D/b6a185592c02e95a624e368ae6501079.png" alt="img"></p>
+<p>接着打开github主页，点击个人设置，点击左侧的SSH and GPG keys，点击New SSH key ：</p>
+<p><img src="/../images/$%7Bfiilename%7D/1818d201e6ccc700d59677c47fbd3cac.png" alt="img"></p>
+<p>将id_rsa.pub复制的内容粘贴到key中，title随便起一个就行。</p>
+<p><img src="/../images/$%7Bfiilename%7D/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
+<p>点击 Add SSH key。</p>
+<blockquote>
+<p>测试是否成功： ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#105;&#116;&#104;&#x75;&#x62;&#46;&#x63;&#111;&#109;</a></p>
+</blockquote>
+<p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
+<p><img src="/../images/$%7Bfiilename%7D/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
+<p>配置账号和密码：</p>
+<h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$ git config --<span class="variable language_">global</span> user.<span class="property">name</span> <span class="string">&quot;liyunchen&quot;</span> #你的github用户名$ git config --<span class="variable language_">global</span> user.<span class="property">email</span> <span class="string">&quot;xxx@163.com&quot;</span> #填写你的github注册邮箱</span><br></pre></td></tr></table></figure>
+
+<p>复制</p>
+<blockquote>
+<p>备注：用户名和邮箱记得改为自己的</p>
+</blockquote>
+<h2 id="本地博客搭建"><a href="#本地博客搭建" class="headerlink" title="本地博客搭建"></a>本地博客搭建</h2><h3 id="新建博客"><a href="#新建博客" class="headerlink" title="新建博客"></a>新建博客</h3><p>开始之前先介绍一下heox的基本命令：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">hexo <span class="keyword">new</span> <span class="string">&quot;postName&quot;</span> #新建文章hexo <span class="keyword">new</span> page <span class="string">&quot;pageName&quot;</span> #新建页面hexo generate #生成静态页面至public目录hexo server #开启预览访问端口（默认端口<span class="number">4000</span>，<span class="string">&#x27;ctrl + c&#x27;</span>关闭server）hexo deploy #部署到<span class="title class_">GitHubhexo</span> help  # 查看帮助hexo version  #查看<span class="title class_">Hexo</span>的版本</span><br></pre></td></tr></table></figure>
+
+<p>复制</p>
+<p>对应的缩写，比如： hexo n &#x3D;&#x3D; hexo new hexo g &#x3D;&#x3D; hexo generate</p>
+<p>新建一个保存博客的存放目录，比如：D:\公众号\0722。</p>
+<p>进入到本地博客存放目录 初始化 个人博客 命令：hexo init</p>
+<p><img src="/../images/$%7Bfiilename%7D/fd4787de8bfade7161a274c3b6c9bc39.png" alt="img"></p>
+<p>可以看到博客存放目录出现了如下内容：</p>
+<p><img src="/../images/$%7Bfiilename%7D/706890a1483d20a9a9ef82494d885f46.png" alt="img"></p>
+<p>#生成静态网页 命令：hexo g #预览 命令：hexo s</p>
+<p><img src="/../images/$%7Bfiilename%7D/2b81faeb9138d1873206dc3526f28e81.png" alt="img"></p>
+<p>在浏览器这访问： <a href="http://localhost:4000/">http://localhost:4000/</a></p>
+<p><img src="/../images/$%7Bfiilename%7D/efc4c675bfe22a838770ebd35e85c199.png" alt="img"></p>
+<p>可以看到访问没问题。</p>
+<p>但这个只是在本地预览，接着将这个博客部署到github。</p>
+<h2 id="GitHub设置"><a href="#GitHub设置" class="headerlink" title="GitHub设置"></a>GitHub设置</h2><h3 id="上传到GitHub"><a href="#上传到GitHub" class="headerlink" title="上传到GitHub"></a>上传到GitHub</h3><p>编辑_config.yml，_config.yml在博客存放目录下：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy</span>:  <span class="attr">type</span>: git  <span class="attr">repository</span>: git@github.<span class="property">com</span>:liyunchen/liyunchen.<span class="property">github</span>.<span class="property">io</span>.<span class="property">git</span>  <span class="attr">branch</span>: main</span><br></pre></td></tr></table></figure>
+
+<p>发布到github 命令：hexo d</p>
+<p><img src="/../images/$%7Bfiilename%7D/56a0b4aaf112d3ea44b5e233b9f6309d.png" alt="img"></p>
+<p>在浏览器访问 <a href="https://xiaozhigang.github.io/">https://xiaozhigang.github.io/</a></p>
+<p>我这配置了域名，不做展示</p>
+<p>可以看到成功访问。</p>
+<blockquote>
+<p>这个博客地址已经是部署到了公网，感兴趣的读者也可以访问</p>
+</blockquote>
+<h3 id="编写博客"><a href="#编写博客" class="headerlink" title="编写博客"></a>编写博客</h3><p>1、git命令：hexo n “文章名称”</p>
+<p>2、\source\_posts目录下会生成md文件，编写md文件就行。</p>
+<p>3、发布到github </p>
+<p>​	命令：hexo clean ，hexo g ，hexo d</p>
+<p>配置个人域名</p>
+<p><img src="/../images/$%7Bfiilename%7D/image-20240329231225707.png" alt="image-20240329231225707"></p>
+]]></content>
+      <categories>
+        <category>环境搭建</category>
+      </categories>
+      <tags>
+        <tag>个人网站搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git仓库的子目录独立成新仓库</title>
+    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
+
+<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
+<span id="more"></span>
+
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git分支模型(参考阿里Aone Flow)</title>
     <url>/2023/04/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
@@ -282,37 +403,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       <categories>
         <category>Git</category>
       </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git仓库的子目录独立成新仓库</title>
-    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
-
-<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
-<span id="more"></span>
-
-<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-]]></content>
       <tags>
         <tag>Git</tag>
       </tags>
