@@ -150,18 +150,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,6 +178,129 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="url">DDD分层架构规范</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-25 20:09:23" itemprop="dateCreated datePublished" datetime="2023-03-25T20:09:23+08:00">2023-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-26 23:22:07" itemprop="dateModified" datetime="2024-03-26T23:22:07+08:00">2024-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
+<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
+<li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
+</li>
+<li><p>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</p>
+</li>
+<li><p>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</p>
+</li>
+<li><p>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</p>
+</li>
+</ol>
+<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
+<li>APP层采用CQE模型，查询和命令分离</li>
+<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
+<li>AppService和DomainService均为无状态服务</li>
+<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
+<li>DomainService封装所有跨实体的业务逻辑</li>
+<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+</ul>
+<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
+<li>按聚合根分包，和包名一样的实体为聚合根</li>
+<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
+<li>聚合根的一致性由自己保障</li>
+<li>跨实体的操作放到领域服务中</li>
+</ul>
+<blockquote>
+<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
+</blockquote>
+<ul>
+<li>实体都有自己的唯一标识通常</li>
+<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -749,7 +872,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-29 23:23:15" itemprop="dateModified" datetime="2024-03-29T23:23:15+08:00">2024-03-29</time>
+      <time title="修改时间：2024-03-30 07:48:27" itemprop="dateModified" datetime="2024-03-30T07:48:27+08:00">2024-03-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
