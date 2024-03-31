@@ -294,7 +294,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#103;&#105;&#x74;&#x68;&#117;&#98;&#46;&#99;&#x6f;&#x6d;">&#103;&#105;&#116;&#x40;&#103;&#105;&#x74;&#x68;&#117;&#98;&#46;&#99;&#x6f;&#x6d;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#105;&#x74;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -813,6 +813,45 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>ThreadLocal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>kafka保证消息不丢失</title>
+    <url>/2024/03/31/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>在kafka的使用过程中，消息传递有下图三个步骤，消息的丢失也就在这三个步骤中：发送过程中丢失、同步过程中丢失、拉取过程中丢失。</p>
+<p><img src="/../images/kafka/image-20240331213103843.png" alt="image-20240331213103843"></p>
+<h3 id="发送过程中丢失"><a href="#发送过程中丢失" class="headerlink" title="发送过程中丢失"></a>发送过程中丢失</h3><h4 id="发送方式"><a href="#发送方式" class="headerlink" title="发送方式"></a>发送方式</h4><p>生产者的发送方式有三种：</p>
+<p>1、简单发送，不关心发送结果，所以发送失败消息丢失也不知道。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="comment">//这里只是把消息放进了一个缓冲区中，然后使用单独的线程将消息发送到服务端</span></span><br><span class="line">   producer.send(record);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(Exception)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、同步发送，等待发送返回</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="comment">//send方法返回的是Future&lt;RecordMetaData&gt; 对象，然后我们可以调用get()方法等待响应</span></span><br><span class="line">   Future&lt;RecordMetaData&gt; future = producer.send(record); </span><br><span class="line">   future.get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(Exception)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、异步发送，执行回调方法</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">DemoProducerCallback</span> <span class="keyword">implements</span> <span class="title class_">Callback</span>&#123;</span><br><span class="line">   <span class="meta">@override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCompletion</span><span class="params">(RecordMetadata recordMetadata,Exception e)</span>&#123;</span><br><span class="line">       <span class="comment">//发生错误的回调方法,可以写入日志，或写入DB通过其它线程重重试，保证最终的数据送达</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line">producer.send(record，<span class="keyword">new</span> <span class="title class_">DemoProducerCallback</span>()))</span><br></pre></td></tr></table></figure>
+
+<p>在这三种发送方法中，第一种方法，无返回，不感知，所以也无法保证消息不丢失。所以要保证消息不丢失，只能选择第二种或者第三种，一般情况下更推荐第三种。</p>
+<h4 id="acks参数设置"><a href="#acks参数设置" class="headerlink" title="acks参数设置"></a>acks参数设置</h4><p>在生产者中有acks参数，该参数指定了kafka的多少个副本同步后才算消息发送成功。该参数取值范围：</p>
+<p>1、acks&#x3D;0，表示生产者在消息后不管有没有在leader磁盘上落盘，就认为消息发送成功。</p>
+<p>2、acks&#x3D;1，表示生产者在消息后，在leader磁盘上落盘，就认为消息发送成功，不管其他follower有没有同步。</p>
+<p>3、acks&#x3D;all，表示生产者在消息后，在leader磁盘上落盘，其他follower都同步落盘， 认为消息发送成功。</p>
+<p><img src="/../images/kafka/image-20240331222238322.png" alt="image-20240331222238322"></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>通过设置发送方式和acks参数，可以保证在发送方式中不丢失，甚至acks参数都可以保证后面的同步过程中消息不丢失。</p>
+<p>发送方式一般设置为异步发送，acks参数默认设置为1。</p>
+<h3 id="同步过程中丢失"><a href="#同步过程中丢失" class="headerlink" title="同步过程中丢失"></a>同步过程中丢失</h3><p>在同步过程中，除了上面说的答acks参数，还有其他副本机制保证消息不丢失。避免leader节点的崩溃导致消息的丢失。</p>
+<p>broker中的配置项,unclean.leader.election.enable &#x3D; false，表示不允许非ISR中的副本被选举为首领，以免数据丢失。</p>
+<p>ISR：是指与leader保持一定程度（这种范围是可通过参数进行配置的）同步的副本和 leader 共同被称为ISR</p>
+<p>OSR：与leader同步时，滞后很多的副本（不包括leader）被称为OSR</p>
+<p>AR，分区中所有的副本统称为AR。AR &#x3D; ISR + OSR</p>
+<h3 id="拉取过程中丢失"><a href="#拉取过程中丢失" class="headerlink" title="拉取过程中丢失"></a>拉取过程中丢失</h3><p>设置 enable.auto.commit &#x3D; false，在consumer端消费消息操作完成以后再手动提交 offset，类似于下文中的代码示例</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">consumerMsg</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="comment">//这里的poll(100)指的是kafka server端没有消息时，连接等待的时间，超过该时间立即返回空给consumer</span></span><br><span class="line">        ConsumerRecords&lt;String,String&gt; records = consomer.poll(<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">            <span class="comment">// 这里是消费消息的逻辑（简单逻辑输入到控制台）</span></span><br><span class="line">            System.out.printIn(record.value));</span><br><span class="line">            <span class="comment">//提交偏移量</span></span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                consumer.commitSync();  <span class="comment">//同步提交 如果异步的话，可以使用 consumer.commitAsync();</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span>(CommitFailedException ex)&#123;</span><br><span class="line">                log.error(<span class="string">&quot;commit fail&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>中间件</category>
+      </categories>
+      <tags>
+        <tag>kafka</tag>
       </tags>
   </entry>
   <entry>
