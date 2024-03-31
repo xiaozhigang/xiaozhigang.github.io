@@ -103,6 +103,67 @@
       </tags>
   </entry>
   <entry>
+    <title>DDD分层架构规范</title>
+    <url>/2023/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
+<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
+<li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
+</li>
+<li><p>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</p>
+</li>
+<li><p>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</p>
+</li>
+<li><p>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</p>
+</li>
+</ol>
+<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
+<li>APP层采用CQE模型，查询和命令分离</li>
+<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
+<li>AppService和DomainService均为无状态服务</li>
+<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
+<li>DomainService封装所有跨实体的业务逻辑</li>
+<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+</ul>
+<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
+<li>按聚合根分包，和包名一样的实体为聚合根</li>
+<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
+<li>聚合根的一致性由自己保障</li>
+<li>跨实体的操作放到领域服务中</li>
+</ul>
+<blockquote>
+<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
+</blockquote>
+<ul>
+<li>实体都有自己的唯一标识通常</li>
+<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+</ul>
+<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
+<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
+</blockquote>
+<ul>
+<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
+<li>放在实体的静态方法上有悖DDD</li>
+<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
+<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
+</ul>
+<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
+<li>DTO：接受Controller层发来的请求，返回结果</li>
+<li>Entity ：将DTO转换为要操作的领域层对象</li>
+</ul>
+<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
+<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
+<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
+<li>无状态服务的优势在于可以很方便地水平伸缩</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>DDD</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ELK搭建</title>
     <url>/2023/10/20/ELK%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
@@ -196,67 +257,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>DDD分层架构规范</title>
-    <url>/2023/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
-</li>
-<li><p>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</p>
-</li>
-<li><p>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</p>
-</li>
-<li><p>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</p>
-</li>
-</ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
-</ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
-</ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
-<ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
-</ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
-<ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
-</ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
-</ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
-</ul>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>DDD</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>GitHub个人网站搭建</title>
     <url>/2022/03/29/GitHub%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>整个流程分3个步骤：新建个人仓库，本地hexo搭建，GitHub连接，本地博客搭建，GitHub设置。</p>
@@ -294,7 +294,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#116;&#x68;&#x75;&#x62;&#x2e;&#99;&#x6f;&#x6d;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#x69;&#116;&#104;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#105;&#x74;&#64;&#103;&#x69;&#116;&#104;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -719,6 +719,74 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>Redis持久化</title>
+    <url>/2024/03/31/Redis%E6%8C%81%E4%B9%85%E5%8C%96/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>redis有两种持久化方式：RDB（Redis DataBase）持久化和 AOF（Append Only File）。</p>
+<p>RDB：通过创建数据的快照，在指定时间间隔内将redis某个时刻的数据状态保存到磁盘RDB文件中。</p>
+<p>AOF：通过记录每个操作命令并将其追加到AOF文件中，恢复时通过执行这些命令来重建数据。</p>
+<p><img src="/../images/redis/image-20240331163759309.png" alt="image-20240331163759309"></p>
+<h3 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h3><p>RBD以快照的方式保存全量的数据，可通过save和bgsave两个命令来触发持久化。</p>
+<p>1、save命令：会同步地将 Redis 的所有数据保存到磁盘上的一个 RDB 文件中。这个操作会阻塞所有客户端请求直到 RDB 文件被完全写入磁盘。</p>
+<p>2、bgsave命令：会在后台异步地创建 Redis 的数据快照，并将快照保存到磁盘上的 RDB 文件中。这个命令会立即返回，Redis 服务器可以继续处理客户端请求。</p>
+<p><img src="/../images/redis/image-20240331165755573.png" alt="image-20240331165755573"></p>
+<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>AOF以追加的方式保存增量的数据，AOF 的主要作用是解决了数据持久化的实时性，目前已经是 Redis 持久化的主流方式。</p>
+<p>AOF 的工作流程操作：命令写入 （append）、文件同步（sync）、文件重写（rewrite）、重启加载 （load）。</p>
+<p><img src="/../images/redis/image-20240331171433901.png" alt="image-20240331171433901"></p>
+<p>流程如下：</p>
+<p>1）当 AOF 持久化功能被启用时，Redis 服务器会将接收到的所有写命令（比如 SET, LPUSH, SADD 等修改数据的命令）追加到 AOF 缓冲区（buffer）的末尾。</p>
+<p>2）为了将缓冲区中的命令持久化到磁盘中的 AOF 文件，Redis 提供了几种不同的同步策略：</p>
+<ul>
+<li>always：每次写命令都会同步到 AOF 文件，这提供了最高的数据安全性，但可能因为磁盘 I&#x2F;O 的延迟而影响性能。</li>
+<li>everysec（默认）：每秒同步一次，这是一种折衷方案，提供了较好的性能和数据安全性。</li>
+<li>no：不主动进行同步，交由操作系统决定何时将缓冲区数据写入磁盘，这种方式性能最好，但在系统崩溃时可能会丢失最近一秒的数据。</li>
+</ul>
+<p>3）随着操作的不断执行，AOF 文件会不断增长，为了减小 AOF 文件大小，Redis 可以重写 AOF 文件：</p>
+<ul>
+<li>重写过程不会解析原始的 AOF 文件，而是将当前内存中的数据库状态转换为一系列写命令，然后保存到一个新的 AOF 文件中。</li>
+<li>AOF 重写操作由 BGREWRITEAOF 命令触发，它会创建一个子进程来执行重写操作，因此不会阻塞主进程。</li>
+<li>重写过程中，新的写命令会继续追加到旧的 AOF 文件中，同时也会被记录到一个缓冲区中。一旦重写完成，Redis 会将这个缓冲区中的命令追加到新的 AOF 文件中，然后切换到新的 AOF 文件上，以确保数据的完整性。</li>
+</ul>
+<p>4）当 Redis 服务器启动时，如果配置为使用 AOF 持久化方式，它会读取 AOF 文件中的所有命令并重新执行它们，以恢复数据库的状态。</p>
+<h3 id="两者优缺点"><a href="#两者优缺点" class="headerlink" title="两者优缺点"></a>两者优缺点</h3><p>RDB-优点</p>
+<ol>
+<li>集中备份，则文件紧凑， <code>dump.rdb</code>，非常适合备份、全量复制的场景。</li>
+<li><strong>容灾性好</strong>，RDB 文件可以直接拷贝使用，用于容灾恢复。</li>
+<li><strong>恢复速度快</strong>，RDB文件集中紧凑， 则速度快</li>
+</ol>
+<p>RDB-缺点</p>
+<ol>
+<li><strong>实时性低</strong>，RDB 是间隔一段时间进行持久化，无法实时持久化。如果在这时间段发生故障，则数据会丢失。</li>
+<li><strong>存在兼容问题</strong>，Redis 演进过程存在多个格式的 RDB 版本，存在老版本 Redis 无法兼容新版本 RDB 的问题。</li>
+</ol>
+<p>AOF-优点</p>
+<ol>
+<li><strong>实时性好</strong>，aof 持久化可以配置 <code>appendfsync</code> 属性，有 <code>always</code>，每进行一次命令操作就记录到 aof 文件中一次。</li>
+<li>通过 append 模式写文件，即使中途服务器宕机，可以通过 redis-check-aof 工具解决数据一致性问题。</li>
+</ol>
+<p>AOF-缺点</p>
+<ol>
+<li>AOF 文件比 RDB <strong>文件大</strong>，且 <strong>恢复速度慢</strong>。</li>
+<li><strong>数据集大</strong> 的时候，比 RDB <strong>启动效率低</strong>。</li>
+</ol>
+<h3 id="两者如何选择"><a href="#两者如何选择" class="headerlink" title="两者如何选择"></a>两者如何选择</h3><p>1、只选RDB，可能会有数分钟的数据丢失。</p>
+<p>2、只选AOF，不利于备份，恢复速度也慢。</p>
+<p>3、两者配合，两种持久化方式都选，这种情况下Redis重启时会优先载入AOF文件来恢复数据，因为AOF文件的数据集比RDB全。</p>
+<p>4、都不选，不持久化。</p>
+<h3 id="故障数据恢复"><a href="#故障数据恢复" class="headerlink" title="故障数据恢复"></a>故障数据恢复</h3><p><strong>Redis</strong> 启动时加载数据的流程：</p>
+<p>1、判断AOF开启且AOF文件是否存在，存在则优先加载</p>
+<p>2、如果AOF关闭或者不存在，则加载RDB文件</p>
+<p>3、文件加载成功后则Redis启动成功</p>
+<p>4、加载失败，则启动失败</p>
+<p><img src="/../images/redis/image-20240331174017060.png" alt="image-20240331174017060"></p>
+]]></content>
+      <categories>
+        <category>中间件</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>ThreadLocal内存泄漏</title>
     <url>/2024/03/30/ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>ThreadLocal是什么，是java中用于实现线程内变量的工具类。允许每个线程都拥有自己的副本，从而实现线程隔离，解决多线程的共享对象的线程安全问题。</p>
@@ -745,32 +813,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>ThreadLocal</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>带新员工</title>
-    <url>/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/</url>
-    <content><![CDATA[<h2 id="导图"><a href="#导图" class="headerlink" title="导图"></a>导图</h2><p><img src="/../../../../images/new_bird_train.png"></p>
-<p><img src="/../images/new_bird/new_bird_train.png"></p>
-<span id="more"></span>
-
-<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ol>
-<li>遵从 PDCA(Plan-&gt;Do-&gt;Check-&gt;Action) 的原则<ul>
-<li>就计划达成一致并讲解计划</li>
-<li>引导思考，最终可以自己寻找找到解决方案(给答案-&gt;给线索-&gt;自己摸索)</li>
-<li>进行阶段性检查，确保计划执行的正确性，解决过程中遇到的问题以及对计划做出调整</li>
-</ul>
-</li>
-<li>以身作则，多肯定和鼓励引导做出正确的选择和避免犯错，多沟通并积极主动去完成每一件事。</li>
-<li>用心、有耐心以及有责任心。</li>
-<li>…待补充</li>
-</ol>
-]]></content>
-      <categories>
-        <category>管理</category>
-      </categories>
-      <tags>
-        <tag>管理</tag>
       </tags>
   </entry>
   <entry>
@@ -815,6 +857,32 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>带新员工</title>
+    <url>/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/</url>
+    <content><![CDATA[<h2 id="导图"><a href="#导图" class="headerlink" title="导图"></a>导图</h2><p><img src="/../../../../images/new_bird_train.png"></p>
+<p><img src="/../images/new_bird/new_bird_train.png"></p>
+<span id="more"></span>
+
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ol>
+<li>遵从 PDCA(Plan-&gt;Do-&gt;Check-&gt;Action) 的原则<ul>
+<li>就计划达成一致并讲解计划</li>
+<li>引导思考，最终可以自己寻找找到解决方案(给答案-&gt;给线索-&gt;自己摸索)</li>
+<li>进行阶段性检查，确保计划执行的正确性，解决过程中遇到的问题以及对计划做出调整</li>
+</ul>
+</li>
+<li>以身作则，多肯定和鼓励引导做出正确的选择和避免犯错，多沟通并积极主动去完成每一件事。</li>
+<li>用心、有耐心以及有责任心。</li>
+<li>…待补充</li>
+</ol>
+]]></content>
+      <categories>
+        <category>管理</category>
+      </categories>
+      <tags>
+        <tag>管理</tag>
       </tags>
   </entry>
   <entry>
