@@ -294,7 +294,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#116;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#109;">&#x67;&#105;&#116;&#x40;&#103;&#x69;&#x74;&#x68;&#117;&#x62;&#x2e;&#x63;&#111;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#x2e;&#x63;&#x6f;&#109;">&#x67;&#105;&#116;&#x40;&#x67;&#x69;&#x74;&#x68;&#117;&#x62;&#x2e;&#x63;&#x6f;&#109;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -471,6 +471,41 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>HashMap</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JVM加载过程</title>
+    <url>/2024/04/09/JVM%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/</url>
+    <content><![CDATA[<h3 id="什么是JVM类加载"><a href="#什么是JVM类加载" class="headerlink" title="什么是JVM类加载"></a>什么是JVM类加载</h3><p>指将编译后的class文件，读到内存中，首先将其放在运行时数据区的方法区内，然后再堆内创建class对象。class对象封装了类在方法区内的数据结构，并提供了访问方法区内的数据结构的接口。</p>
+<p><img src="/../images/jvm-load/image-20240409215152713.png" alt="image-20240409215152713"></p>
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><h4 id="自带加载器"><a href="#自带加载器" class="headerlink" title="自带加载器"></a>自带加载器</h4><p>自带加载器有三个：</p>
+<p>1、<strong>启动类加载器</strong>：负责加载存放在JDK\jre\lib(JDK代表JDK的安装目录，下同)下，或被-Xbootclasspath参数指定的路径中的，并且能被虚拟机识别的类库（如rt.jar，所有的java.*开头的类均被Bootstrap ClassLoader加载）。启动类加载器是无法被Java程序直接引用的。</p>
+<p>2、<strong>扩展类加载器</strong>：该加载器由sun.misc.Launcher$ExtClassLoader实现，它负责加载DK\jre\lib\ext目录中，或者由java.ext.dirs系统变量指定的路径中的所有类库（如javax.*开头的类），开发者可以直接使用扩展类加载器。</p>
+<p>3、<strong>应用程序类加载器</strong>：该类加载器由sun.misc.Launcher$AppClassLoader来实现，它负责加载用户类路径（ClassPath）所指定的类，开发者可以直接使用该类加载器，如果应用程序中没有自定义过自己的类加载器，一般情况下这个就是程序中默认的类加载器。</p>
+<p>类加载的三种方式</p>
+<ul>
+<li>命令行启动应用时候由JVM初始化加载</li>
+<li>通过Class.forName()方法动态加载</li>
+<li>通过ClassLoader.loadClass()方法动态加载</li>
+</ul>
+<h4 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h4><p>1、一个类加载器收到类加载请求，不会首先自己去加载这个类，而是把请求委托到父类加载器去完成。</p>
+<p>2、依次向上。</p>
+<p>3、所有类加载请求都会被传递到顶层的启动类加载器中。</p>
+<p>4、只有父加载器无法加载该类，才会由子类尝试加载。</p>
+<p><img src="/../images/jvm-load/image-20240409221650719.png" alt="image-20240409221650719"></p>
+<h3 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h3><p>生命周期主要包括7个部分：<strong>加载，验证，准备、解析、初始化、使用、卸载</strong></p>
+<p>类加载过程：<strong>加载，验证，准备、解析、初始化</strong></p>
+<p>其中 <strong>验证，准备、解析</strong> 这三个部分统称为连接</p>
+<p><img src="/../images/jvm-load/image-20240409223238427.png" alt="image-20240409223238427"></p>
+<p>加载，验证，准备、初始化 这四个部分是按顺序发生的，而解析则不一定，它在某些情况下可以在初始化阶段之后开始，这是为了支持Java语言的运行时绑定（也成为动态绑定或晚期绑定）。其他阶段是按顺序发生，不一定按顺序结束，通常是相互交叉的混合进行，在一个阶段执行的过程中调用另一个阶段。</p>
+<p><strong>加载</strong>：查找并加载类的二进制数据</p>
+<p><strong>验证</strong>：确保被加载类的正确性</p>
+<p><strong>准备</strong>：为类的静态变量分配内存，并将其初始化默认值</p>
+<p><strong>解析</strong>：把类中的符号引用转换为直接引用</p>
+<p><strong>初始化</strong>：到此才开始真正执行Java程序代码，执行类构造器方法的过程</p>
+]]></content>
+      <tags>
+        <tag>JVM</tag>
       </tags>
   </entry>
   <entry>
