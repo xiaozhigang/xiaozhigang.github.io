@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>CAP原则</title>
-    <url>/2024/03/30/CAP%E5%8E%9F%E5%88%99/</url>
+    <url>/0203/03/30/CAP%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
 <p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
 <p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
@@ -41,6 +41,65 @@
       </categories>
       <tags>
         <tag>CAP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>COLA</title>
+    <url>/2023/08/26/COLA/</url>
+    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
+<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
+<ol>
+<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
+</li>
+<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
+</li>
+<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
+</li>
+<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
+<span id="more"></span></li>
+</ol>
+<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
+<li>gateway是为了防腐</li>
+<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
+<li>第三方服务的调用在Infra层</li>
+<li>为了易于理解可以把Adapter改为Controller</li>
+</ol>
+<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
+<ol>
+<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
+<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
+<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
+</ol>
+<p>调用过程及对象使用</p>
+<ol>
+<li>Client<br>定义如下对象<ul>
+<li>VO(View Object)，Adapter层使用</li>
+<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
+<li>DomainEvent，Infra层发布领域事件使用</li>
+<li>ServiceI，APP层实现该服务对外提供应用API</li>
+</ul>
+</li>
+<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
+<li>APP层<br>ServiceImpl接收Command<ul>
+<li>直接&#x2F;间接传给Mapper</li>
+<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
+</ul>
+</li>
+<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
+<li>Infa<ol>
+<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
+<li>调用第三方服务封装DO和Mapper，返回DO</li>
+<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
+<li>DomainEvent的发布</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>架构</category>
+      </categories>
+      <tags>
+        <tag>COLA</tag>
       </tags>
   </entry>
   <entry>
@@ -102,65 +161,6 @@
       </categories>
       <tags>
         <tag>DDD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>COLA</title>
-    <url>/2023/08/26/COLA/</url>
-    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
-<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
-<ol>
-<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
-</li>
-<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
-</li>
-<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
-</li>
-<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
-<span id="more"></span></li>
-</ol>
-<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
-<li>gateway是为了防腐</li>
-<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
-<li>第三方服务的调用在Infra层</li>
-<li>为了易于理解可以把Adapter改为Controller</li>
-</ol>
-<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
-<ol>
-<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
-<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
-<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
-</ol>
-<p>调用过程及对象使用</p>
-<ol>
-<li>Client<br>定义如下对象<ul>
-<li>VO(View Object)，Adapter层使用</li>
-<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
-<li>DomainEvent，Infra层发布领域事件使用</li>
-<li>ServiceI，APP层实现该服务对外提供应用API</li>
-</ul>
-</li>
-<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
-<li>APP层<br>ServiceImpl接收Command<ul>
-<li>直接&#x2F;间接传给Mapper</li>
-<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
-</ul>
-</li>
-<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
-<li>Infa<ol>
-<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
-<li>调用第三方服务封装DO和Mapper，返回DO</li>
-<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
-<li>DomainEvent的发布</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>架构</category>
-      </categories>
-      <tags>
-        <tag>COLA</tag>
       </tags>
   </entry>
   <entry>
@@ -294,7 +294,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#x69;&#116;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;">&#103;&#x69;&#116;&#x40;&#103;&#x69;&#x74;&#104;&#117;&#x62;&#x2e;&#x63;&#111;&#x6d;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#103;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;">&#x67;&#105;&#x74;&#64;&#103;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#x63;&#x6f;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -606,7 +606,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>MySQL线上索引创建</title>
-    <url>/2024/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/</url>
+    <url>/2023/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>如果在线上环境，需要新建一个索引，会发生什么，会不会导致不可用，具体的创建步骤又是啥。</p>
 <p>首先肯定会有一段时间导致表不可用的，主要就是看不可用的时间长短。</p>
 <p>在不同的版本上主要有三种创建方式：Copy Table方式、Inplace方式、Online方式</p>
@@ -638,8 +638,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
     <url>/2023/06/25/RESTful-API%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<h2 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h2><hr>
 <p><em>RESTful本身是一种风格而不是规范，本文为该风格的规范实现的最佳实践，本文档详细说明了HTTP RESTful API的定义和使用规范，作为接口调用者和实现者的重要参考。</em></p>
-<span id="more"></span>
-
 <h2 id="接口风格"><a href="#接口风格" class="headerlink" title="接口风格"></a>接口风格</h2><p>遵循RESTful设计风格，同时控制复杂度及易于使用，仅遵循大部分原则。 遵循原则：</p>
 <ul>
 <li>使用https协议</li>
@@ -787,7 +785,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Redis持久化</title>
-    <url>/2024/03/31/Redis%E6%8C%81%E4%B9%85%E5%8C%96/</url>
+    <url>/2023/12/01/Redis%E6%8C%81%E4%B9%85%E5%8C%96/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>redis有两种持久化方式：RDB（Redis DataBase）持久化和 AOF（Append Only File）。</p>
 <p>RDB：通过创建数据的快照，在指定时间间隔内将redis某个时刻的数据状态保存到磁盘RDB文件中。</p>
 <p>AOF：通过记录每个操作命令并将其追加到AOF文件中，恢复时通过执行这些命令来重建数据。</p>
@@ -892,7 +890,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Spring中用到的设计模式</title>
-    <url>/2024/04/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2023/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
 <p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
 <p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
@@ -952,6 +950,9 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>l</li>
 </ul>
 ]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
       <tags>
         <tag>设计模式</tag>
       </tags>
@@ -1060,7 +1061,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>kafka保证消息不丢失</title>
-    <url>/2024/03/31/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/</url>
+    <url>/2023/03/31/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>在kafka的使用过程中，消息传递有下图三个步骤，消息的丢失也就在这三个步骤中：发送过程中丢失、同步过程中丢失、拉取过程中丢失。</p>
 <p><img src="/../images/kafka/image-20240331213103843.png" alt="image-20240331213103843"></p>
 <h3 id="发送过程中丢失"><a href="#发送过程中丢失" class="headerlink" title="发送过程中丢失"></a>发送过程中丢失</h3><h4 id="发送方式"><a href="#发送方式" class="headerlink" title="发送方式"></a>发送方式</h4><p>生产者的发送方式有三种：</p>

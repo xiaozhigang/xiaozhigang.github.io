@@ -22,22 +22,22 @@
     <meta name="description" content="简述如果在线上环境，需要新建一个索引，会发生什么，会不会导致不可用，具体的创建步骤又是啥。 首先肯定会有一段时间导致表不可用的，主要就是看不可用的时间长短。 在不同的版本上主要有三种创建方式：Copy Table方式、Inplace方式、Online方式 Copy Table方式早期版本，直接通过复制表实现 步骤1、先为原表table创建临时表table_copy。 2、向临时表table_cop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL线上索引创建">
-<meta property="og:url" content="http://example.com/2024/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/index.html">
+<meta property="og:url" content="http://example.com/2023/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/index.html">
 <meta property="og:site_name" content="xiaozhigang">
 <meta property="og:description" content="简述如果在线上环境，需要新建一个索引，会发生什么，会不会导致不可用，具体的创建步骤又是啥。 首先肯定会有一段时间导致表不可用的，主要就是看不可用的时间长短。 在不同的版本上主要有三种创建方式：Copy Table方式、Inplace方式、Online方式 Copy Table方式早期版本，直接通过复制表实现 步骤1、先为原表table创建临时表table_copy。 2、向临时表table_cop">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-04-10T13:10:03.000Z">
-<meta property="article:modified_time" content="2024-04-10T15:01:21.430Z">
+<meta property="article:published_time" content="2023-04-10T13:10:03.000Z">
+<meta property="article:modified_time" content="2023-04-10T13:10:03.000Z">
 <meta property="article:author" content="xiaozhigang">
 <meta property="article:tag" content="索引">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2024/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/">
+<link rel="canonical" href="http://example.com/2023/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/","path":"2024/04/10/MySQL线上索引创建/","title":"MySQL线上索引创建"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2023/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/","path":"2023/04/10/MySQL线上索引创建/","title":"MySQL线上索引创建"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>MySQL线上索引创建 | xiaozhigang</title>
@@ -191,7 +191,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -219,9 +219,8 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-04-10 21:10:03 / 修改时间：23:01:21" itemprop="dateCreated datePublished" datetime="2024-04-10T21:10:03+08:00">2024-04-10</time>
+      <time title="创建时间：2023-04-10 21:10:03" itemprop="dateCreated datePublished" datetime="2023-04-10T21:10:03+08:00">2023-04-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -276,13 +275,13 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/04/09/JVM%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/" rel="prev" title="JVM加载过程">
-                  <i class="fa fa-angle-left"></i> JVM加载过程
+                <a href="/2023/03/31/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/" rel="prev" title="kafka保证消息不丢失">
+                  <i class="fa fa-angle-left"></i> kafka保证消息不丢失
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/04/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="next" title="Spring中用到的设计模式">
-                  Spring中用到的设计模式 <i class="fa fa-angle-right"></i>
+                <a href="/2023/04/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/" rel="next" title="Git分支模型(参考阿里Aone Flow)">
+                  Git分支模型(参考阿里Aone Flow) <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>

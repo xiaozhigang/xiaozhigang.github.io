@@ -187,105 +187,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">HashMap和ConcurrentHashMap的put方法详解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-11-08 21:07:31" itemprop="dateCreated datePublished" datetime="2022-11-08T21:07:31+08:00">2022-11-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-26 23:24:29" itemprop="dateModified" datetime="2024-03-26T23:24:29+08:00">2024-03-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
-<p>计算</p>
-<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
-<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
-<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
-<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
-<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/26/%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -316,13 +217,6 @@
       <span class="post-meta-item-text">发表于</span>
 
       <time title="创建时间：2022-09-26 22:06:29" itemprop="dateCreated datePublished" datetime="2022-09-26T22:06:29+08:00">2022-09-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-26 23:25:00" itemprop="dateModified" datetime="2024-03-26T23:25:00+08:00">2024-03-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -417,13 +311,6 @@
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-29 21:20:37" itemprop="dateModified" datetime="2024-03-29T21:20:37+08:00">2024-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
@@ -514,13 +401,6 @@
       <span class="post-meta-item-text">发表于</span>
 
       <time title="创建时间：2022-06-21 22:04:58" itemprop="dateCreated datePublished" datetime="2022-06-21T22:04:58+08:00">2022-06-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-26 23:23:18" itemprop="dateModified" datetime="2024-03-26T23:23:18+08:00">2024-03-26</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -648,13 +528,6 @@
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-26 23:22:55" itemprop="dateModified" datetime="2024-03-26T23:22:55+08:00">2024-03-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
@@ -743,13 +616,6 @@
       <span class="post-meta-item-text">发表于</span>
 
       <time title="创建时间：2022-03-29 21:28:50" itemprop="dateCreated datePublished" datetime="2022-03-29T21:28:50+08:00">2022-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-30 20:31:44" itemprop="dateModified" datetime="2024-03-30T20:31:44+08:00">2024-03-30</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -844,13 +710,6 @@
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-26 23:18:20" itemprop="dateModified" datetime="2024-03-26T23:18:20+08:00">2024-03-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
@@ -880,6 +739,123 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/03/26/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/0203/03/30/CAP%E5%8E%9F%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/0203/03/30/CAP%E5%8E%9F%E5%88%99/" class="post-title-link" itemprop="url">CAP原则</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：0203-03-30 18:35:20" itemprop="dateCreated datePublished" datetime="0203-03-30T18:35:20+08:05">0203-03-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-30 18:35:20" itemprop="dateModified" datetime="2023-03-30T18:35:20+08:00">2023-03-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
+<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
+<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
+<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性（Consistency</td>
+<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
+</tr>
+<tr>
+<td>可用性（Availability）</td>
+<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
+</tr>
+<tr>
+<td>分区容错性（Partition tolerance）</td>
+<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
+</tr>
+</tbody></table>
+<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
+<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
+<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/0203/03/30/CAP%E5%8E%9F%E5%88%99/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
