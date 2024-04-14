@@ -334,6 +334,7 @@
     <div class="post-body" itemprop="articleBody">
           <h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
 <p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
+<p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
 <p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
 <table>
 <thead>
@@ -367,7 +368,6 @@
 <p>两者异同：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/720402">https://developer.aliyun.com/article/720402</a></p>
 <h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>父类定义算法骨架或者关键步骤，而具体实现延迟到子类中，使子类再不改变父类结构的情况下可重定义某些特定步骤的实现。</p>
 <p>Spring 中 <code>JdbcTemplate</code>、<code>HibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用 Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。定义了资源获取、执行SQL、释放资源这些基本流程，执行sql的具体方式又以回调函数的形式开放。</p>
-<p>参考文献：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangweiocp/article/details/115486257">https://blog.csdn.net/zhangweiocp/article/details/115486257</a></p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/#more" rel="contents">
