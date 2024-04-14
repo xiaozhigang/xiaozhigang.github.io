@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>CAP原则</title>
-    <url>/0203/03/30/CAP%E5%8E%9F%E5%88%99/</url>
+    <url>/2023/03/30/CAP%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
 <p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
 <p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
@@ -45,7 +45,7 @@
   </entry>
   <entry>
     <title>DDD分层架构规范</title>
-    <url>/2023/03/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
+    <url>/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
 <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
 <li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
@@ -106,7 +106,7 @@
   </entry>
   <entry>
     <title>COLA</title>
-    <url>/2023/08/26/COLA/</url>
+    <url>/2023/01/06/COLA/</url>
     <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
 <p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
 <ol>
@@ -294,7 +294,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#105;&#116;&#x68;&#x75;&#98;&#x2e;&#99;&#111;&#109;">&#103;&#x69;&#116;&#64;&#103;&#105;&#116;&#x68;&#x75;&#98;&#x2e;&#99;&#111;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;">&#x67;&#105;&#116;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#x62;&#x2e;&#99;&#111;&#109;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -348,7 +348,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Git仓库的子目录独立成新仓库</title>
-    <url>/2023/05/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
+    <url>/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
     <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
 
@@ -379,7 +379,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Git分支模型(参考阿里Aone Flow)</title>
-    <url>/2023/04/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
+    <url>/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
 <li><p>master</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
@@ -451,31 +451,8 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>HashMap和ConcurrentHashMap的put方法详解</title>
-    <url>/2022/11/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
-<p>计算</p>
-<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
-<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
-<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
-<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
-<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
-<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
-<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
-<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
-<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>HashMap</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JVM加载过程</title>
-    <url>/2024/04/09/JVM%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/</url>
+    <url>/2023/04/09/JVM%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<h3 id="什么是JVM类加载"><a href="#什么是JVM类加载" class="headerlink" title="什么是JVM类加载"></a>什么是JVM类加载</h3><p>指将编译后的class文件，读到内存中，首先将其放在运行时数据区的方法区内，然后再堆内创建class对象。class对象封装了类在方法区内的数据结构，并提供了访问方法区内的数据结构的接口。</p>
 <p><img src="/../images/jvm-load/image-20240409215152713.png" alt="image-20240409215152713"></p>
 <h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><h4 id="自带加载器"><a href="#自带加载器" class="headerlink" title="自带加载器"></a>自带加载器</h4><p>自带加载器有三个：</p>
@@ -509,6 +486,29 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>JVM加载</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HashMap和ConcurrentHashMap的put方法详解</title>
+    <url>/2022/05/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
+<p>计算</p>
+<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
+<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
+<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
+<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
+<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
+<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
+<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
+<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
+<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
+<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>HashMap</tag>
       </tags>
   </entry>
   <entry>
@@ -785,7 +785,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Redis持久化</title>
-    <url>/2023/12/01/Redis%E6%8C%81%E4%B9%85%E5%8C%96/</url>
+    <url>/2023/07/31/Redis%E6%8C%81%E4%B9%85%E5%8C%96/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>redis有两种持久化方式：RDB（Redis DataBase）持久化和 AOF（Append Only File）。</p>
 <p>RDB：通过创建数据的快照，在指定时间间隔内将redis某个时刻的数据状态保存到磁盘RDB文件中。</p>
 <p>AOF：通过记录每个操作命令并将其追加到AOF文件中，恢复时通过执行这些命令来重建数据。</p>
@@ -853,7 +853,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Spring IoC 的简单实现</title>
-    <url>/2024/04/01/Spring-IoC-%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/</url>
+    <url>/2022/10/10/Spring-IoC-%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>IoC是指控制反转，是指有容器来控制对象的生命周期和对象之间的关系。简单来说就是之前使用对象首先需要new一个对象，而现在直接从容器中取就可以了。这就像有小农经济转变到商品经济。</p>
 <p>小农经济：自给自足，什么东西都需要自己动手也就类似于对象需要自己new。</p>
 <p>商品经济：需要啥去商店买就行，这里的商店就相当于容器，商品就相当于对象，生成商品的工厂就相当于对象工厂等。</p>
@@ -890,7 +890,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Spring中用到的设计模式</title>
-    <url>/2023/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
 <p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
 <p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
@@ -962,7 +962,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>Spring的自动加载配置</title>
-    <url>/2024/04/01/Spring%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E9%85%8D%E7%BD%AE/</url>
+    <url>/2022/09/01/Spring%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>都知道spring的自动加载是通过注解实现的，但是这注解又是怎么实现的呢？</p>
 <p>通过@SpringBootApplication注解开启，读取配置文件中的配置类，然后过滤掉不需要的配置类，最后将剩余的配置类加载配置。</p>
 <h3 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程"></a>具体过程</h3><p>上面说了一下大概的概念，接下来我们分析一下具体的执行过程。</p>
@@ -1035,7 +1035,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>ThreadLocal内存泄漏</title>
-    <url>/2024/03/30/ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</url>
+    <url>/2022/11/30/ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>ThreadLocal是什么，是java中用于实现线程内变量的工具类。允许每个线程都拥有自己的副本，从而实现线程隔离，解决多线程的共享对象的线程安全问题。</p>
 <p><img src="/../images/ThreadLocal/image-20240330210435879.png" alt="image-20240330210435879"></p>
 <p>ThreadLocal的使用</p>
@@ -1064,7 +1064,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>kafka保证消息不丢失</title>
-    <url>/2023/03/31/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/</url>
+    <url>/2023/11/13/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>在kafka的使用过程中，消息传递有下图三个步骤，消息的丢失也就在这三个步骤中：发送过程中丢失、同步过程中丢失、拉取过程中丢失。</p>
 <p><img src="/../images/kafka/image-20240331213103843.png" alt="image-20240331213103843"></p>
 <h3 id="发送过程中丢失"><a href="#发送过程中丢失" class="headerlink" title="发送过程中丢失"></a>发送过程中丢失</h3><h4 id="发送方式"><a href="#发送方式" class="headerlink" title="发送方式"></a>发送方式</h4><p>生产者的发送方式有三种：</p>
@@ -1103,7 +1103,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>可复用jar包能力架构</title>
-    <url>/2024/04/08/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/</url>
+    <url>/2023/10/28/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/</url>
     <content><![CDATA[<h3 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h3><p>计划将原有的代码抽取成可复用的原子能力jar包，一个业务可能需要调用多个原子能力jar包，jar包调用链配置在配置文件中。</p>
 <p>实现外部调用接口，通过原子能力调用链实现原子能力包调用。 </p>
 <p>主要目的：1、实现能力抽取复用，2、实现原子能力编排。</p>
@@ -1160,7 +1160,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>数组和链表的区别</title>
-    <url>/2022/09/26/%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <url>/2022/04/26/%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<p>虽然网上已经有很多了，但是我还是尝试总结一下，添加一点自己的心得。</p>
 <p>总体来说，数组和链表是两种数据结构，所有的异同都是这两种数据结构的特点导致的。这两种数宝结构是计算机的基本数据结构，基态所有都是基于这两种数据结构实现的，只不过在细节上有区别。</p>
 <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>数组：多用于读多写少的情况，读取O(1)，写入O(n)，修改O(1)，删除O(n)；需要连续内存。</p>
@@ -1250,7 +1250,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>简单时间管理</title>
-    <url>/2022/03/26/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/</url>
+    <url>/2022/03/30/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="时间管理"><a href="#时间管理" class="headerlink" title="时间管理"></a>时间管理</h1><h2 id="目标感"><a href="#目标感" class="headerlink" title="目标感"></a>目标感</h2><ol>
 <li>给每件事情设定deadline</li>
 <li>给长期的事情设置周期循环事项</li>
@@ -1258,7 +1258,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <h2 id="时间块"><a href="#时间块" class="headerlink" title="时间块"></a>时间块</h2><ul>
 <li>30分钟刻度划分<br>一般管理人员的时间快划分可以到30分钟或者1小时</li>
 <li>半天刻度划分<br>研发人员会按照半天来划分时间，涉及到写代码、用例、测试计划、编译、部署等具体工作，需要时间来思考及实现，所以有效的时间块划分是半天或者一天。</li>
-<li><span id="more"></span></li>
 </ul>
 <h2 id="固化日程"><a href="#固化日程" class="headerlink" title="固化日程"></a>固化日程</h2><p>固化日程即养成好的习惯，使得时间利用率高，事情处理效率高。<br>有些固定模板可套用，如：</p>
 <ul>
@@ -1266,7 +1265,8 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <li><strong>早会及总结</strong></li>
 <li><strong>上午做需求评审，下午写代码，晚上做分享</strong></li>
 </ul>
-<p>个人日程示例：<br>    <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">8.45-9.00：查看日程，规划今天事务</span><br><span class="line">9.15-9.30： 早会</span><br><span class="line">9.30-9.45：整理项目的进度和风险</span><br><span class="line">10.00-11.00： 检视930版本需求</span><br><span class="line">11.00-11.50： XX技术方案/需求评审会议</span><br><span class="line">———————————————————</span><br><span class="line">1.30-3.00：写代码</span><br><span class="line">3.15-6.00： 接口设计</span><br><span class="line">7.00-8.45：  小组分享</span><br><span class="line">8.45-9.00： 今日事项总结，明日事项规划</span><br></pre></td></tr></table></figure></p>
+<p>个人日程示例：</p>
+<p>​	9.30-10.00：整理项目的进度和风险<br>​	10.00-11.00： 思考编码方案<br>​	11.00-11.50： XX技术方案&#x2F;监视团队代码<br>​	———————————————————<br>​	2.30-3.00：接口设计<br>​	3.15-6.00： 编码<br>​	7.00-8.00：  小组分享&#x2F;学习<br>​	8.00-8.30： 今日事项总结，明日事项规划<br>​	</p>
 <h2 id="工具和方法论"><a href="#工具和方法论" class="headerlink" title="工具和方法论"></a>工具和方法论</h2><p>工具：microsoft todo、滴答清单、calendar<br>方法论：GTD(Get things done)</p>
 ]]></content>
       <categories>
@@ -1278,7 +1278,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
   </entry>
   <entry>
     <title>约瑟夫环问题</title>
-    <url>/2022/08/29/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
+    <url>/2022/04/10/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
     <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
 <p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
