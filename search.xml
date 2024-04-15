@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>4月15面试复盘</title>
+    <url>/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。</p>
+<h3 id="面试问题"><a href="#面试问题" class="headerlink" title="面试问题"></a>面试问题</h3><p>有些问题记不上来了，将记忆清楚和答的不好的记录复盘。</p>
+<h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>问：</p>
+<p>我们使用的<strong>注册中心、配置中心</strong>和市面使用的spring或者nacos的异同。</p>
+<p>复盘：</p>
+<p>公司使用的是zookeeper，市面常见的主要有4种<strong>Eureka、Zookeeper、Consul、Nacos</strong>。</p>
+<p>具体的对比差异没有答好，简述了注册中心<strong>AP，CP</strong>的差异。</p>
+<p>在配置中心上，目前常用的有<strong>springcloud config、nacos、apollo</strong></p>
+<p>具体的差异也没答上。</p>
+<p>后续整理归纳一篇文章。</p>
+<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>问：自定义经典线程池拒绝策略</p>
+<p>复盘：</p>
+<p>相当于知识盲区了，没有答上，只知道有4种拒绝策略：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1、AbortPolicy：默认拒绝策略，抛出RejectExecutionException异常</span><br><span class="line"></span><br><span class="line">2、CallerRunsPolicy：不抛异常，而是让提交任务的线程自己去执行这个任务</span><br><span class="line"></span><br><span class="line">3、DiscardOldestPolicy：策略会丢失队列中最老的以恶搞任务，然后重新尝试新提交被拒绝的任务</span><br><span class="line"></span><br><span class="line">4、DiscardPolicy：抛弃被拒绝的任务，不会做任何处理也不会抛出异常。</span><br></pre></td></tr></table></figure>
+
+<p>自定义的拒绝策略没有了解过，可以写篇文章总结了解一下。</p>
+<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>问：优化SQL方案</p>
+<p>复盘：知道一些优化方案，但是没有条理性</p>
+<p>需要整理一下，最好整理成一个全面的方法论</p>
+<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>问：redis和数据库同步一致性方案</p>
+<p>复盘：知道新跟新数据库，再更新缓存</p>
+<p>但是全面的方法论没有将出来。</p>
+<h4 id="问题5"><a href="#问题5" class="headerlink" title="问题5"></a>问题5</h4><p>问：jdk 虚拟线程，新版jdk特性</p>
+<p>复盘：jdk8之后都没有了解，这块短板等补齐，目前面试很少问到这个，但是得了解补齐.</p>
+<p>问：新版jdk的垃圾回收器</p>
+<p>复盘：同上</p>
+<h4 id="问题6"><a href="#问题6" class="headerlink" title="问题6"></a>问题6</h4><p>问：jdk调优工具</p>
+<p>复盘：知识盲点。得补齐，可能后续面试工作中用不到，但是得了解一下。</p>
+<h4 id="问题7"><a href="#问题7" class="headerlink" title="问题7"></a>问题7</h4><p>问：如何打破双亲加载机制</p>
+<p>复盘：知道双亲加载机制，但是如何打破倒是没有深入了解，自己也写篇文章总结一下。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总体来说，每个问题都有自己知道的点，但是好多没有全面的回答。<strong>回答的都是一个个的点，没有梳理成一个面</strong>，体现自己的逻辑性，条理性和全面性</p>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+      <tags>
+        <tag>复盘</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CAP原则</title>
     <url>/2023/03/30/CAP%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
@@ -41,65 +83,6 @@
       </categories>
       <tags>
         <tag>CAP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>COLA</title>
-    <url>/2023/01/06/COLA/</url>
-    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
-<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
-<ol>
-<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
-</li>
-<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
-</li>
-<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
-</li>
-<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
-<span id="more"></span></li>
-</ol>
-<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
-<li>gateway是为了防腐</li>
-<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
-<li>第三方服务的调用在Infra层</li>
-<li>为了易于理解可以把Adapter改为Controller</li>
-</ol>
-<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
-<ol>
-<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
-<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
-<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
-</ol>
-<p>调用过程及对象使用</p>
-<ol>
-<li>Client<br>定义如下对象<ul>
-<li>VO(View Object)，Adapter层使用</li>
-<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
-<li>DomainEvent，Infra层发布领域事件使用</li>
-<li>ServiceI，APP层实现该服务对外提供应用API</li>
-</ul>
-</li>
-<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
-<li>APP层<br>ServiceImpl接收Command<ul>
-<li>直接&#x2F;间接传给Mapper</li>
-<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
-</ul>
-</li>
-<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
-<li>Infa<ol>
-<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
-<li>调用第三方服务封装DO和Mapper，返回DO</li>
-<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
-<li>DomainEvent的发布</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>架构</category>
-      </categories>
-      <tags>
-        <tag>COLA</tag>
       </tags>
   </entry>
   <entry>
@@ -161,6 +144,65 @@
       </categories>
       <tags>
         <tag>DDD</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>COLA</title>
+    <url>/2023/01/06/COLA/</url>
+    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
+<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
+<ol>
+<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
+</li>
+<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
+</li>
+<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
+</li>
+<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
+<span id="more"></span></li>
+</ol>
+<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
+<li>gateway是为了防腐</li>
+<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
+<li>第三方服务的调用在Infra层</li>
+<li>为了易于理解可以把Adapter改为Controller</li>
+</ol>
+<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
+<ol>
+<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
+<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
+<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
+</ol>
+<p>调用过程及对象使用</p>
+<ol>
+<li>Client<br>定义如下对象<ul>
+<li>VO(View Object)，Adapter层使用</li>
+<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
+<li>DomainEvent，Infra层发布领域事件使用</li>
+<li>ServiceI，APP层实现该服务对外提供应用API</li>
+</ul>
+</li>
+<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
+<li>APP层<br>ServiceImpl接收Command<ul>
+<li>直接&#x2F;间接传给Mapper</li>
+<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
+</ul>
+</li>
+<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
+<li>Infa<ol>
+<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
+<li>调用第三方服务封装DO和Mapper，返回DO</li>
+<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
+<li>DomainEvent的发布</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>架构</category>
+      </categories>
+      <tags>
+        <tag>COLA</tag>
       </tags>
   </entry>
   <entry>
@@ -294,7 +336,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#103;&#x69;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#x6d;">&#x67;&#x69;&#x74;&#x40;&#103;&#x69;&#116;&#104;&#117;&#98;&#46;&#99;&#111;&#x6d;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#116;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#x40;&#103;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#x63;&#x6f;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
