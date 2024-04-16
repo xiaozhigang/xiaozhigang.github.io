@@ -156,12 +156,12 @@
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -218,6 +218,15 @@
 
       <time title="创建时间：2024-04-16 19:25:11" itemprop="dateCreated datePublished" datetime="2024-04-16T19:25:11+08:00">2024-04-16</time>
     </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+        </span>
+    </span>
 
   
 </div>
@@ -229,7 +238,49 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>之前面试问到了工作中用到的注册中心和市面上的有啥异同。</p>
+<p>公司用的注册中心：Zookeeper</p>
+<p>市面上除此之外还有其他注册中心：Eureka、Consul、Nacos</p>
+<table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>所属公司</th>
+<th>组件介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zookeeper</td>
+<td>Apache</td>
+<td>Zookeeper是一个分布式协调工具，可以实现注册功能</td>
+</tr>
+<tr>
+<td>Eureka</td>
+<td>Netflix</td>
+<td>Spring最早的注册中心，目前已经进入停更进维</td>
+</tr>
+<tr>
+<td>Consul</td>
+<td>Hashicorp</td>
+<td>Consul简化了分布式环境中的服务的注册和发现流程，通过HTTP或者DNS接口发现，支持外部Saas提供者等</td>
+</tr>
+<tr>
+<td>Nacos</td>
+<td>Alibaba</td>
+<td>Nacos致力于发现、配置和管理微服务。Nacos提供了一组简单易用的特性集，快速实现动态服务发现、服务配置、服务元数据以及流量管理</td>
+</tr>
+</tbody></table>
+<h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>遵循CP原则（一致性，分区容错性），牺牲了高可用。所以任何时候请求都能得到一致的数据结果，但是不能保证每次服务请求都是可达的。比如请求的时候leader节点宕机，或者集群中半数以上节点不可用，那么将无法处理请求。</p>
+<h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><p>遵循AP原则（可用性，分区容错性），牺牲了数据一致性。也就是能保证每次服务请求都是可达的，但是不能保证每次的请求结果都是一致的。Eureka集群没有主从之分，采用的是Peer to Peer对等通信，这是一种去中心化的架构，每个节点都需要添加一个或多个有效的serviceUrl指向其他节点，每个节点都是其他节点的副本。集群中只要还有一个节点存活，那么服务就是可用的，但是不饿能保证查到的数据是最新的或者一致的。</p>
+<p>除此之外还有一种保护机制，如果在15分钟内超过85%的节点都没有正常心跳，Eureka则认为客户端与注册中心之间出现了网络故障，此时会出现以下几种情况：</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 

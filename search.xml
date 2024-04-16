@@ -86,6 +86,65 @@
       </tags>
   </entry>
   <entry>
+    <title>COLA</title>
+    <url>/2023/01/06/COLA/</url>
+    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
+<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
+<ol>
+<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
+</li>
+<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
+</li>
+<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
+</li>
+<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
+<span id="more"></span></li>
+</ol>
+<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
+<li>gateway是为了防腐</li>
+<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
+<li>第三方服务的调用在Infra层</li>
+<li>为了易于理解可以把Adapter改为Controller</li>
+</ol>
+<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
+<ol>
+<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
+<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
+<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
+</ol>
+<p>调用过程及对象使用</p>
+<ol>
+<li>Client<br>定义如下对象<ul>
+<li>VO(View Object)，Adapter层使用</li>
+<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
+<li>DomainEvent，Infra层发布领域事件使用</li>
+<li>ServiceI，APP层实现该服务对外提供应用API</li>
+</ul>
+</li>
+<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
+<li>APP层<br>ServiceImpl接收Command<ul>
+<li>直接&#x2F;间接传给Mapper</li>
+<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
+</ul>
+</li>
+<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
+<li>Infa<ol>
+<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
+<li>调用第三方服务封装DO和Mapper，返回DO</li>
+<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
+<li>DomainEvent的发布</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>架构</category>
+      </categories>
+      <tags>
+        <tag>COLA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>DDD分层架构规范</title>
     <url>/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
@@ -144,65 +203,6 @@
       </categories>
       <tags>
         <tag>DDD</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>COLA</title>
-    <url>/2023/01/06/COLA/</url>
-    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
-<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
-<ol>
-<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
-</li>
-<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
-</li>
-<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
-</li>
-<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
-<span id="more"></span></li>
-</ol>
-<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
-<li>gateway是为了防腐</li>
-<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
-<li>第三方服务的调用在Infra层</li>
-<li>为了易于理解可以把Adapter改为Controller</li>
-</ol>
-<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
-<ol>
-<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
-<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
-<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
-</ol>
-<p>调用过程及对象使用</p>
-<ol>
-<li>Client<br>定义如下对象<ul>
-<li>VO(View Object)，Adapter层使用</li>
-<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
-<li>DomainEvent，Infra层发布领域事件使用</li>
-<li>ServiceI，APP层实现该服务对外提供应用API</li>
-</ul>
-</li>
-<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
-<li>APP层<br>ServiceImpl接收Command<ul>
-<li>直接&#x2F;间接传给Mapper</li>
-<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
-</ul>
-</li>
-<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
-<li>Infa<ol>
-<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
-<li>调用第三方服务封装DO和Mapper，返回DO</li>
-<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
-<li>DomainEvent的发布</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>架构</category>
-      </categories>
-      <tags>
-        <tag>COLA</tag>
       </tags>
   </entry>
   <entry>
@@ -336,7 +336,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#111;&#109;">&#x67;&#105;&#x74;&#x40;&#103;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#111;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;">&#103;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -1201,34 +1201,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>注册中心分析</title>
-    <url>/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>浅谈ChatGPT</title>
-    <url>/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/</url>
-    <content><![CDATA[<p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
-<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
-<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
-<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
-<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
-<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
-<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
-<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
-<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
-<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
-<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>ChatGPT</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>数组和链表的区别</title>
     <url>/2022/04/26/%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<p>虽然网上已经有很多了，但是我还是尝试总结一下，添加一点自己的心得。</p>
@@ -1270,6 +1242,155 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>注册中心分析</title>
+    <url>/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>之前面试问到了工作中用到的注册中心和市面上的有啥异同。</p>
+<p>公司用的注册中心：Zookeeper</p>
+<p>市面上除此之外还有其他注册中心：Eureka、Consul、Nacos</p>
+<table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>所属公司</th>
+<th>组件介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zookeeper</td>
+<td>Apache</td>
+<td>Zookeeper是一个分布式协调工具，可以实现注册功能</td>
+</tr>
+<tr>
+<td>Eureka</td>
+<td>Netflix</td>
+<td>Spring最早的注册中心，目前已经进入停更进维</td>
+</tr>
+<tr>
+<td>Consul</td>
+<td>Hashicorp</td>
+<td>Consul简化了分布式环境中的服务的注册和发现流程，通过HTTP或者DNS接口发现，支持外部Saas提供者等</td>
+</tr>
+<tr>
+<td>Nacos</td>
+<td>Alibaba</td>
+<td>Nacos致力于发现、配置和管理微服务。Nacos提供了一组简单易用的特性集，快速实现动态服务发现、服务配置、服务元数据以及流量管理</td>
+</tr>
+</tbody></table>
+<h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>遵循CP原则（一致性，分区容错性），牺牲了高可用。所以任何时候请求都能得到一致的数据结果，但是不能保证每次服务请求都是可达的。比如请求的时候leader节点宕机，或者集群中半数以上节点不可用，那么将无法处理请求。</p>
+<h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><p>遵循AP原则（可用性，分区容错性），牺牲了数据一致性。也就是能保证每次服务请求都是可达的，但是不能保证每次的请求结果都是一致的。Eureka集群没有主从之分，采用的是Peer to Peer对等通信，这是一种去中心化的架构，每个节点都需要添加一个或多个有效的serviceUrl指向其他节点，每个节点都是其他节点的副本。集群中只要还有一个节点存活，那么服务就是可用的，但是不饿能保证查到的数据是最新的或者一致的。</p>
+<p>除此之外还有一种保护机制，如果在15分钟内超过85%的节点都没有正常心跳，Eureka则认为客户端与注册中心之间出现了网络故障，此时会出现以下几种情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">1、Eureka不再从注册表中移除因长时间没有收到心跳而过期的服务</span><br><span class="line"></span><br><span class="line">2、Eureka仍然能够接受新服务注册和查询请求，但不会同步到其他节点上，只保证当前节点可用</span><br><span class="line"></span><br><span class="line">3、当网络稳定时，当前实例新注册的信息会被同步到其他节点</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Consul"><a href="#Consul" class="headerlink" title="Consul"></a>Consul</h3><p>遵循CP原则，Hashicorp公司开发，用于实现分布式系统的服务发现与配置。使用的时Raft算法，比zookeeper使用的Paxos算法更简单，虽然保证了强一致性，但是可用性方面性能有所下降，比如在服务注册方面，Raft协议要求半数以上的节点都写入才算注册成功，leader节点宕机之后，在重新选取出leader节点之前都会导致不可用。</p>
+<h3 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h3><p>遵循AP原则，也可支持CP原则，阿里开源，nacos &#x3D; 注册中心 + 配置中心，总之很强大，推荐。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>Nacos</th>
+<th>Eureka</th>
+<th>Consul</th>
+<th>Zookeeper</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性协议</td>
+<td>CP+AP</td>
+<td>AP</td>
+<td>AP</td>
+<td>CP</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>TCP&#x2F;HTTP&#x2F;MySQL&#x2F;Client Beat</td>
+<td>Client Beat</td>
+<td>TCP&#x2F;HTTP&#x2F;gRPC&#x2F;Cmd</td>
+<td>keep alive</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>权重&#x2F;metadata&#x2F;Selector</td>
+<td>Ribbon</td>
+<td>Fabio</td>
+<td>-</td>
+</tr>
+<tr>
+<td>自动注销实例</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>访问协议</td>
+<td>HTTP&#x2F;DNS</td>
+<td>HTTP</td>
+<td>HTTP&#x2F;DNS</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>监听支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多数据中心</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>跨注册中心同步</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>SpringCloud集成</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>注册中心</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>浅谈ChatGPT</title>
+    <url>/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/</url>
+    <content><![CDATA[<p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
+<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
+<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
+<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
+<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
+<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
+<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
+<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
+<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
+<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
+<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>ChatGPT</tag>
       </tags>
   </entry>
   <entry>
