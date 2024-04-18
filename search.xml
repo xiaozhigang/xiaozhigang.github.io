@@ -336,7 +336,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;">&#103;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#111;&#x6d;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#109;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -386,110 +386,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>个人网站搭建</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git仓库的子目录独立成新仓库</title>
-    <url>/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
-
-<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
-<span id="more"></span>
-
-<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git分支模型(参考阿里Aone Flow)</title>
-    <url>/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
-<li><p>master</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>release&#x2F;xxx</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">release/test 和 release/prod</span><br><span class="line">既可以为长期分支也可以为短期分支，可能存在于一个或者多个版本之间.</span><br><span class="line"></span><br><span class="line">由测试负责人负责人管理该分支。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>feature&#x2F;fixbug&#x2F;hotfix</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">临时分支</span><br><span class="line">用于开发的具体功能特性和修复bug的分支，功能完成后删除.</span><br><span class="line">格式为：feature_$date_$name_$description</span><br><span class="line">       fixbug_$date_$name_$description</span><br><span class="line">       hotfix_$date_$name_$description</span><br></pre></td></tr></table></figure></li>
-</ol>
-<span id="more"></span>
-
-<h2 id="分支策略"><a href="#分支策略" class="headerlink" title="分支策略"></a>分支策略</h2><ol>
-<li><p>规则1</p>
-<p>开始工作前，从主干创建特性分支</p>
-<ul>
-<li>每当开始一件新的工作项（比如新的功能或是bug）的时候，从最新已发布版本的主干Master上创建一个以feature(bugfix)&#x2F;前缀命名的特性分支，然后在这个分支上提交代码修改。</li>
-<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/git-model/image-1.png"></li>
-</ul>
-</li>
-<li><p>规则2</p>
-<p>通过合并特性分支，形成发布分支</p>
-<ul>
-<li>从主干上拉出一条新分支，将所有本次要集成或发布的特性分支依次合并过去，从而得到发布分支。发布分支通常以release&#x2F;前缀命名。</li>
-<li>每条发布分支与具体的环境相对应，比如release&#x2F;test分支对应部署测试环境，release&#x2F;prod分支对应线上正式环境等等，并与流水线工具相结合，串联各个环境上的代码质量扫描和自动化测试关卡，将产出的部署包直接发布到相应环境上。</li>
-<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/git-model/image-2.png"></li>
-</ul>
-</li>
-<li><p>规则3</p>
-<p>发布到线上正式环境后，合并相应的发布分支到主干，在主干添加标签，同时删除该发布分支关联的特性分支</p>
-<ul>
-<li>完成了线上正式环境的部署，就意味着相应的功能真正地发布了，此时应该将这条发布分支合并到主干。</li>
-<li>为了避免在代码仓库里堆积大量历史上的特性分支，还应该清理掉已经上线部分特性分支。</li>
-<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/git-model/image-3.png"></li>
-</ul>
-</li>
-<li><p>其他</p>
-<ul>
-<li>对于hotfix，可以创建一条新的发布分支对应线上环境（相当于hotfix分支），同时为这个分支创建临时流水线，以保障必要的发布前检查和冒烟测试能够自动执行。</li>
-<li>如果非得修一个历史版本的Bug，在主干分支找到版本标签位置，然后从那个位置创建hotfix分支，这种情况比较少见</li>
-</ul>
-</li>
-</ol>
-<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><ol>
-<li><p>新功能开发时，开发人员从Master拉取代码生成特性分支。</p>
-</li>
-<li><p>单元测试完成后等待测试负责人拉取release&#x2F;test分支，然后提交Pull Request</p>
-</li>
-<li><p>开发负责人或者其他开发人员对Pull Request进行代码Review</p>
-</li>
-<li><p>代码Review完成后，测试负责人合并Pull Request到release&#x2F;test，如果遇到合并冲突，则让相应的开发人员把feature&#x2F;bug&#x2F;hotfix分支重新以master为基准进行提交以及让相应的开发人员协助解决。</p>
-</li>
-<li><p>测试人员使用流水线工具进行代码质量扫描和自动化测试</p>
-</li>
-<li><p>测试人员进行测试</p>
-</li>
-<li><p>完成测试后，查看Master是否比拉取release&#x2F;test时有更新，如果没有直接使用release&#x2F;test上线，否则从最新Master拉取分支release&#x2F;prod分支合并相关PR并进行回归测试</p>
-</li>
-<li><p>提交上线申请上线</p>
-<p>示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">开发人员A从Master拉取代码生成feature_20190818_A_get_users</span><br><span class="line">开发人员B从Master拉取代码生成feature_20190819_B_login</span><br><span class="line"></span><br><span class="line">测试负责人Y从Master拉取release/test</span><br><span class="line">开发人员A提交Pull Request PR1</span><br><span class="line">开发人员B提交Pull Request PR2</span><br><span class="line"></span><br><span class="line">开发负责人F和开发人员C评审PR1 PR2，评审通过</span><br><span class="line"></span><br><span class="line">测试负责人Y合并代码到release/test</span><br><span class="line">测试人员X进行测试，完成后发现Master和拉取release/test时一样，直接使用release/test进行构建申请发布</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -673,6 +569,110 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>索引</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git分支模型(参考阿里Aone Flow)</title>
+    <url>/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
+<li><p>master</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>release&#x2F;xxx</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">release/test 和 release/prod</span><br><span class="line">既可以为长期分支也可以为短期分支，可能存在于一个或者多个版本之间.</span><br><span class="line"></span><br><span class="line">由测试负责人负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>feature&#x2F;fixbug&#x2F;hotfix</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">临时分支</span><br><span class="line">用于开发的具体功能特性和修复bug的分支，功能完成后删除.</span><br><span class="line">格式为：feature_$date_$name_$description</span><br><span class="line">       fixbug_$date_$name_$description</span><br><span class="line">       hotfix_$date_$name_$description</span><br></pre></td></tr></table></figure></li>
+</ol>
+<span id="more"></span>
+
+<h2 id="分支策略"><a href="#分支策略" class="headerlink" title="分支策略"></a>分支策略</h2><ol>
+<li><p>规则1</p>
+<p>开始工作前，从主干创建特性分支</p>
+<ul>
+<li>每当开始一件新的工作项（比如新的功能或是bug）的时候，从最新已发布版本的主干Master上创建一个以feature(bugfix)&#x2F;前缀命名的特性分支，然后在这个分支上提交代码修改。</li>
+<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/git-model/image-1.png"></li>
+</ul>
+</li>
+<li><p>规则2</p>
+<p>通过合并特性分支，形成发布分支</p>
+<ul>
+<li>从主干上拉出一条新分支，将所有本次要集成或发布的特性分支依次合并过去，从而得到发布分支。发布分支通常以release&#x2F;前缀命名。</li>
+<li>每条发布分支与具体的环境相对应，比如release&#x2F;test分支对应部署测试环境，release&#x2F;prod分支对应线上正式环境等等，并与流水线工具相结合，串联各个环境上的代码质量扫描和自动化测试关卡，将产出的部署包直接发布到相应环境上。</li>
+<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/git-model/image-2.png"></li>
+</ul>
+</li>
+<li><p>规则3</p>
+<p>发布到线上正式环境后，合并相应的发布分支到主干，在主干添加标签，同时删除该发布分支关联的特性分支</p>
+<ul>
+<li>完成了线上正式环境的部署，就意味着相应的功能真正地发布了，此时应该将这条发布分支合并到主干。</li>
+<li>为了避免在代码仓库里堆积大量历史上的特性分支，还应该清理掉已经上线部分特性分支。</li>
+<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/git-model/image-3.png"></li>
+</ul>
+</li>
+<li><p>其他</p>
+<ul>
+<li>对于hotfix，可以创建一条新的发布分支对应线上环境（相当于hotfix分支），同时为这个分支创建临时流水线，以保障必要的发布前检查和冒烟测试能够自动执行。</li>
+<li>如果非得修一个历史版本的Bug，在主干分支找到版本标签位置，然后从那个位置创建hotfix分支，这种情况比较少见</li>
+</ul>
+</li>
+</ol>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><ol>
+<li><p>新功能开发时，开发人员从Master拉取代码生成特性分支。</p>
+</li>
+<li><p>单元测试完成后等待测试负责人拉取release&#x2F;test分支，然后提交Pull Request</p>
+</li>
+<li><p>开发负责人或者其他开发人员对Pull Request进行代码Review</p>
+</li>
+<li><p>代码Review完成后，测试负责人合并Pull Request到release&#x2F;test，如果遇到合并冲突，则让相应的开发人员把feature&#x2F;bug&#x2F;hotfix分支重新以master为基准进行提交以及让相应的开发人员协助解决。</p>
+</li>
+<li><p>测试人员使用流水线工具进行代码质量扫描和自动化测试</p>
+</li>
+<li><p>测试人员进行测试</p>
+</li>
+<li><p>完成测试后，查看Master是否比拉取release&#x2F;test时有更新，如果没有直接使用release&#x2F;test上线，否则从最新Master拉取分支release&#x2F;prod分支合并相关PR并进行回归测试</p>
+</li>
+<li><p>提交上线申请上线</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">开发人员A从Master拉取代码生成feature_20190818_A_get_users</span><br><span class="line">开发人员B从Master拉取代码生成feature_20190819_B_login</span><br><span class="line"></span><br><span class="line">测试负责人Y从Master拉取release/test</span><br><span class="line">开发人员A提交Pull Request PR1</span><br><span class="line">开发人员B提交Pull Request PR2</span><br><span class="line"></span><br><span class="line">开发负责人F和开发人员C评审PR1 PR2，评审通过</span><br><span class="line"></span><br><span class="line">测试负责人Y合并代码到release/test</span><br><span class="line">测试人员X进行测试，完成后发现Master和拉取release/test时一样，直接使用release/test进行构建申请发布</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git仓库的子目录独立成新仓库</title>
+    <url>/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
+
+<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
+<span id="more"></span>
+
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -931,78 +931,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>Spring中用到的设计模式</title>
-    <url>/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
-<p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
-<p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
-<p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Spring AOP</th>
-<th>AspectJ</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>与spring ioc紧密集成，新项目使用</td>
-<td>维护老项目使用</td>
-</tr>
-<tr>
-<td>2</td>
-<td>运行时织入</td>
-<td>编译时生成</td>
-</tr>
-<tr>
-<td>3</td>
-<td>不支持static和final修饰方法和类</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>4</td>
-<td>简单，有注解</td>
-<td>复杂，需要.aj文件来创建切面，并且需要使用ajc来编译代码</td>
-</tr>
-</tbody></table>
-<p>两者异同：<a href="https://developer.aliyun.com/article/720402">https://developer.aliyun.com/article/720402</a></p>
-<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>父类定义算法骨架或者关键步骤，而具体实现延迟到子类中，使子类再不改变父类结构的情况下可重定义某些特定步骤的实现。</p>
-<p>Spring 中 <code>JdbcTemplate</code>、<code>HibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用 Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。定义了资源获取、执行SQL、释放资源这些基本流程，执行sql的具体方式又以回调函数的形式开放。</p>
-<p><img src="/../images/design/image-20240414192751147.png" alt="image-20240414192751147"></p>
-<p>参考文献：<a href="https://blog.csdn.net/zhangweiocp/article/details/115486257">https://blog.csdn.net/zhangweiocp/article/details/115486257</a></p>
-<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，依赖这个对象的所有对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。</p>
-<p>事件驱动模型中的三种角色：事件角色、事件监听者角色、事件发布者角色。</p>
-<p><img src="/../images/design/image-20240414190146289.png" alt="image-20240414190146289"></p>
-<p><strong>spring的事件流程总结</strong></p>
-<p>1、定义一个事件: 实现一个继承自<code>ApplicationEvent</code>，并且写相应的构造函数</p>
-<p>2、定义一个事件监听者：实现 <code>ApplicationListener</code> 接口，重写 <code>onApplicationEvent()</code> 方法</p>
-<p>3、使用事件发布者发布消息: 可以通过 <code>ApplicationEventPublisher</code> 的 <code>publishEvent()</code> 方法发布消息</p>
-<p>example:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数</span><br><span class="line">public class DemoEvent extends ApplicationEvent&#123;</span><br><span class="line">    private static final long serialVersionUID = 1L;</span><br><span class="line"></span><br><span class="line">    private String message;</span><br><span class="line"></span><br><span class="line">    public DemoEvent(Object source,String message)&#123;</span><br><span class="line">        super(source);</span><br><span class="line">        this.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMessage() &#123;</span><br><span class="line">         return message;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；</span><br><span class="line">@Component</span><br><span class="line">public class DemoListener implements ApplicationListener&lt;DemoEvent&gt;&#123;</span><br><span class="line"></span><br><span class="line">    //使用onApplicationEvent接收消息</span><br><span class="line">    @Override</span><br><span class="line">    public void onApplicationEvent(DemoEvent event) &#123;</span><br><span class="line">        String msg = event.getMessage();</span><br><span class="line">        System.out.println(&quot;接收到的信息是：&quot;+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。</span><br><span class="line">@Component</span><br><span class="line">public class DemoPublisher &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    ApplicationContext applicationContext;</span><br><span class="line"></span><br><span class="line">    public void publish(String message)&#123;</span><br><span class="line">        //发布事件</span><br><span class="line">        applicationContext.publishEvent(new DemoEvent(this, message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>当调用 <code>DemoPublisher</code> 的 <code>publish()</code> 方法的时候，比如 <code>demoPublisher.publish(&quot;你好&quot;)</code> ，控制台就会打印出:<code>接收到的信息是：你好</code> 。</p>
-<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>装饰者模式可以动态地给对象添加一些额外的属性或行为。相比于使用继承，装饰者模式更加灵活。简单点儿说就是当我们需要修改原有的功能，但我们又不愿直接去修改原有的代码时，设计一个 Decorator 套在原有代码外面。最典型的就是JDK中的<code>InputStream,OutputStream</code>，两个类下的所有子类都是再不修改父类代码的情况下扩展了他的功能。</p>
-<p><img src="/../images/design/Decorator.jpg" alt="装饰者模式示意图"></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Spring 框架中用到了哪些设计模式？</p>
-<ul>
-<li><strong>工厂设计模式</strong> : Spring 使用工厂模式通过 <code>BeanFactory</code>、<code>ApplicationContext</code> 创建 bean 对象。</li>
-<li><strong>代理设计模式</strong> : Spring AOP 功能的实现。</li>
-<li><strong>单例设计模式</strong> : Spring 中的 Bean 默认都是单例的。</li>
-<li><strong>模板方法模式</strong> : Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。</li>
-<li><strong>包装器设计模式</strong> : 我们的项目需要连接多个数据库，而且不同的客户在每次访问中根据需要会去访问不同的数据库。这种模式让我们可以根据客户的需求能够动态切换不同的数据源。</li>
-<li><strong>观察者模式:</strong> Spring 事件驱动模型就是观察者模式很经典的一个应用。</li>
-<li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>l</li>
-</ul>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Spring的自动加载配置</title>
     <url>/2022/09/01/Spring%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E9%85%8D%E7%BD%AE/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>都知道spring的自动加载是通过注解实现的，但是这注解又是怎么实现的呢？</p>
@@ -1102,6 +1030,78 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>ThreadLocal</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring中用到的设计模式</title>
+    <url>/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
+<p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
+<p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
+<p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Spring AOP</th>
+<th>AspectJ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>与spring ioc紧密集成，新项目使用</td>
+<td>维护老项目使用</td>
+</tr>
+<tr>
+<td>2</td>
+<td>运行时织入</td>
+<td>编译时生成</td>
+</tr>
+<tr>
+<td>3</td>
+<td>不支持static和final修饰方法和类</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>4</td>
+<td>简单，有注解</td>
+<td>复杂，需要.aj文件来创建切面，并且需要使用ajc来编译代码</td>
+</tr>
+</tbody></table>
+<p>两者异同：<a href="https://developer.aliyun.com/article/720402">https://developer.aliyun.com/article/720402</a></p>
+<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>父类定义算法骨架或者关键步骤，而具体实现延迟到子类中，使子类再不改变父类结构的情况下可重定义某些特定步骤的实现。</p>
+<p>Spring 中 <code>JdbcTemplate</code>、<code>HibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用 Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。定义了资源获取、执行SQL、释放资源这些基本流程，执行sql的具体方式又以回调函数的形式开放。</p>
+<p><img src="/../images/design/image-20240414192751147.png" alt="image-20240414192751147"></p>
+<p>参考文献：<a href="https://blog.csdn.net/zhangweiocp/article/details/115486257">https://blog.csdn.net/zhangweiocp/article/details/115486257</a></p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，依赖这个对象的所有对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。</p>
+<p>事件驱动模型中的三种角色：事件角色、事件监听者角色、事件发布者角色。</p>
+<p><img src="/../images/design/image-20240414190146289.png" alt="image-20240414190146289"></p>
+<p><strong>spring的事件流程总结</strong></p>
+<p>1、定义一个事件: 实现一个继承自<code>ApplicationEvent</code>，并且写相应的构造函数</p>
+<p>2、定义一个事件监听者：实现 <code>ApplicationListener</code> 接口，重写 <code>onApplicationEvent()</code> 方法</p>
+<p>3、使用事件发布者发布消息: 可以通过 <code>ApplicationEventPublisher</code> 的 <code>publishEvent()</code> 方法发布消息</p>
+<p>example:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数</span><br><span class="line">public class DemoEvent extends ApplicationEvent&#123;</span><br><span class="line">    private static final long serialVersionUID = 1L;</span><br><span class="line"></span><br><span class="line">    private String message;</span><br><span class="line"></span><br><span class="line">    public DemoEvent(Object source,String message)&#123;</span><br><span class="line">        super(source);</span><br><span class="line">        this.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMessage() &#123;</span><br><span class="line">         return message;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；</span><br><span class="line">@Component</span><br><span class="line">public class DemoListener implements ApplicationListener&lt;DemoEvent&gt;&#123;</span><br><span class="line"></span><br><span class="line">    //使用onApplicationEvent接收消息</span><br><span class="line">    @Override</span><br><span class="line">    public void onApplicationEvent(DemoEvent event) &#123;</span><br><span class="line">        String msg = event.getMessage();</span><br><span class="line">        System.out.println(&quot;接收到的信息是：&quot;+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。</span><br><span class="line">@Component</span><br><span class="line">public class DemoPublisher &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    ApplicationContext applicationContext;</span><br><span class="line"></span><br><span class="line">    public void publish(String message)&#123;</span><br><span class="line">        //发布事件</span><br><span class="line">        applicationContext.publishEvent(new DemoEvent(this, message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当调用 <code>DemoPublisher</code> 的 <code>publish()</code> 方法的时候，比如 <code>demoPublisher.publish(&quot;你好&quot;)</code> ，控制台就会打印出:<code>接收到的信息是：你好</code> 。</p>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>装饰者模式可以动态地给对象添加一些额外的属性或行为。相比于使用继承，装饰者模式更加灵活。简单点儿说就是当我们需要修改原有的功能，但我们又不愿直接去修改原有的代码时，设计一个 Decorator 套在原有代码外面。最典型的就是JDK中的<code>InputStream,OutputStream</code>，两个类下的所有子类都是再不修改父类代码的情况下扩展了他的功能。</p>
+<p><img src="/../images/design/Decorator.jpg" alt="装饰者模式示意图"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Spring 框架中用到了哪些设计模式？</p>
+<ul>
+<li><strong>工厂设计模式</strong> : Spring 使用工厂模式通过 <code>BeanFactory</code>、<code>ApplicationContext</code> 创建 bean 对象。</li>
+<li><strong>代理设计模式</strong> : Spring AOP 功能的实现。</li>
+<li><strong>单例设计模式</strong> : Spring 中的 Bean 默认都是单例的。</li>
+<li><strong>模板方法模式</strong> : Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。</li>
+<li><strong>包装器设计模式</strong> : 我们的项目需要连接多个数据库，而且不同的客户在每次访问中根据需要会去访问不同的数据库。这种模式让我们可以根据客户的需求能够动态切换不同的数据源。</li>
+<li><strong>观察者模式:</strong> Spring 事件驱动模型就是观察者模式很经典的一个应用。</li>
+<li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>l</li>
+</ul>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1463,6 +1463,125 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置中心分析</title>
+    <url>/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>配置中心可以兼顾<strong>配置实时性、配置的流程管理、以及分布式场景</strong>的应用。</p>
+<p>配置实时性：传统的静态配置方式想要修改某个配置，则需要修改后重启，如果想要实现动态修改，可以使用数据库，采用轮询的方式，访问数据库获得配置数据。轮询频率低的话对配置数据变更的感知就慢，频率高的话，就会消耗过多的性能。</p>
+<p>配置管理流程：权限管理、灰度管理、版本管理、格式检验和安全配置</p>
+<p>分布式场景：随着采用分布式开发模式，项目之间的相互引用不断增多，相互之间的调用复杂度也指数上升，需要配置中心治理。</p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p><strong>灰度发布</strong>：当配置修改影响较大时，需要先在部分实例中生效，验证配置变更符合预期之后再推送到所有实例。</p>
+<p><strong>权限管理</strong>：对配置变更的权限管控，以及对审计权限的管控</p>
+<p><strong>版本管理&amp;回滚</strong>：当配置变更不符合预期时，需要根据配置发布版本回滚</p>
+<p><strong>配置格式校验</strong>：配置数据一般会以一种配置格式存储，配置中心会对配置数据的格式进行校验，防止格式错误导致的各种问题</p>
+<p><strong>监听查询</strong>：当排查问题或者进行统计的时候，需要指导一个配置被哪些实例使用到，以及一个实例使用了哪些配置</p>
+<p><strong>多环境</strong>：生产环境中，配置中心常常需要涉及到多环境或者多集群，业务在开发环境和生产环境隔离开，或者根据不同的生产线存在多个生产环境，各环境隔离之后相互影响就小。</p>
+<p><strong>多集群</strong>：当对稳定性要求比较高，不允许各个环境相互影响的时候，需要将多环境通过多集群的方式进行物理隔离</p>
+<h3 id="常用配置中心"><a href="#常用配置中心" class="headerlink" title="常用配置中心"></a>常用配置中心</h3><h4 id="Apollo"><a href="#Apollo" class="headerlink" title="Apollo"></a>Apollo</h4><p><img src="/../images/spring-config/overall-architecture.png"></p>
+<h4 id="spring-cloud-config"><a href="#spring-cloud-config" class="headerlink" title="spring cloud config"></a>spring cloud config</h4><p><img src="/../images/spring-config/a3bb80c142c74634aa8ed67e8bf1ac3d.png" alt="overall-architecture"></p>
+<h4 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h4><p><img src="/../images/spring-config/1561217892717-1418fb9b-7faa-4324-87b9-f1740329f564.jpeg" alt="nacos_arch.jpg"></p>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>spring cloud config</th>
+<th>Apollo</th>
+<th>nacos</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置界面</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>配置实时推送</td>
+<td>支持（spring cloud bus）</td>
+<td>支持（http长轮询）</td>
+<td>支持（http长轮询）</td>
+</tr>
+<tr>
+<td>版本管理</td>
+<td>支持（git）</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>配置回滚</td>
+<td>支持（git）</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>灰度发布</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>权限管理</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多集群</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多环境</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>监听查询</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多语言</td>
+<td>java</td>
+<td>多语言</td>
+<td>多语言</td>
+</tr>
+<tr>
+<td>配置格式校验</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>分布式部署</td>
+<td>复杂</td>
+<td>复杂</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>数据一致性</td>
+<td>git保证数据一致性，config service从git读取数据</td>
+<td>数据量模拟消息队列，Apollo定时读取消息队列</td>
+<td>http异步通知</td>
+</tr>
+<tr>
+<td>通信协议</td>
+<td>http、amqp</td>
+<td>http</td>
+<td>http</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>配置中心</tag>
       </tags>
   </entry>
   <entry>
