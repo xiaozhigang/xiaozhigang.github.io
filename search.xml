@@ -86,65 +86,6 @@
       </tags>
   </entry>
   <entry>
-    <title>COLA</title>
-    <url>/2023/01/06/COLA/</url>
-    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
-<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
-<ol>
-<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
-</li>
-<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
-</li>
-<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
-</li>
-<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
-<span id="more"></span></li>
-</ol>
-<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
-<li>gateway是为了防腐</li>
-<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
-<li>第三方服务的调用在Infra层</li>
-<li>为了易于理解可以把Adapter改为Controller</li>
-</ol>
-<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
-<ol>
-<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
-<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
-<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
-</ol>
-<p>调用过程及对象使用</p>
-<ol>
-<li>Client<br>定义如下对象<ul>
-<li>VO(View Object)，Adapter层使用</li>
-<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
-<li>DomainEvent，Infra层发布领域事件使用</li>
-<li>ServiceI，APP层实现该服务对外提供应用API</li>
-</ul>
-</li>
-<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
-<li>APP层<br>ServiceImpl接收Command<ul>
-<li>直接&#x2F;间接传给Mapper</li>
-<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
-</ul>
-</li>
-<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
-<li>Infa<ol>
-<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
-<li>调用第三方服务封装DO和Mapper，返回DO</li>
-<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
-<li>DomainEvent的发布</li>
-</ol>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>架构</category>
-      </categories>
-      <tags>
-        <tag>COLA</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DDD分层架构规范</title>
     <url>/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
     <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
@@ -203,6 +144,65 @@
       </categories>
       <tags>
         <tag>DDD</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>COLA</title>
+    <url>/2023/01/06/COLA/</url>
+    <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
+<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
+<ol>
+<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
+</li>
+<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
+</li>
+<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
+</li>
+<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
+<span id="more"></span></li>
+</ol>
+<h2 id="组件说明"><a href="#组件说明" class="headerlink" title="组件说明"></a>组件说明</h2><ol>
+<li>gateway是为了防腐</li>
+<li>Infra层起数据屏蔽作用，如果提供的接口不变，数据层的改动都可以直接在Infra里面完成</li>
+<li>第三方服务的调用在Infra层</li>
+<li>为了易于理解可以把Adapter改为Controller</li>
+</ol>
+<h2 id="调用关系"><a href="#调用关系" class="headerlink" title="调用关系"></a>调用关系</h2><p><img src="/../images/COLA/cola-invoke-chain.jpg" alt="cola-invoke-chain.jpg"></p>
+<ol>
+<li>APP —&gt; Infra, 为了可以直接CRUD，同时也是为什么Infra 可以直接依赖Client包</li>
+<li>APP —&gt; gateway, 为了解耦&#x2F;防腐&#x2F;数据聚合</li>
+<li>APP —&gt; domain service —&gt; gateway —&gt; 存储&#x2F;缓存&#x2F;外部服务, 为了实现复杂领域业务<br>灵活使用，覆盖不同的场景</li>
+</ol>
+<p>调用过程及对象使用</p>
+<ol>
+<li>Client<br>定义如下对象<ul>
+<li>VO(View Object)，Adapter层使用</li>
+<li>Command，APP层使用，包含Qry、Add&#x2F;Update&#x2F;Delete</li>
+<li>DomainEvent，Infra层发布领域事件使用</li>
+<li>ServiceI，APP层实现该服务对外提供应用API</li>
+</ul>
+</li>
+<li>Adapter层<br>接收Command或者参数列表传递给ServiceI<br>返回Response+VO给前端</li>
+<li>APP层<br>ServiceImpl接收Command<ul>
+<li>直接&#x2F;间接传给Mapper</li>
+<li>转换成Entity，传给gateway或者domainservice<br>返回Response+VO给Adapter层</li>
+</ul>
+</li>
+<li>Domain — 不依赖其他任何层<br>定义领域对象Entity<br>Entity作为gateway的参数或返回<br>Entity作为domain service的参数或返回</li>
+<li>Infa<ol>
+<li>调用数据库直接用Mybatis的Mapper，返回DO</li>
+<li>调用第三方服务封装DO和Mapper，返回DO</li>
+<li>gatewayImpl通过mapper聚合来提供上层数据接口，返回Entity</li>
+<li>DomainEvent的发布</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>架构</category>
+      </categories>
+      <tags>
+        <tag>COLA</tag>
       </tags>
   </entry>
   <entry>
@@ -336,7 +336,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#x69;&#x74;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#103;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#x40;&#103;&#105;&#116;&#104;&#117;&#98;&#46;&#x63;&#x6f;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -386,6 +386,110 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>个人网站搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git仓库的子目录独立成新仓库</title>
+    <url>/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
+    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
+
+<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
+<span id="more"></span>
+
+<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Git分支模型(参考阿里Aone Flow)</title>
+    <url>/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
+<li><p>master</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>release&#x2F;xxx</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">release/test 和 release/prod</span><br><span class="line">既可以为长期分支也可以为短期分支，可能存在于一个或者多个版本之间.</span><br><span class="line"></span><br><span class="line">由测试负责人负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>feature&#x2F;fixbug&#x2F;hotfix</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">临时分支</span><br><span class="line">用于开发的具体功能特性和修复bug的分支，功能完成后删除.</span><br><span class="line">格式为：feature_$date_$name_$description</span><br><span class="line">       fixbug_$date_$name_$description</span><br><span class="line">       hotfix_$date_$name_$description</span><br></pre></td></tr></table></figure></li>
+</ol>
+<span id="more"></span>
+
+<h2 id="分支策略"><a href="#分支策略" class="headerlink" title="分支策略"></a>分支策略</h2><ol>
+<li><p>规则1</p>
+<p>开始工作前，从主干创建特性分支</p>
+<ul>
+<li>每当开始一件新的工作项（比如新的功能或是bug）的时候，从最新已发布版本的主干Master上创建一个以feature(bugfix)&#x2F;前缀命名的特性分支，然后在这个分支上提交代码修改。</li>
+<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/git-model/image-1.png"></li>
+</ul>
+</li>
+<li><p>规则2</p>
+<p>通过合并特性分支，形成发布分支</p>
+<ul>
+<li>从主干上拉出一条新分支，将所有本次要集成或发布的特性分支依次合并过去，从而得到发布分支。发布分支通常以release&#x2F;前缀命名。</li>
+<li>每条发布分支与具体的环境相对应，比如release&#x2F;test分支对应部署测试环境，release&#x2F;prod分支对应线上正式环境等等，并与流水线工具相结合，串联各个环境上的代码质量扫描和自动化测试关卡，将产出的部署包直接发布到相应环境上。</li>
+<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/git-model/image-2.png"></li>
+</ul>
+</li>
+<li><p>规则3</p>
+<p>发布到线上正式环境后，合并相应的发布分支到主干，在主干添加标签，同时删除该发布分支关联的特性分支</p>
+<ul>
+<li>完成了线上正式环境的部署，就意味着相应的功能真正地发布了，此时应该将这条发布分支合并到主干。</li>
+<li>为了避免在代码仓库里堆积大量历史上的特性分支，还应该清理掉已经上线部分特性分支。</li>
+<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/git-model/image-3.png"></li>
+</ul>
+</li>
+<li><p>其他</p>
+<ul>
+<li>对于hotfix，可以创建一条新的发布分支对应线上环境（相当于hotfix分支），同时为这个分支创建临时流水线，以保障必要的发布前检查和冒烟测试能够自动执行。</li>
+<li>如果非得修一个历史版本的Bug，在主干分支找到版本标签位置，然后从那个位置创建hotfix分支，这种情况比较少见</li>
+</ul>
+</li>
+</ol>
+<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><ol>
+<li><p>新功能开发时，开发人员从Master拉取代码生成特性分支。</p>
+</li>
+<li><p>单元测试完成后等待测试负责人拉取release&#x2F;test分支，然后提交Pull Request</p>
+</li>
+<li><p>开发负责人或者其他开发人员对Pull Request进行代码Review</p>
+</li>
+<li><p>代码Review完成后，测试负责人合并Pull Request到release&#x2F;test，如果遇到合并冲突，则让相应的开发人员把feature&#x2F;bug&#x2F;hotfix分支重新以master为基准进行提交以及让相应的开发人员协助解决。</p>
+</li>
+<li><p>测试人员使用流水线工具进行代码质量扫描和自动化测试</p>
+</li>
+<li><p>测试人员进行测试</p>
+</li>
+<li><p>完成测试后，查看Master是否比拉取release&#x2F;test时有更新，如果没有直接使用release&#x2F;test上线，否则从最新Master拉取分支release&#x2F;prod分支合并相关PR并进行回归测试</p>
+</li>
+<li><p>提交上线申请上线</p>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">开发人员A从Master拉取代码生成feature_20190818_A_get_users</span><br><span class="line">开发人员B从Master拉取代码生成feature_20190819_B_login</span><br><span class="line"></span><br><span class="line">测试负责人Y从Master拉取release/test</span><br><span class="line">开发人员A提交Pull Request PR1</span><br><span class="line">开发人员B提交Pull Request PR2</span><br><span class="line"></span><br><span class="line">开发负责人F和开发人员C评审PR1 PR2，评审通过</span><br><span class="line"></span><br><span class="line">测试负责人Y合并代码到release/test</span><br><span class="line">测试人员X进行测试，完成后发现Master和拉取release/test时一样，直接使用release/test进行构建申请发布</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -569,110 +673,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>索引</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git分支模型(参考阿里Aone Flow)</title>
-    <url>/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
-<li><p>master</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>release&#x2F;xxx</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">release/test 和 release/prod</span><br><span class="line">既可以为长期分支也可以为短期分支，可能存在于一个或者多个版本之间.</span><br><span class="line"></span><br><span class="line">由测试负责人负责人管理该分支。</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>feature&#x2F;fixbug&#x2F;hotfix</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">临时分支</span><br><span class="line">用于开发的具体功能特性和修复bug的分支，功能完成后删除.</span><br><span class="line">格式为：feature_$date_$name_$description</span><br><span class="line">       fixbug_$date_$name_$description</span><br><span class="line">       hotfix_$date_$name_$description</span><br></pre></td></tr></table></figure></li>
-</ol>
-<span id="more"></span>
-
-<h2 id="分支策略"><a href="#分支策略" class="headerlink" title="分支策略"></a>分支策略</h2><ol>
-<li><p>规则1</p>
-<p>开始工作前，从主干创建特性分支</p>
-<ul>
-<li>每当开始一件新的工作项（比如新的功能或是bug）的时候，从最新已发布版本的主干Master上创建一个以feature(bugfix)&#x2F;前缀命名的特性分支，然后在这个分支上提交代码修改。</li>
-<li>每个工作项（可以是一个人完成，或是多个人协作完成）对应一个特性分支，所有的修改都不允许直接提交到主干。<img src="/../images/git-model/image-1.png"></li>
-</ul>
-</li>
-<li><p>规则2</p>
-<p>通过合并特性分支，形成发布分支</p>
-<ul>
-<li>从主干上拉出一条新分支，将所有本次要集成或发布的特性分支依次合并过去，从而得到发布分支。发布分支通常以release&#x2F;前缀命名。</li>
-<li>每条发布分支与具体的环境相对应，比如release&#x2F;test分支对应部署测试环境，release&#x2F;prod分支对应线上正式环境等等，并与流水线工具相结合，串联各个环境上的代码质量扫描和自动化测试关卡，将产出的部署包直接发布到相应环境上。</li>
-<li>release&#x2F;prod从master上拉取的时候master可能已经有其他更新上线了，此时从master拉取拉取的release&#x2F;prod合并相关feature分支后需要进行回归测试。<br><img src="/../images/git-model/image-2.png"></li>
-</ul>
-</li>
-<li><p>规则3</p>
-<p>发布到线上正式环境后，合并相应的发布分支到主干，在主干添加标签，同时删除该发布分支关联的特性分支</p>
-<ul>
-<li>完成了线上正式环境的部署，就意味着相应的功能真正地发布了，此时应该将这条发布分支合并到主干。</li>
-<li>为了避免在代码仓库里堆积大量历史上的特性分支，还应该清理掉已经上线部分特性分支。</li>
-<li>主干分支上的最新版本始终与线上版本一致，如果要回溯历史版本，只需在主干分支上找到相应的版本标签即可。<br><img src="/../images/git-model/image-3.png"></li>
-</ul>
-</li>
-<li><p>其他</p>
-<ul>
-<li>对于hotfix，可以创建一条新的发布分支对应线上环境（相当于hotfix分支），同时为这个分支创建临时流水线，以保障必要的发布前检查和冒烟测试能够自动执行。</li>
-<li>如果非得修一个历史版本的Bug，在主干分支找到版本标签位置，然后从那个位置创建hotfix分支，这种情况比较少见</li>
-</ul>
-</li>
-</ol>
-<h2 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h2><ol>
-<li><p>新功能开发时，开发人员从Master拉取代码生成特性分支。</p>
-</li>
-<li><p>单元测试完成后等待测试负责人拉取release&#x2F;test分支，然后提交Pull Request</p>
-</li>
-<li><p>开发负责人或者其他开发人员对Pull Request进行代码Review</p>
-</li>
-<li><p>代码Review完成后，测试负责人合并Pull Request到release&#x2F;test，如果遇到合并冲突，则让相应的开发人员把feature&#x2F;bug&#x2F;hotfix分支重新以master为基准进行提交以及让相应的开发人员协助解决。</p>
-</li>
-<li><p>测试人员使用流水线工具进行代码质量扫描和自动化测试</p>
-</li>
-<li><p>测试人员进行测试</p>
-</li>
-<li><p>完成测试后，查看Master是否比拉取release&#x2F;test时有更新，如果没有直接使用release&#x2F;test上线，否则从最新Master拉取分支release&#x2F;prod分支合并相关PR并进行回归测试</p>
-</li>
-<li><p>提交上线申请上线</p>
-<p>示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">开发人员A从Master拉取代码生成feature_20190818_A_get_users</span><br><span class="line">开发人员B从Master拉取代码生成feature_20190819_B_login</span><br><span class="line"></span><br><span class="line">测试负责人Y从Master拉取release/test</span><br><span class="line">开发人员A提交Pull Request PR1</span><br><span class="line">开发人员B提交Pull Request PR2</span><br><span class="line"></span><br><span class="line">开发负责人F和开发人员C评审PR1 PR2，评审通过</span><br><span class="line"></span><br><span class="line">测试负责人Y合并代码到release/test</span><br><span class="line">测试人员X进行测试，完成后发现Master和拉取release/test时一样，直接使用release/test进行构建申请发布</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Git仓库的子目录独立成新仓库</title>
-    <url>/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/</url>
-    <content><![CDATA[<h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
-
-<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
-<span id="more"></span>
-
-<h2 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h2><h3 id="1-Clone原有仓库到本地"><a href="#1-Clone原有仓库到本地" class="headerlink" title="1. Clone原有仓库到本地"></a>1. Clone原有仓库到本地</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone git@192.168.0.xxx:test/AAA.git</span><br></pre></td></tr></table></figure>
-
-<h3 id="2-在本地创建需要保留的分支"><a href="#2-在本地创建需要保留的分支" class="headerlink" title="2. 在本地创建需要保留的分支"></a>2. 在本地创建需要保留的分支</h3><p>下面示例中保留了dev和feature_20230513_xxx_aaa_bbb</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git checkout -b dev origin/dev</span><br><span class="line">git checkout -b feature_20230513_xxx_aaa_bbb origin/feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-<h3 id="3-取消远程库的关联"><a href="#3-取消远程库的关联" class="headerlink" title="3. 取消远程库的关联"></a>3. 取消远程库的关联</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote rm origin</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-删除所有tag"><a href="#4-删除所有tag" class="headerlink" title="4. 删除所有tag"></a>4. 删除所有tag</h3><p>需要删除所有的tag，否则会出错</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git tag -l | xargs git tag -d</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-保留需要的目录和git历史"><a href="#5-保留需要的目录和git历史" class="headerlink" title="5. 保留需要的目录和git历史"></a>5. 保留需要的目录和git历史</h3><p>把”GIT_COMMIT –”后面的目录改为自己需要保留的</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git filter-branch -f --prune-empty --index-filter \</span><br><span class="line">  &#x27;git rm --cached -r -q -- . ; git reset -q $GIT_COMMIT -- commons-api  commons-pojo  commons-utils&#x27; -- --all</span><br></pre></td></tr></table></figure>
-
-<h3 id="6-清理仓库并减小体积"><a href="#6-清理仓库并减小体积" class="headerlink" title="6. 清理仓库并减小体积"></a>6. 清理仓库并减小体积</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git reset --hard</span><br><span class="line">git for-each-ref --format=&quot;%(refname)&quot; refs/original/ | xargs -n 1 git update-ref -d</span><br><span class="line">git reflog expire --expire=now --all</span><br><span class="line">git gc --aggressive --prune=now</span><br></pre></td></tr></table></figure>
-
-<h3 id="7-关联到新的远程库-空仓库-，并推送代码到远端"><a href="#7-关联到新的远程库-空仓库-，并推送代码到远端" class="headerlink" title="7. 关联到新的远程库(空仓库)，并推送代码到远端"></a>7. 关联到新的远程库(空仓库)，并推送代码到远端</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote add origin git@192.168.0.xxx:test/xxx-common.git</span><br><span class="line">git push -u origin master</span><br><span class="line">git push -u origin dev</span><br><span class="line">git push -u origin feature_20230513_xxx_aaa_bbb</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>Git</tag>
       </tags>
   </entry>
   <entry>
@@ -894,40 +894,75 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>Spring IoC 的简单实现</title>
-    <url>/2022/10/10/Spring-IoC-%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/</url>
-    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>IoC是指控制反转，是指有容器来控制对象的生命周期和对象之间的关系。简单来说就是之前使用对象首先需要new一个对象，而现在直接从容器中取就可以了。这就像有小农经济转变到商品经济。</p>
-<p>小农经济：自给自足，什么东西都需要自己动手也就类似于对象需要自己new。</p>
-<p>商品经济：需要啥去商店买就行，这里的商店就相当于容器，商品就相当于对象，生成商品的工厂就相当于对象工厂等。</p>
-<p><img src="/../images/spring-ioc/image-20240401193113474.png"></p>
-<h3 id="Spring-IOC-的简单实现"><a href="#Spring-IOC-的简单实现" class="headerlink" title="Spring IOC 的简单实现"></a>Spring IOC 的简单实现</h3><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>1、首先我们得有一个容器，这个容器负责保存和生成bean，这也就是对象工厂BeanFactory 。</p>
-<p>2、其次，得有一个bean注册器，这负责bean的注册和真正生成。</p>
-<p>3、然后，还得有一个资源加载器，用来加载bean的定义</p>
-<p>4、最后，得有一个bean的定义模型和配置文件。</p>
-<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>分析为倒叙分析，实现就得看正序实现了，不然依赖就颠倒了。</p>
-<h5 id="1、配置文件和bean模型"><a href="#1、配置文件和bean模型" class="headerlink" title="1、配置文件和bean模型"></a>1、配置文件和bean模型</h5><p>先准备一个示例的bean</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class BeanExample &#123;</span><br><span class="line">    public void print(String string)&#123;</span><br><span class="line">        System.out.println(&quot;test out: &quot; + string);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>Spring中用到的设计模式</title>
+    <url>/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
+<p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
+<p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
+<p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Spring AOP</th>
+<th>AspectJ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>与spring ioc紧密集成，新项目使用</td>
+<td>维护老项目使用</td>
+</tr>
+<tr>
+<td>2</td>
+<td>运行时织入</td>
+<td>编译时生成</td>
+</tr>
+<tr>
+<td>3</td>
+<td>不支持static和final修饰方法和类</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>4</td>
+<td>简单，有注解</td>
+<td>复杂，需要.aj文件来创建切面，并且需要使用ajc来编译代码</td>
+</tr>
+</tbody></table>
+<p>两者异同：<a href="https://developer.aliyun.com/article/720402">https://developer.aliyun.com/article/720402</a></p>
+<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>父类定义算法骨架或者关键步骤，而具体实现延迟到子类中，使子类再不改变父类结构的情况下可重定义某些特定步骤的实现。</p>
+<p>Spring 中 <code>JdbcTemplate</code>、<code>HibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用 Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。定义了资源获取、执行SQL、释放资源这些基本流程，执行sql的具体方式又以回调函数的形式开放。</p>
+<p><img src="/../images/design/image-20240414192751147.png" alt="image-20240414192751147"></p>
+<p>参考文献：<a href="https://blog.csdn.net/zhangweiocp/article/details/115486257">https://blog.csdn.net/zhangweiocp/article/details/115486257</a></p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，依赖这个对象的所有对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。</p>
+<p>事件驱动模型中的三种角色：事件角色、事件监听者角色、事件发布者角色。</p>
+<p><img src="/../images/design/image-20240414190146289.png" alt="image-20240414190146289"></p>
+<p><strong>spring的事件流程总结</strong></p>
+<p>1、定义一个事件: 实现一个继承自<code>ApplicationEvent</code>，并且写相应的构造函数</p>
+<p>2、定义一个事件监听者：实现 <code>ApplicationListener</code> 接口，重写 <code>onApplicationEvent()</code> 方法</p>
+<p>3、使用事件发布者发布消息: 可以通过 <code>ApplicationEventPublisher</code> 的 <code>publishEvent()</code> 方法发布消息</p>
+<p>example:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数</span><br><span class="line">public class DemoEvent extends ApplicationEvent&#123;</span><br><span class="line">    private static final long serialVersionUID = 1L;</span><br><span class="line"></span><br><span class="line">    private String message;</span><br><span class="line"></span><br><span class="line">    public DemoEvent(Object source,String message)&#123;</span><br><span class="line">        super(source);</span><br><span class="line">        this.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMessage() &#123;</span><br><span class="line">         return message;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；</span><br><span class="line">@Component</span><br><span class="line">public class DemoListener implements ApplicationListener&lt;DemoEvent&gt;&#123;</span><br><span class="line"></span><br><span class="line">    //使用onApplicationEvent接收消息</span><br><span class="line">    @Override</span><br><span class="line">    public void onApplicationEvent(DemoEvent event) &#123;</span><br><span class="line">        String msg = event.getMessage();</span><br><span class="line">        System.out.println(&quot;接收到的信息是：&quot;+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。</span><br><span class="line">@Component</span><br><span class="line">public class DemoPublisher &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    ApplicationContext applicationContext;</span><br><span class="line"></span><br><span class="line">    public void publish(String message)&#123;</span><br><span class="line">        //发布事件</span><br><span class="line">        applicationContext.publishEvent(new DemoEvent(this, message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>配置文件，偷懒使用一个&lt;key,value&gt;键值对代替</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">beanExample:com.shopmall.springIoc.BeanExample</span><br></pre></td></tr></table></figure>
-
-<p>bean模型定义</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Getter</span><br><span class="line">@Setter</span><br><span class="line">public class BeanDefinition &#123;</span><br><span class="line">    private String beanName;</span><br><span class="line"></span><br><span class="line">    private Class beanClass;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h5 id="2、资源加载器"><a href="#2、资源加载器" class="headerlink" title="2、资源加载器"></a>2、资源加载器</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class ResourceLoader &#123;</span><br><span class="line">    public static Map&lt;String, BeanDefinition&gt; getResource() &#123;</span><br><span class="line">        Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new HashMap&lt;&gt;();</span><br><span class="line">        Properties properties = new Properties();</span><br><span class="line">        try &#123;</span><br><span class="line">            InputStream inputStream = ResourceLoader.class.getResourceAsStream(&quot;/beans.properties&quot;);</span><br><span class="line">            properties.load(inputStream);</span><br><span class="line">            for (String key : properties.stringPropertyNames()) &#123;</span><br><span class="line">                String className = properties.getProperty(key);</span><br><span class="line">                BeanDefinition beanDefinition = new BeanDefinition();</span><br><span class="line">                beanDefinition.setBeanName(key);</span><br><span class="line">                Class clazz = Class.forName(className);</span><br><span class="line">                beanDefinition.setBeanClass(clazz);</span><br><span class="line">                beanDefinitionMap.put(key, beanDefinition);</span><br><span class="line">            &#125;</span><br><span class="line">            inputStream.close();</span><br><span class="line">        &#125; catch (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return beanDefinitionMap;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="3、对象注册器"><a href="#3、对象注册器" class="headerlink" title="3、对象注册器"></a>3、对象注册器</h5><p>简化过程，都用单例了</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class BeanRegister &#123;</span><br><span class="line"></span><br><span class="line">    //单例Bean缓存</span><br><span class="line">    private final Map&lt;String, Object&gt; singletonBeanMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取单例Bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @return Object 单例Bean</span><br><span class="line">     */</span><br><span class="line">    public Object getSingletonBean(String beanName) &#123;</span><br><span class="line">        return singletonBeanMap.get(beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 注册单例bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @param bean 单例bean</span><br><span class="line">     */</span><br><span class="line">    public void registerSingletonBean(String beanName, Object bean) &#123;</span><br><span class="line">        if (singletonBeanMap.containsKey(beanName)) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        singletonBeanMap.put(beanName, bean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h5 id="4、容器bean工厂"><a href="#4、容器bean工厂" class="headerlink" title="4、容器bean工厂"></a>4、容器bean工厂</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class BeanFactory &#123;</span><br><span class="line">    private Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    private BeanRegister beanRegister;</span><br><span class="line"></span><br><span class="line">    public BeanFactory() &#123;</span><br><span class="line">        //创建bean注册器</span><br><span class="line">        beanRegister = new BeanRegister();</span><br><span class="line">        //加载资源</span><br><span class="line">        this.beanDefinitionMap = new ResourceLoader().getResource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @return Object Bean</span><br><span class="line">     */</span><br><span class="line">    public Object getBean(String beanName) &#123;</span><br><span class="line">        //从bean缓存中取</span><br><span class="line">        Object bean = beanRegister.getSingletonBean(beanName);</span><br><span class="line">        if (bean != null) &#123;</span><br><span class="line">            return bean;</span><br><span class="line">        &#125;</span><br><span class="line">        //根据bean定义，创建bean</span><br><span class="line">        return createBean(beanDefinitionMap.get(beanName));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 创建Bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanDefinition bean定义</span><br><span class="line">     * @return Object Bean</span><br><span class="line">     */</span><br><span class="line">    private Object createBean(BeanDefinition beanDefinition) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Object bean = beanDefinition.getBeanClass().newInstance();</span><br><span class="line">            //缓存bean</span><br><span class="line">            beanRegister.registerSingletonBean(beanDefinition.getBeanName(), bean);</span><br><span class="line">            return bean;</span><br><span class="line">        &#125; catch (InstantiationException | IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h5 id="5、测试运行"><a href="#5、测试运行" class="headerlink" title="5、测试运行"></a>5、测试运行</h5><p><img src="/../images/spring-ioc/image-20240401201006715.png"></p>
+<p>当调用 <code>DemoPublisher</code> 的 <code>publish()</code> 方法的时候，比如 <code>demoPublisher.publish(&quot;你好&quot;)</code> ，控制台就会打印出:<code>接收到的信息是：你好</code> 。</p>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>装饰者模式可以动态地给对象添加一些额外的属性或行为。相比于使用继承，装饰者模式更加灵活。简单点儿说就是当我们需要修改原有的功能，但我们又不愿直接去修改原有的代码时，设计一个 Decorator 套在原有代码外面。最典型的就是JDK中的<code>InputStream,OutputStream</code>，两个类下的所有子类都是再不修改父类代码的情况下扩展了他的功能。</p>
+<p><img src="/../images/design/Decorator.jpg" alt="装饰者模式示意图"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Spring 框架中用到了哪些设计模式？</p>
+<ul>
+<li><strong>工厂设计模式</strong> : Spring 使用工厂模式通过 <code>BeanFactory</code>、<code>ApplicationContext</code> 创建 bean 对象。</li>
+<li><strong>代理设计模式</strong> : Spring AOP 功能的实现。</li>
+<li><strong>单例设计模式</strong> : Spring 中的 Bean 默认都是单例的。</li>
+<li><strong>模板方法模式</strong> : Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。</li>
+<li><strong>包装器设计模式</strong> : 我们的项目需要连接多个数据库，而且不同的客户在每次访问中根据需要会去访问不同的数据库。这种模式让我们可以根据客户的需求能够动态切换不同的数据源。</li>
+<li><strong>观察者模式:</strong> Spring 事件驱动模型就是观察者模式很经典的一个应用。</li>
+<li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>l</li>
+</ul>
 ]]></content>
       <categories>
         <category>JAVA</category>
       </categories>
       <tags>
-        <tag>Spring</tag>
+        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1030,78 +1065,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>ThreadLocal</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Spring中用到的设计模式</title>
-    <url>/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
-<p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
-<p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
-<p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Spring AOP</th>
-<th>AspectJ</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td>与spring ioc紧密集成，新项目使用</td>
-<td>维护老项目使用</td>
-</tr>
-<tr>
-<td>2</td>
-<td>运行时织入</td>
-<td>编译时生成</td>
-</tr>
-<tr>
-<td>3</td>
-<td>不支持static和final修饰方法和类</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>4</td>
-<td>简单，有注解</td>
-<td>复杂，需要.aj文件来创建切面，并且需要使用ajc来编译代码</td>
-</tr>
-</tbody></table>
-<p>两者异同：<a href="https://developer.aliyun.com/article/720402">https://developer.aliyun.com/article/720402</a></p>
-<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>父类定义算法骨架或者关键步骤，而具体实现延迟到子类中，使子类再不改变父类结构的情况下可重定义某些特定步骤的实现。</p>
-<p>Spring 中 <code>JdbcTemplate</code>、<code>HibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用 Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。定义了资源获取、执行SQL、释放资源这些基本流程，执行sql的具体方式又以回调函数的形式开放。</p>
-<p><img src="/../images/design/image-20240414192751147.png" alt="image-20240414192751147"></p>
-<p>参考文献：<a href="https://blog.csdn.net/zhangweiocp/article/details/115486257">https://blog.csdn.net/zhangweiocp/article/details/115486257</a></p>
-<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，依赖这个对象的所有对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。</p>
-<p>事件驱动模型中的三种角色：事件角色、事件监听者角色、事件发布者角色。</p>
-<p><img src="/../images/design/image-20240414190146289.png" alt="image-20240414190146289"></p>
-<p><strong>spring的事件流程总结</strong></p>
-<p>1、定义一个事件: 实现一个继承自<code>ApplicationEvent</code>，并且写相应的构造函数</p>
-<p>2、定义一个事件监听者：实现 <code>ApplicationListener</code> 接口，重写 <code>onApplicationEvent()</code> 方法</p>
-<p>3、使用事件发布者发布消息: 可以通过 <code>ApplicationEventPublisher</code> 的 <code>publishEvent()</code> 方法发布消息</p>
-<p>example:</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数</span><br><span class="line">public class DemoEvent extends ApplicationEvent&#123;</span><br><span class="line">    private static final long serialVersionUID = 1L;</span><br><span class="line"></span><br><span class="line">    private String message;</span><br><span class="line"></span><br><span class="line">    public DemoEvent(Object source,String message)&#123;</span><br><span class="line">        super(source);</span><br><span class="line">        this.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMessage() &#123;</span><br><span class="line">         return message;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；</span><br><span class="line">@Component</span><br><span class="line">public class DemoListener implements ApplicationListener&lt;DemoEvent&gt;&#123;</span><br><span class="line"></span><br><span class="line">    //使用onApplicationEvent接收消息</span><br><span class="line">    @Override</span><br><span class="line">    public void onApplicationEvent(DemoEvent event) &#123;</span><br><span class="line">        String msg = event.getMessage();</span><br><span class="line">        System.out.println(&quot;接收到的信息是：&quot;+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。</span><br><span class="line">@Component</span><br><span class="line">public class DemoPublisher &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    ApplicationContext applicationContext;</span><br><span class="line"></span><br><span class="line">    public void publish(String message)&#123;</span><br><span class="line">        //发布事件</span><br><span class="line">        applicationContext.publishEvent(new DemoEvent(this, message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>当调用 <code>DemoPublisher</code> 的 <code>publish()</code> 方法的时候，比如 <code>demoPublisher.publish(&quot;你好&quot;)</code> ，控制台就会打印出:<code>接收到的信息是：你好</code> 。</p>
-<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>装饰者模式可以动态地给对象添加一些额外的属性或行为。相比于使用继承，装饰者模式更加灵活。简单点儿说就是当我们需要修改原有的功能，但我们又不愿直接去修改原有的代码时，设计一个 Decorator 套在原有代码外面。最典型的就是JDK中的<code>InputStream,OutputStream</code>，两个类下的所有子类都是再不修改父类代码的情况下扩展了他的功能。</p>
-<p><img src="/../images/design/Decorator.jpg" alt="装饰者模式示意图"></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Spring 框架中用到了哪些设计模式？</p>
-<ul>
-<li><strong>工厂设计模式</strong> : Spring 使用工厂模式通过 <code>BeanFactory</code>、<code>ApplicationContext</code> 创建 bean 对象。</li>
-<li><strong>代理设计模式</strong> : Spring AOP 功能的实现。</li>
-<li><strong>单例设计模式</strong> : Spring 中的 Bean 默认都是单例的。</li>
-<li><strong>模板方法模式</strong> : Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。</li>
-<li><strong>包装器设计模式</strong> : 我们的项目需要连接多个数据库，而且不同的客户在每次访问中根据需要会去访问不同的数据库。这种模式让我们可以根据客户的需求能够动态切换不同的数据源。</li>
-<li><strong>观察者模式:</strong> Spring 事件驱动模型就是观察者模式很经典的一个应用。</li>
-<li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>l</li>
-</ul>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>设计模式</tag>
       </tags>
   </entry>
   <entry>
@@ -1245,6 +1208,66 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>浅谈ChatGPT</title>
+    <url>/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/</url>
+    <content><![CDATA[<p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
+<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
+<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
+<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
+<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
+<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
+<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
+<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
+<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
+<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
+<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>ChatGPT</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Spring IoC 的简单实现</title>
+    <url>/2022/10/10/Spring-IoC-%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>IoC是指控制反转，是指有容器来控制对象的生命周期和对象之间的关系。简单来说就是之前使用对象首先需要new一个对象，而现在直接从容器中取就可以了。这就像有小农经济转变到商品经济。</p>
+<p>小农经济：自给自足，什么东西都需要自己动手也就类似于对象需要自己new。</p>
+<p>商品经济：需要啥去商店买就行，这里的商店就相当于容器，商品就相当于对象，生成商品的工厂就相当于对象工厂等。</p>
+<p><img src="/../images/spring-ioc/image-20240401193113474.png"></p>
+<h3 id="Spring-IOC-的简单实现"><a href="#Spring-IOC-的简单实现" class="headerlink" title="Spring IOC 的简单实现"></a>Spring IOC 的简单实现</h3><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>1、首先我们得有一个容器，这个容器负责保存和生成bean，这也就是对象工厂BeanFactory 。</p>
+<p>2、其次，得有一个bean注册器，这负责bean的注册和真正生成。</p>
+<p>3、然后，还得有一个资源加载器，用来加载bean的定义</p>
+<p>4、最后，得有一个bean的定义模型和配置文件。</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>分析为倒叙分析，实现就得看正序实现了，不然依赖就颠倒了。</p>
+<h5 id="1、配置文件和bean模型"><a href="#1、配置文件和bean模型" class="headerlink" title="1、配置文件和bean模型"></a>1、配置文件和bean模型</h5><p>先准备一个示例的bean</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class BeanExample &#123;</span><br><span class="line">    public void print(String string)&#123;</span><br><span class="line">        System.out.println(&quot;test out: &quot; + string);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置文件，偷懒使用一个&lt;key,value&gt;键值对代替</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">beanExample:com.shopmall.springIoc.BeanExample</span><br></pre></td></tr></table></figure>
+
+<p>bean模型定义</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Getter</span><br><span class="line">@Setter</span><br><span class="line">public class BeanDefinition &#123;</span><br><span class="line">    private String beanName;</span><br><span class="line"></span><br><span class="line">    private Class beanClass;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="2、资源加载器"><a href="#2、资源加载器" class="headerlink" title="2、资源加载器"></a>2、资源加载器</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class ResourceLoader &#123;</span><br><span class="line">    public static Map&lt;String, BeanDefinition&gt; getResource() &#123;</span><br><span class="line">        Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new HashMap&lt;&gt;();</span><br><span class="line">        Properties properties = new Properties();</span><br><span class="line">        try &#123;</span><br><span class="line">            InputStream inputStream = ResourceLoader.class.getResourceAsStream(&quot;/beans.properties&quot;);</span><br><span class="line">            properties.load(inputStream);</span><br><span class="line">            for (String key : properties.stringPropertyNames()) &#123;</span><br><span class="line">                String className = properties.getProperty(key);</span><br><span class="line">                BeanDefinition beanDefinition = new BeanDefinition();</span><br><span class="line">                beanDefinition.setBeanName(key);</span><br><span class="line">                Class clazz = Class.forName(className);</span><br><span class="line">                beanDefinition.setBeanClass(clazz);</span><br><span class="line">                beanDefinitionMap.put(key, beanDefinition);</span><br><span class="line">            &#125;</span><br><span class="line">            inputStream.close();</span><br><span class="line">        &#125; catch (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return beanDefinitionMap;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3、对象注册器"><a href="#3、对象注册器" class="headerlink" title="3、对象注册器"></a>3、对象注册器</h5><p>简化过程，都用单例了</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class BeanRegister &#123;</span><br><span class="line"></span><br><span class="line">    //单例Bean缓存</span><br><span class="line">    private final Map&lt;String, Object&gt; singletonBeanMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取单例Bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @return Object 单例Bean</span><br><span class="line">     */</span><br><span class="line">    public Object getSingletonBean(String beanName) &#123;</span><br><span class="line">        return singletonBeanMap.get(beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 注册单例bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @param bean 单例bean</span><br><span class="line">     */</span><br><span class="line">    public void registerSingletonBean(String beanName, Object bean) &#123;</span><br><span class="line">        if (singletonBeanMap.containsKey(beanName)) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        singletonBeanMap.put(beanName, bean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="4、容器bean工厂"><a href="#4、容器bean工厂" class="headerlink" title="4、容器bean工厂"></a>4、容器bean工厂</h5><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class BeanFactory &#123;</span><br><span class="line">    private Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    private BeanRegister beanRegister;</span><br><span class="line"></span><br><span class="line">    public BeanFactory() &#123;</span><br><span class="line">        //创建bean注册器</span><br><span class="line">        beanRegister = new BeanRegister();</span><br><span class="line">        //加载资源</span><br><span class="line">        this.beanDefinitionMap = new ResourceLoader().getResource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @return Object Bean</span><br><span class="line">     */</span><br><span class="line">    public Object getBean(String beanName) &#123;</span><br><span class="line">        //从bean缓存中取</span><br><span class="line">        Object bean = beanRegister.getSingletonBean(beanName);</span><br><span class="line">        if (bean != null) &#123;</span><br><span class="line">            return bean;</span><br><span class="line">        &#125;</span><br><span class="line">        //根据bean定义，创建bean</span><br><span class="line">        return createBean(beanDefinitionMap.get(beanName));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 创建Bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanDefinition bean定义</span><br><span class="line">     * @return Object Bean</span><br><span class="line">     */</span><br><span class="line">    private Object createBean(BeanDefinition beanDefinition) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Object bean = beanDefinition.getBeanClass().newInstance();</span><br><span class="line">            //缓存bean</span><br><span class="line">            beanRegister.registerSingletonBean(beanDefinition.getBeanName(), bean);</span><br><span class="line">            return bean;</span><br><span class="line">        &#125; catch (InstantiationException | IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="5、测试运行"><a href="#5、测试运行" class="headerlink" title="5、测试运行"></a>5、测试运行</h5><p><img src="/../images/spring-ioc/image-20240401201006715.png"></p>
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>Spring</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>注册中心分析</title>
     <url>/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>之前面试问到了工作中用到的注册中心和市面上的有啥异同。</p>
@@ -1371,52 +1394,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>浅谈ChatGPT</title>
-    <url>/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/</url>
-    <content><![CDATA[<p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
-<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
-<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
-<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
-<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
-<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
-<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
-<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
-<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
-<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
-<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>ChatGPT</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>添加聊天办公机器人</title>
-    <url>/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/</url>
-    <content><![CDATA[<p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
-<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>1、代码开源，不需要冲头开发，基本拿来可用。</p>
-<p>2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。</p>
-<p><img src="/../images/ChatGPT-rabbit/image-20240326225843904.png"></p>
-<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。</p>
-<h3 id="交互性"><a href="#交互性" class="headerlink" title="交互性"></a>交互性</h3><p>1、通过开放接口和外部交互，如钉钉，微信。降低交互成本，提升交互沟通效率。</p>
-<h3 id="优越性"><a href="#优越性" class="headerlink" title="优越性"></a>优越性</h3><p>1、人工智能的参与，提升员工工作效率，通过员工和人工智能沟通可以提升员工的工作效率，比如程序员可以问个代码怎么写啊类似的，不做缀叙。</p>
-<p>2、部署在内部服务器的化，还可以通过其和内部任务交互，比如日常的一些小任务，可以程序化之后，部署服务器，暴露接口和人工智能交互，我们通过聊天软件通知智能机器人，让他去触发这些任务。</p>
-<p><img src="/../images/ChatGPT-rabbit/image-20240326225800266.png"></p>
-<p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
-<p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
-<h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>ChatGPT</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>简单时间管理</title>
     <url>/2022/03/30/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="时间管理"><a href="#时间管理" class="headerlink" title="时间管理"></a>时间管理</h1><h2 id="目标感"><a href="#目标感" class="headerlink" title="目标感"></a>目标感</h2><ol>
@@ -1442,6 +1419,59 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>效率</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>知识库原理</title>
+    <url>/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>现在大模型大行其道，我们普通人没有那么多资源，有没有办法搭建一个大模型玩一下呢，答案肯定是有的，我们可以搭建一个知识库，用一下大模型。</p>
+<p>总所周知，大模型的训练是需要大量资源的，我们没有这么多资源，那我们就得想办法绕过训练或者减少训练。这时候知识库就是一个比较好的选择，它不需要对大模型进行大量的训练，大模型只是帮我们生成一个类人话的答案。</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>目前比较用的比较多的就是LangChain框架，这是一种基于Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。</p>
+<p><img src="https://github.com/chatchat-space/Langchain-Chatchat/raw/master/img/langchain+chatglm.png" alt="实现原理图"></p>
+<p>可以从上面的原理图看出知识库的整个实现原理。</p>
+<p>1、先加载文件，文件可以是结构化的也可以是非结构化的</p>
+<p>2、读取文本，这就很好理解了，将加载进来的文件读取</p>
+<p>3、分割文本，将读取的文本分割成一段一段的，便于提取其中的关键字和让内容更内敛</p>
+<p>4、向量化，将分割后的文本向量化，</p>
+<p>5、存储，将向量化后的文本存入向量数据库中，当然可能也有一些结构型数据，直接存入关系型数据库中</p>
+<p>6、问句向量化，将我们提问的问句给向量化，理论上和上面的文本向量化一样，问句也是一个文本</p>
+<p>7、向量化匹配，通过问句的向量去向量库里面匹配文本，可能会匹配出多个，我们只取top n</p>
+<p>8、生成prompt，将匹配到的文本作为上下文和问题一起生成prompt</p>
+<p>9、将prompt提交给LLM生成回答</p>
+<p>上面就是知识库的原理和流程。可以看到，其实大模型在这里只是扮演一个类人化回答生成的作用，回答中的知识点其实都是在向量化匹配的过程中匹配出来的。所以这里不需要大模型做大量的训练。</p>
+<p>LangChain只是做了一个框架，上面的原理和流程也只是一个大纲，具体的细节我们还是有很多可操控空间的。</p>
+<p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
+<p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
+<p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>添加聊天办公机器人</title>
+    <url>/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/</url>
+    <content><![CDATA[<p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
+<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>1、代码开源，不需要冲头开发，基本拿来可用。</p>
+<p>2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225843904.png"></p>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。</p>
+<h3 id="交互性"><a href="#交互性" class="headerlink" title="交互性"></a>交互性</h3><p>1、通过开放接口和外部交互，如钉钉，微信。降低交互成本，提升交互沟通效率。</p>
+<h3 id="优越性"><a href="#优越性" class="headerlink" title="优越性"></a>优越性</h3><p>1、人工智能的参与，提升员工工作效率，通过员工和人工智能沟通可以提升员工的工作效率，比如程序员可以问个代码怎么写啊类似的，不做缀叙。</p>
+<p>2、部署在内部服务器的化，还可以通过其和内部任务交互，比如日常的一些小任务，可以程序化之后，部署服务器，暴露接口和人工智能交互，我们通过聊天软件通知智能机器人，让他去触发这些任务。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225800266.png"></p>
+<p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
+<p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
+<h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>ChatGPT</tag>
       </tags>
   </entry>
   <entry>
