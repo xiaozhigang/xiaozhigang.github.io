@@ -43,49 +43,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CAP原则</title>
-    <url>/2023/03/30/CAP%E5%8E%9F%E5%88%99/</url>
-    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
-<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
-<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
-<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
-<thead>
-<tr>
-<th>选项</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>一致性（Consistency</td>
-<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
-</tr>
-<tr>
-<td>可用性（Availability）</td>
-<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
-</tr>
-<tr>
-<td>分区容错性（Partition tolerance）</td>
-<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
-</tr>
-</tbody></table>
-<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
-<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
-<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
-<p>​			A、B、C三个分区，分区上的数据一致。现在操作A分区中的数据发生更改，在保证一直性的情况下，得先同步更改B、C分区上得数据。更改数据需要时间，在同步更改的这段时间中，是不是就不能对外提供服务。	如果要先保证可用性，那是不是就不能先同步更改B、C分区上的数据。由此就可以看出CAP不能同时存在。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>虽然CAP不能同时存在，但是在分布式系统中一般AP、CP也可以根据场景的不同解决我们的问题了。</p>
-<p>在可用性要求高的场景中，可以放弃一致性。这要求在数据不一致的情况下不影响我们的服务，比如NoSQL。</p>
-<p>在一致性要求高的场景中，可以放弃可用性。这种场景是对数据有很高的要求，比如转账服务，可以牺牲一段可用时间，以保证各分区数据同步一致。</p>
-<h4 id="折中方案"><a href="#折中方案" class="headerlink" title="折中方案"></a>折中方案</h4><p>在一致性要求比较高的场景中，同步各分区的时候，是不是需要同步到所有分区，如果同步一个或者大部分分区就可以的，那么这时候返回，是不是会提高可用性。这是一个在保证一致性的情况下提高可用性的办法，前提是同步到一个或大部分分区就可以保证我们的业务。</p>
-<p>归根究底，一致性和可用性不能同时兼得，一个增加另一个必然减少。</p>
-]]></content>
-      <categories>
-        <category>分布式</category>
-      </categories>
-      <tags>
-        <tag>CAP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>COLA</title>
     <url>/2023/01/06/COLA/</url>
     <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
@@ -299,6 +256,49 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>CAP原则</title>
+    <url>/2023/03/30/CAP%E5%8E%9F%E5%88%99/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
+<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
+<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
+<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性（Consistency</td>
+<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
+</tr>
+<tr>
+<td>可用性（Availability）</td>
+<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
+</tr>
+<tr>
+<td>分区容错性（Partition tolerance）</td>
+<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
+</tr>
+</tbody></table>
+<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
+<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
+<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
+<p>​			A、B、C三个分区，分区上的数据一致。现在操作A分区中的数据发生更改，在保证一直性的情况下，得先同步更改B、C分区上得数据。更改数据需要时间，在同步更改的这段时间中，是不是就不能对外提供服务。	如果要先保证可用性，那是不是就不能先同步更改B、C分区上的数据。由此就可以看出CAP不能同时存在。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>虽然CAP不能同时存在，但是在分布式系统中一般AP、CP也可以根据场景的不同解决我们的问题了。</p>
+<p>在可用性要求高的场景中，可以放弃一致性。这要求在数据不一致的情况下不影响我们的服务，比如NoSQL。</p>
+<p>在一致性要求高的场景中，可以放弃可用性。这种场景是对数据有很高的要求，比如转账服务，可以牺牲一段可用时间，以保证各分区数据同步一致。</p>
+<h4 id="折中方案"><a href="#折中方案" class="headerlink" title="折中方案"></a>折中方案</h4><p>在一致性要求比较高的场景中，同步各分区的时候，是不是需要同步到所有分区，如果同步一个或者大部分分区就可以的，那么这时候返回，是不是会提高可用性。这是一个在保证一致性的情况下提高可用性的办法，前提是同步到一个或大部分分区就可以保证我们的业务。</p>
+<p>归根究底，一致性和可用性不能同时兼得，一个增加另一个必然减少。</p>
+]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>CAP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>GitHub个人网站搭建</title>
     <url>/2022/03/29/GitHub%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/</url>
     <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>整个流程分3个步骤：新建个人仓库，本地hexo搭建，GitHub连接，本地博客搭建，GitHub设置。</p>
@@ -336,7 +336,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#105;&#116;&#x40;&#x67;&#105;&#x74;&#x68;&#117;&#98;&#x2e;&#99;&#111;&#109;">&#103;&#105;&#116;&#x40;&#x67;&#105;&#x74;&#x68;&#117;&#98;&#x2e;&#99;&#111;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#x63;&#111;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#x63;&#111;&#109;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -1076,6 +1076,35 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>ThreadLocal内存泄漏</title>
+    <url>/2022/11/30/ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>ThreadLocal是什么，是java中用于实现线程内变量的工具类。允许每个线程都拥有自己的副本，从而实现线程隔离，解决多线程的共享对象的线程安全问题。</p>
+<p><img src="/../images/ThreadLocal/image-20240330210435879.png" alt="image-20240330210435879"></p>
+<p>ThreadLocal的使用</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; localVariable = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;(); <span class="comment">// 新建</span></span><br><span class="line">localVariable.set(<span class="string">&quot;他是沙雕&quot;</span>); <span class="comment">// 设置值</span></span><br><span class="line"><span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> localVariable.get(); <span class="comment">// 获取值</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="详述"><a href="#详述" class="headerlink" title="详述"></a>详述</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>ThreadLocal的底层实现是一个特殊的map，可以理解往ThreadLocal设置一个xxx值，就是往这个特殊的map中设置一个key为当前线程，value为xxx的值。由于他的key只能为当前线程，所以在某个线程中set和get都不会影响其他线程，从而到达线程安全。下图的ThreadLocalMap就是拿个特殊的map。</p>
+<p><img src="/../images/ThreadLocal/image-20240330211735870.png" alt="image-20240330211735870"></p>
+<p>总体来说，java在运行的过程中会维护一个ThreadLocalMap，这个ThreadLocalMap的key为各个线程，value为各个线程想存放的东西，可以是String，可以是map，List等等。当时由于key为各个线程，所有每个线程只能由一个Entry ，也就是一个键值对（key-value），当然线程也可以不设置不存放。</p>
+<p><img src="/../images/ThreadLocal/image-20240330213034272.png" alt="image-20240330213034272"></p>
+<h4 id="内存泄露"><a href="#内存泄露" class="headerlink" title="内存泄露"></a>内存泄露</h4><p>都知道ThreadLocal会内存泄漏，那么这个内存泄漏又是怎么回事。</p>
+<p>都知道在java虚拟机中栈是私有的，而堆是共享的，所以ThreadLocalMap是存放在堆中的，而栈中存的只是一个引用，如下图。</p>
+<p><img src="/../images/ThreadLocal/image-20240330214507001.png" alt="image-20240330214507001"></p>
+<p>由于Entry extends WeakReference&lt;ThreadLocal&lt;?&gt;&gt;，所以可以看到，Entry中的key指向ThreadLocal是弱引用，也就是线程执行完之后，这个ThreadLocal就会被释放清理掉，但是由于ThreadLocalMap指向Entry是强引用，所以Entry不会被释放清理，如果这Entry一直不被清理释放，那么ThreadLocalMap的内存占用就会越来越大，以至于内存也漏。</p>
+<p>所以为了防止这种问题的发生，在用完时，记得释放清理。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    threadLocal.set(value);</span><br><span class="line">    <span class="comment">// 执行业务操作</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    threadLocal.remove(); <span class="comment">// 确保能够执行清理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>JAVA</category>
+      </categories>
+      <tags>
+        <tag>ThreadLocal</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>kafka保证消息不丢失</title>
     <url>/2023/11/13/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>在kafka的使用过程中，消息传递有下图三个步骤，消息的丢失也就在这三个步骤中：发送过程中丢失、同步过程中丢失、拉取过程中丢失。</p>
@@ -1112,35 +1141,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>kafka</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ThreadLocal内存泄漏</title>
-    <url>/2022/11/30/ThreadLocal%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/</url>
-    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>ThreadLocal是什么，是java中用于实现线程内变量的工具类。允许每个线程都拥有自己的副本，从而实现线程隔离，解决多线程的共享对象的线程安全问题。</p>
-<p><img src="/../images/ThreadLocal/image-20240330210435879.png" alt="image-20240330210435879"></p>
-<p>ThreadLocal的使用</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> ThreadLocal&lt;String&gt; localVariable = <span class="keyword">new</span> <span class="title class_">ThreadLocal</span>&lt;&gt;(); <span class="comment">// 新建</span></span><br><span class="line">localVariable.set(<span class="string">&quot;他是沙雕&quot;</span>); <span class="comment">// 设置值</span></span><br><span class="line"><span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> localVariable.get(); <span class="comment">// 获取值</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="详述"><a href="#详述" class="headerlink" title="详述"></a>详述</h3><h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>ThreadLocal的底层实现是一个特殊的map，可以理解往ThreadLocal设置一个xxx值，就是往这个特殊的map中设置一个key为当前线程，value为xxx的值。由于他的key只能为当前线程，所以在某个线程中set和get都不会影响其他线程，从而到达线程安全。下图的ThreadLocalMap就是拿个特殊的map。</p>
-<p><img src="/../images/ThreadLocal/image-20240330211735870.png" alt="image-20240330211735870"></p>
-<p>总体来说，java在运行的过程中会维护一个ThreadLocalMap，这个ThreadLocalMap的key为各个线程，value为各个线程想存放的东西，可以是String，可以是map，List等等。当时由于key为各个线程，所有每个线程只能由一个Entry ，也就是一个键值对（key-value），当然线程也可以不设置不存放。</p>
-<p><img src="/../images/ThreadLocal/image-20240330213034272.png" alt="image-20240330213034272"></p>
-<h4 id="内存泄露"><a href="#内存泄露" class="headerlink" title="内存泄露"></a>内存泄露</h4><p>都知道ThreadLocal会内存泄漏，那么这个内存泄漏又是怎么回事。</p>
-<p>都知道在java虚拟机中栈是私有的，而堆是共享的，所以ThreadLocalMap是存放在堆中的，而栈中存的只是一个引用，如下图。</p>
-<p><img src="/../images/ThreadLocal/image-20240330214507001.png" alt="image-20240330214507001"></p>
-<p>由于Entry extends WeakReference&lt;ThreadLocal&lt;?&gt;&gt;，所以可以看到，Entry中的key指向ThreadLocal是弱引用，也就是线程执行完之后，这个ThreadLocal就会被释放清理掉，但是由于ThreadLocalMap指向Entry是强引用，所以Entry不会被释放清理，如果这Entry一直不被清理释放，那么ThreadLocalMap的内存占用就会越来越大，以至于内存也漏。</p>
-<p>所以为了防止这种问题的发生，在用完时，记得释放清理。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    threadLocal.set(value);</span><br><span class="line">    <span class="comment">// 执行业务操作</span></span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    threadLocal.remove(); <span class="comment">// 确保能够执行清理</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>ThreadLocal</tag>
       </tags>
   </entry>
   <entry>
@@ -1417,36 +1417,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>知识库原理</title>
-    <url>/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>现在大模型大行其道，我们普通人没有那么多资源，有没有办法搭建一个大模型玩一下呢，答案肯定是有的，我们可以搭建一个知识库，用一下大模型。</p>
-<p>总所周知，大模型的训练是需要大量资源的，我们没有这么多资源，那我们就得想办法绕过训练或者减少训练。这时候知识库就是一个比较好的选择，它不需要对大模型进行大量的训练，大模型只是帮我们生成一个类人话的答案。</p>
-<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>目前比较用的比较多的就是LangChain框架，这是一种基于Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。</p>
-<p><img src="/../images/LangChain/langchain+chatglm.png"></p>
-<p>可以从上面的原理图看出知识库的整个实现原理。</p>
-<p>1、先加载文件，文件可以是结构化的也可以是非结构化的</p>
-<p>2、读取文本，这就很好理解了，将加载进来的文件读取</p>
-<p>3、分割文本，将读取的文本分割成一段一段的，便于提取其中的关键字和让内容更内敛</p>
-<p>4、向量化，将分割后的文本向量化，</p>
-<p>5、存储，将向量化后的文本存入向量数据库中，当然可能也有一些结构型数据，直接存入关系型数据库中</p>
-<p>6、问句向量化，将我们提问的问句给向量化，理论上和上面的文本向量化一样，问句也是一个文本</p>
-<p>7、向量化匹配，通过问句的向量去向量库里面匹配文本，可能会匹配出多个，我们只取top n</p>
-<p>8、生成prompt，将匹配到的文本作为上下文和问题一起生成prompt</p>
-<p>9、将prompt提交给LLM生成回答</p>
-<p>上面就是知识库的原理和流程。可以看到，其实大模型在这里只是扮演一个类人化回答生成的作用，回答中的知识点其实都是在向量化匹配的过程中匹配出来的。所以这里不需要大模型做大量的训练。</p>
-<p>LangChain只是做了一个框架，上面的原理和流程也只是一个大纲，具体的细节我们还是有很多可操控空间的。</p>
-<p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
-<p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
-<p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>大模型</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>简单时间管理</title>
     <url>/2022/03/30/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<h1 id="时间管理"><a href="#时间管理" class="headerlink" title="时间管理"></a>时间管理</h1><h2 id="目标感"><a href="#目标感" class="headerlink" title="目标感"></a>目标感</h2><ol>
@@ -1472,27 +1442,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>效率</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>约瑟夫环问题</title>
-    <url>/2022/04/10/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
-<p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
-<p>直到圈内只剩余m人，求胜利者的编号。<br>例如：当n&#x3D;6, k&#x3D;5, m&#x3D;1时，5,4,6,2,3将会被依次处决，而1将会幸免。</p>
-<p>示例代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class JosephProblem &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回活着的人的位置</span><br><span class="line">     *</span><br><span class="line">     * @param total 总人数</span><br><span class="line">     * @param magicNum 报数到该数字的人自杀</span><br><span class="line">     * @param remain 笑着活下去的人</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private List getJosephNumbers(int total, int magicNum, int remain) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; peopleList = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = 1; i &lt;= total; i++) &#123;</span><br><span class="line">            peopleList.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; diedList = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int index = -1;  //当前应该删除的位置</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            index = (index + magicNum) % peopleList.size();</span><br><span class="line"></span><br><span class="line">            diedList.add(peopleList.get(index));</span><br><span class="line">            peopleList.remove(index);</span><br><span class="line"></span><br><span class="line">            //从上一个位置开始计数</span><br><span class="line">            index--;</span><br><span class="line"></span><br><span class="line">            //判断是否剩余m个，如果是的话结束</span><br><span class="line">            if (peopleList.size() == remain) &#123;</span><br><span class="line">                System.out.println(&quot;共&quot; + total + &quot;人，依次报数，当报到&quot; + magicNum + &quot;的人自杀，&quot; + remain + &quot;个人笑着活下去.&quot;);</span><br><span class="line">                System.out.println(&quot;死掉的序号顺序为：&quot; + diedList);</span><br><span class="line">                System.out.println(&quot;笑着活下去序号为：&quot; + peopleList);</span><br><span class="line">                System.out.println(&quot;----------------------------------&quot;);</span><br><span class="line">                return peopleList;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JosephProblem test = new JosephProblem();</span><br><span class="line"></span><br><span class="line">        test.getJosephNumbers(10, 4, 1);</span><br><span class="line">        test.getJosephNumbers(10, 2, 1);</span><br><span class="line">        test.getJosephNumbers(10, 3, 1);</span><br><span class="line">        test.getJosephNumbers(20, 10, 3);</span><br><span class="line">        test.getJosephNumbers(20, 4, 6);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">共10人，依次报数，当报到4的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 2, 7, 3, 10, 9, 1, 6]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到2的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[2, 4, 6, 8, 10, 3, 7, 1, 9]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到3的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[3, 6, 9, 2, 7, 1, 8, 5, 10]</span><br><span class="line">笑着活下去序号为：[4]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到10的人自杀，3个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[10, 20, 11, 2, 14, 6, 19, 15, 9, 7, 5, 8, 13, 18, 12, 4, 17]</span><br><span class="line">笑着活下去序号为：[1, 3, 16]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到4的人自杀，6个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 12, 16, 20, 5, 10, 15, 1, 7, 14, 2, 11, 19]</span><br><span class="line">笑着活下去序号为：[3, 6, 9, 13, 17, 18]</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1615,6 +1564,27 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>约瑟夫环问题</title>
+    <url>/2022/04/10/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
+<p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
+<p>直到圈内只剩余m人，求胜利者的编号。<br>例如：当n&#x3D;6, k&#x3D;5, m&#x3D;1时，5,4,6,2,3将会被依次处决，而1将会幸免。</p>
+<p>示例代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class JosephProblem &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回活着的人的位置</span><br><span class="line">     *</span><br><span class="line">     * @param total 总人数</span><br><span class="line">     * @param magicNum 报数到该数字的人自杀</span><br><span class="line">     * @param remain 笑着活下去的人</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private List getJosephNumbers(int total, int magicNum, int remain) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; peopleList = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = 1; i &lt;= total; i++) &#123;</span><br><span class="line">            peopleList.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; diedList = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int index = -1;  //当前应该删除的位置</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            index = (index + magicNum) % peopleList.size();</span><br><span class="line"></span><br><span class="line">            diedList.add(peopleList.get(index));</span><br><span class="line">            peopleList.remove(index);</span><br><span class="line"></span><br><span class="line">            //从上一个位置开始计数</span><br><span class="line">            index--;</span><br><span class="line"></span><br><span class="line">            //判断是否剩余m个，如果是的话结束</span><br><span class="line">            if (peopleList.size() == remain) &#123;</span><br><span class="line">                System.out.println(&quot;共&quot; + total + &quot;人，依次报数，当报到&quot; + magicNum + &quot;的人自杀，&quot; + remain + &quot;个人笑着活下去.&quot;);</span><br><span class="line">                System.out.println(&quot;死掉的序号顺序为：&quot; + diedList);</span><br><span class="line">                System.out.println(&quot;笑着活下去序号为：&quot; + peopleList);</span><br><span class="line">                System.out.println(&quot;----------------------------------&quot;);</span><br><span class="line">                return peopleList;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JosephProblem test = new JosephProblem();</span><br><span class="line"></span><br><span class="line">        test.getJosephNumbers(10, 4, 1);</span><br><span class="line">        test.getJosephNumbers(10, 2, 1);</span><br><span class="line">        test.getJosephNumbers(10, 3, 1);</span><br><span class="line">        test.getJosephNumbers(20, 10, 3);</span><br><span class="line">        test.getJosephNumbers(20, 4, 6);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">共10人，依次报数，当报到4的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 2, 7, 3, 10, 9, 1, 6]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到2的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[2, 4, 6, 8, 10, 3, 7, 1, 9]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到3的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[3, 6, 9, 2, 7, 1, 8, 5, 10]</span><br><span class="line">笑着活下去序号为：[4]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到10的人自杀，3个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[10, 20, 11, 2, 14, 6, 19, 15, 9, 7, 5, 8, 13, 18, 12, 4, 17]</span><br><span class="line">笑着活下去序号为：[1, 3, 16]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到4的人自杀，6个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 12, 16, 20, 5, 10, 15, 1, 7, 14, 2, 11, 19]</span><br><span class="line">笑着活下去序号为：[3, 6, 9, 13, 17, 18]</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>面试复盘-03-27</title>
     <url>/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/</url>
     <content><![CDATA[<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>这次面试场面有点大，6个面试官，但只有3个面试官提问了。前两个面试官回答的还行，后一个面试官直接问懵了。</p>
@@ -1725,6 +1695,36 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>复盘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>知识库原理</title>
+    <url>/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>现在大模型大行其道，我们普通人没有那么多资源，有没有办法搭建一个大模型玩一下呢，答案肯定是有的，我们可以搭建一个知识库，用一下大模型。</p>
+<p>总所周知，大模型的训练是需要大量资源的，我们没有这么多资源，那我们就得想办法绕过训练或者减少训练。这时候知识库就是一个比较好的选择，它不需要对大模型进行大量的训练，大模型只是帮我们生成一个类人话的答案。</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>目前比较用的比较多的就是LangChain框架，这是一种基于Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。</p>
+<p><img src="/../images/LangChain/langchain+chatglm.png"></p>
+<p>可以从上面的原理图看出知识库的整个实现原理。</p>
+<p>1、先加载文件，文件可以是结构化的也可以是非结构化的</p>
+<p>2、读取文本，这就很好理解了，将加载进来的文件读取</p>
+<p>3、分割文本，将读取的文本分割成一段一段的，便于提取其中的关键字和让内容更内敛</p>
+<p>4、向量化，将分割后的文本向量化，</p>
+<p>5、存储，将向量化后的文本存入向量数据库中，当然可能也有一些结构型数据，直接存入关系型数据库中</p>
+<p>6、问句向量化，将我们提问的问句给向量化，理论上和上面的文本向量化一样，问句也是一个文本</p>
+<p>7、向量化匹配，通过问句的向量去向量库里面匹配文本，可能会匹配出多个，我们只取top n</p>
+<p>8、生成prompt，将匹配到的文本作为上下文和问题一起生成prompt</p>
+<p>9、将prompt提交给LLM生成回答</p>
+<p>上面就是知识库的原理和流程。可以看到，其实大模型在这里只是扮演一个类人化回答生成的作用，回答中的知识点其实都是在向量化匹配的过程中匹配出来的。所以这里不需要大模型做大量的训练。</p>
+<p>LangChain只是做了一个框架，上面的原理和流程也只是一个大纲，具体的细节我们还是有很多可操控空间的。</p>
+<p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
+<p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
+<p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
       </tags>
   </entry>
 </search>
