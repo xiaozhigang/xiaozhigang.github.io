@@ -43,6 +43,49 @@
       </tags>
   </entry>
   <entry>
+    <title>CAP原则</title>
+    <url>/2023/03/30/CAP%E5%8E%9F%E5%88%99/</url>
+    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
+<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
+<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
+<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性（Consistency</td>
+<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
+</tr>
+<tr>
+<td>可用性（Availability）</td>
+<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
+</tr>
+<tr>
+<td>分区容错性（Partition tolerance）</td>
+<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
+</tr>
+</tbody></table>
+<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
+<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
+<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
+<p>​			A、B、C三个分区，分区上的数据一致。现在操作A分区中的数据发生更改，在保证一直性的情况下，得先同步更改B、C分区上得数据。更改数据需要时间，在同步更改的这段时间中，是不是就不能对外提供服务。	如果要先保证可用性，那是不是就不能先同步更改B、C分区上的数据。由此就可以看出CAP不能同时存在。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>虽然CAP不能同时存在，但是在分布式系统中一般AP、CP也可以根据场景的不同解决我们的问题了。</p>
+<p>在可用性要求高的场景中，可以放弃一致性。这要求在数据不一致的情况下不影响我们的服务，比如NoSQL。</p>
+<p>在一致性要求高的场景中，可以放弃可用性。这种场景是对数据有很高的要求，比如转账服务，可以牺牲一段可用时间，以保证各分区数据同步一致。</p>
+<h4 id="折中方案"><a href="#折中方案" class="headerlink" title="折中方案"></a>折中方案</h4><p>在一致性要求比较高的场景中，同步各分区的时候，是不是需要同步到所有分区，如果同步一个或者大部分分区就可以的，那么这时候返回，是不是会提高可用性。这是一个在保证一致性的情况下提高可用性的办法，前提是同步到一个或大部分分区就可以保证我们的业务。</p>
+<p>归根究底，一致性和可用性不能同时兼得，一个增加另一个必然减少。</p>
+]]></content>
+      <categories>
+        <category>分布式</category>
+      </categories>
+      <tags>
+        <tag>CAP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>COLA</title>
     <url>/2023/01/06/COLA/</url>
     <content><![CDATA[<h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
@@ -99,67 +142,6 @@
       </categories>
       <tags>
         <tag>COLA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DDD分层架构规范</title>
-    <url>/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
-    <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
-<li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
-</li>
-<li><p>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</p>
-</li>
-<li><p>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</p>
-</li>
-<li><p>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</p>
-</li>
-</ol>
-<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
-<li>APP层采用CQE模型，查询和命令分离</li>
-<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
-<li>AppService和DomainService均为无状态服务</li>
-<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
-<li>DomainService封装所有跨实体的业务逻辑</li>
-<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
-</ul>
-<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
-<li>按聚合根分包，和包名一样的实体为聚合根</li>
-<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
-<li>聚合根的一致性由自己保障</li>
-<li>跨实体的操作放到领域服务中</li>
-</ul>
-<blockquote>
-<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
-</blockquote>
-<ul>
-<li>实体都有自己的唯一标识通常</li>
-<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
-</ul>
-<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
-<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
-</blockquote>
-<ul>
-<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
-<li>放在实体的静态方法上有悖DDD</li>
-<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
-<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
-</ul>
-<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
-<li>DTO：接受Controller层发来的请求，返回结果</li>
-<li>Entity ：将DTO转换为要操作的领域层对象</li>
-</ul>
-<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
-<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
-<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
-<li>无状态服务的优势在于可以很方便地水平伸缩</li>
-</ul>
-]]></content>
-      <categories>
-        <category>JAVA</category>
-      </categories>
-      <tags>
-        <tag>DDD</tag>
       </tags>
   </entry>
   <entry>
@@ -256,46 +238,64 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>CAP原则</title>
-    <url>/2023/03/30/CAP%E5%8E%9F%E5%88%99/</url>
-    <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
-<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
-<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
-<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
-<thead>
-<tr>
-<th>选项</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>一致性（Consistency</td>
-<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
-</tr>
-<tr>
-<td>可用性（Availability）</td>
-<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
-</tr>
-<tr>
-<td>分区容错性（Partition tolerance）</td>
-<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
-</tr>
-</tbody></table>
-<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
-<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
-<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
-<p>​			A、B、C三个分区，分区上的数据一致。现在操作A分区中的数据发生更改，在保证一直性的情况下，得先同步更改B、C分区上得数据。更改数据需要时间，在同步更改的这段时间中，是不是就不能对外提供服务。	如果要先保证可用性，那是不是就不能先同步更改B、C分区上的数据。由此就可以看出CAP不能同时存在。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>虽然CAP不能同时存在，但是在分布式系统中一般AP、CP也可以根据场景的不同解决我们的问题了。</p>
-<p>在可用性要求高的场景中，可以放弃一致性。这要求在数据不一致的情况下不影响我们的服务，比如NoSQL。</p>
-<p>在一致性要求高的场景中，可以放弃可用性。这种场景是对数据有很高的要求，比如转账服务，可以牺牲一段可用时间，以保证各分区数据同步一致。</p>
-<h4 id="折中方案"><a href="#折中方案" class="headerlink" title="折中方案"></a>折中方案</h4><p>在一致性要求比较高的场景中，同步各分区的时候，是不是需要同步到所有分区，如果同步一个或者大部分分区就可以的，那么这时候返回，是不是会提高可用性。这是一个在保证一致性的情况下提高可用性的办法，前提是同步到一个或大部分分区就可以保证我们的业务。</p>
-<p>归根究底，一致性和可用性不能同时兼得，一个增加另一个必然减少。</p>
+    <title>DDD分层架构规范</title>
+    <url>/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/</url>
+    <content><![CDATA[<h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
+<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
+<li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
+</li>
+<li><p>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</p>
+</li>
+<li><p>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</p>
+</li>
+<li><p>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</p>
+</li>
+</ol>
+<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
+<li>APP层采用CQE模型，查询和命令分离</li>
+<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
+<li>AppService和DomainService均为无状态服务</li>
+<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
+<li>DomainService封装所有跨实体的业务逻辑</li>
+<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+</ul>
+<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
+<li>按聚合根分包，和包名一样的实体为聚合根</li>
+<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
+<li>聚合根的一致性由自己保障</li>
+<li>跨实体的操作放到领域服务中</li>
+</ul>
+<blockquote>
+<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
+</blockquote>
+<ul>
+<li>实体都有自己的唯一标识通常</li>
+<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+</ul>
+<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
+<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
+</blockquote>
+<ul>
+<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
+<li>放在实体的静态方法上有悖DDD</li>
+<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
+<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
+</ul>
+<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
+<li>DTO：接受Controller层发来的请求，返回结果</li>
+<li>Entity ：将DTO转换为要操作的领域层对象</li>
+</ul>
+<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
+<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
+<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
+<li>无状态服务的优势在于可以很方便地水平伸缩</li>
+</ul>
 ]]></content>
       <categories>
-        <category>分布式</category>
+        <category>JAVA</category>
       </categories>
       <tags>
-        <tag>CAP</tag>
+        <tag>DDD</tag>
       </tags>
   </entry>
   <entry>
@@ -336,7 +336,7 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#x63;&#111;&#109;">&#x67;&#x69;&#116;&#64;&#103;&#105;&#x74;&#x68;&#x75;&#x62;&#46;&#x63;&#111;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;">&#x67;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
@@ -615,38 +615,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>MySQL的回表</title>
-    <url>/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/</url>
-    <content><![CDATA[<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
-<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
-<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
-<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
-<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
-<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
-<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
-<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
-<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
-<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
-<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
-<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
-<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
-<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
-<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
-<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
-<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
-<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
-<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
-<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
-]]></content>
-      <categories>
-        <category>MySQL</category>
-      </categories>
-      <tags>
-        <tag>索引</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL线上索引创建</title>
     <url>/2023/04/10/MySQL%E7%BA%BF%E4%B8%8A%E7%B4%A2%E5%BC%95%E5%88%9B%E5%BB%BA/</url>
     <content><![CDATA[<h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>如果在线上环境，需要新建一个索引，会发生什么，会不会导致不可用，具体的创建步骤又是啥。</p>
@@ -823,6 +791,38 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>RESTful-API</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MySQL的回表</title>
+    <url>/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/</url>
+    <content><![CDATA[<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
+<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
+<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
+<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
+<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
+<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
+<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
+<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
+<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
+<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
+<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
+<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
+<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
+<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
+<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
+<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
+<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
+<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
+<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
+<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
+]]></content>
+      <categories>
+        <category>MySQL</category>
+      </categories>
+      <tags>
+        <tag>索引</tag>
       </tags>
   </entry>
   <entry>
@@ -1144,29 +1144,68 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>带新员工</title>
-    <url>/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/</url>
-    <content><![CDATA[<h2 id="导图"><a href="#导图" class="headerlink" title="导图"></a>导图</h2><p><img src="/../../../../images/new_bird_train.png"></p>
-<p><img src="/../images/new_bird/new_bird_train.png"></p>
-<span id="more"></span>
+    <title>spring缓存</title>
+    <url>/2024/04/27/spring%E7%BC%93%E5%AD%98/</url>
+    <content><![CDATA[<h3 id="各级缓存"><a href="#各级缓存" class="headerlink" title="各级缓存"></a>各级缓存</h3><p>spring中有三级缓存：一级二级三级。三个都是存储bean相关的内容，但是具体存储的内容有所差异。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>一级缓存</th>
+<th>二级缓存</th>
+<th>三级缓存</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>名称</td>
+<td>singletonObjects</td>
+<td>earlySingletonObjects</td>
+<td>singletonFactories</td>
+</tr>
+<tr>
+<td>类型</td>
+<td>ConcurrentHashMap</td>
+<td>HashMap</td>
+<td>HashMap</td>
+</tr>
+<tr>
+<td>定义</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+</tr>
+<tr>
+<td>缓存内容</td>
+<td>存放就绪状态的Bean</td>
+<td>早期曝光的Bean</td>
+<td>创建用于获取Bean的工厂类-ObjectFactory实例</td>
+</tr>
+</tbody></table>
+<p><img src="/../images/spring-cache/image-20240427123420433.png" alt="image-20240427123420433"></p>
+<p>一级缓存：就绪状态的bean，保存在该缓存中的Bean所实现Aware子接口的方法已经回调完毕，自定义初始化方法已经执行完毕，也经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理。</p>
+<p>二级缓存：早期曝光的bean，一般只有处于循环引用状态的bean才会被保存在该缓存中，所实现的Aware子接口方法还未回调，自定义初始化方法还未执行。</p>
+<p>三级缓存：存放获取bean的工厂类-ObjectFactory实例，在IoC容器中，所有刚被创建出来的bean，默认都会保存到该缓存中。</p>
+<h3 id="解决循环依赖问题"><a href="#解决循环依赖问题" class="headerlink" title="解决循环依赖问题"></a>解决循环依赖问题</h3><p>什么是循环依赖：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceA</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceB circularServiceB;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceB</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceA circularServiceA;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ol>
-<li>遵从 PDCA(Plan-&gt;Do-&gt;Check-&gt;Action) 的原则<ul>
-<li>就计划达成一致并讲解计划</li>
-<li>引导思考，最终可以自己寻找找到解决方案(给答案-&gt;给线索-&gt;自己摸索)</li>
-<li>进行阶段性检查，确保计划执行的正确性，解决过程中遇到的问题以及对计划做出调整</li>
-</ul>
-</li>
-<li>以身作则，多肯定和鼓励引导做出正确的选择和避免犯错，多沟通并积极主动去完成每一件事。</li>
-<li>用心、有耐心以及有责任心。</li>
-<li>…待补充</li>
-</ol>
+
+
+
+
+<p>在 A 和 B 循环依赖的场景中：</p>
+<p>B <code>populatedBean</code> 查找依赖项 A 的时候，从一级缓存中虽然未获取到 A，但是发现 A 在创建中。</p>
+<p>此时，从三级缓存中获取 A 的 <code>singletonFactory</code> 调用工厂方法，创建 <code>getEarlyBeanReference</code> A 的早期引用并返回。</p>
+<p>B 引用到 A ，B 就可以初始化完毕，然后 A 同样也可以初始化完毕了。</p>
+<p><img src="/../images/spring-cache/image-20240427154008953.png" alt="image-20240427154008953"></p>
+<h3 id="AOP代理"><a href="#AOP代理" class="headerlink" title="AOP代理"></a>AOP代理</h3><p>说是二级缓存其实已经能解决循环依赖的问题，但是为什么需要三级缓存呢。说是解决AOP代理的问题。</p>
+<p>如果只有二级缓存，虽然能解决循环依赖，但是在查询二级缓存中返回的实例，而不是我们需要的代理对象，所以添加了三级缓存，在三级对象中获取实例的时候，会经过判断，如果是代理对象则返回代理对象，如果是实例就返回实例。</p>
+<p>其实具体的我说的也不是很清楚，可以参考连接：<a href="https://zhuanlan.zhihu.com/p/377878056">https://zhuanlan.zhihu.com/p/377878056</a></p>
 ]]></content>
       <categories>
-        <category>管理</category>
+        <category>JAVA</category>
       </categories>
       <tags>
-        <tag>管理</tag>
+        <tag>缓存</tag>
       </tags>
   </entry>
   <entry>
@@ -1198,6 +1237,32 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>架构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>带新员工</title>
+    <url>/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/</url>
+    <content><![CDATA[<h2 id="导图"><a href="#导图" class="headerlink" title="导图"></a>导图</h2><p><img src="/../../../../images/new_bird_train.png"></p>
+<p><img src="/../images/new_bird/new_bird_train.png"></p>
+<span id="more"></span>
+
+<h2 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h2><ol>
+<li>遵从 PDCA(Plan-&gt;Do-&gt;Check-&gt;Action) 的原则<ul>
+<li>就计划达成一致并讲解计划</li>
+<li>引导思考，最终可以自己寻找找到解决方案(给答案-&gt;给线索-&gt;自己摸索)</li>
+<li>进行阶段性检查，确保计划执行的正确性，解决过程中遇到的问题以及对计划做出调整</li>
+</ul>
+</li>
+<li>以身作则，多肯定和鼓励引导做出正确的选择和避免犯错，多沟通并积极主动去完成每一件事。</li>
+<li>用心、有耐心以及有责任心。</li>
+<li>…待补充</li>
+</ol>
+]]></content>
+      <categories>
+        <category>管理</category>
+      </categories>
+      <tags>
+        <tag>管理</tag>
       </tags>
   </entry>
   <entry>
@@ -1394,6 +1459,36 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
+    <title>知识库原理</title>
+    <url>/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/</url>
+    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>现在大模型大行其道，我们普通人没有那么多资源，有没有办法搭建一个大模型玩一下呢，答案肯定是有的，我们可以搭建一个知识库，用一下大模型。</p>
+<p>总所周知，大模型的训练是需要大量资源的，我们没有这么多资源，那我们就得想办法绕过训练或者减少训练。这时候知识库就是一个比较好的选择，它不需要对大模型进行大量的训练，大模型只是帮我们生成一个类人话的答案。</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>目前比较用的比较多的就是LangChain框架，这是一种基于Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。</p>
+<p><img src="/../images/LangChain/langchain+chatglm.png"></p>
+<p>可以从上面的原理图看出知识库的整个实现原理。</p>
+<p>1、先加载文件，文件可以是结构化的也可以是非结构化的</p>
+<p>2、读取文本，这就很好理解了，将加载进来的文件读取</p>
+<p>3、分割文本，将读取的文本分割成一段一段的，便于提取其中的关键字和让内容更内敛</p>
+<p>4、向量化，将分割后的文本向量化，</p>
+<p>5、存储，将向量化后的文本存入向量数据库中，当然可能也有一些结构型数据，直接存入关系型数据库中</p>
+<p>6、问句向量化，将我们提问的问句给向量化，理论上和上面的文本向量化一样，问句也是一个文本</p>
+<p>7、向量化匹配，通过问句的向量去向量库里面匹配文本，可能会匹配出多个，我们只取top n</p>
+<p>8、生成prompt，将匹配到的文本作为上下文和问题一起生成prompt</p>
+<p>9、将prompt提交给LLM生成回答</p>
+<p>上面就是知识库的原理和流程。可以看到，其实大模型在这里只是扮演一个类人化回答生成的作用，回答中的知识点其实都是在向量化匹配的过程中匹配出来的。所以这里不需要大模型做大量的训练。</p>
+<p>LangChain只是做了一个框架，上面的原理和流程也只是一个大纲，具体的细节我们还是有很多可操控空间的。</p>
+<p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
+<p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
+<p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>大模型</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>添加聊天办公机器人</title>
     <url>/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/</url>
     <content><![CDATA[<p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
@@ -1442,6 +1537,27 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>效率</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>约瑟夫环问题</title>
+    <url>/2022/04/10/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
+<p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
+<p>直到圈内只剩余m人，求胜利者的编号。<br>例如：当n&#x3D;6, k&#x3D;5, m&#x3D;1时，5,4,6,2,3将会被依次处决，而1将会幸免。</p>
+<p>示例代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class JosephProblem &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回活着的人的位置</span><br><span class="line">     *</span><br><span class="line">     * @param total 总人数</span><br><span class="line">     * @param magicNum 报数到该数字的人自杀</span><br><span class="line">     * @param remain 笑着活下去的人</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private List getJosephNumbers(int total, int magicNum, int remain) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; peopleList = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = 1; i &lt;= total; i++) &#123;</span><br><span class="line">            peopleList.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; diedList = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int index = -1;  //当前应该删除的位置</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            index = (index + magicNum) % peopleList.size();</span><br><span class="line"></span><br><span class="line">            diedList.add(peopleList.get(index));</span><br><span class="line">            peopleList.remove(index);</span><br><span class="line"></span><br><span class="line">            //从上一个位置开始计数</span><br><span class="line">            index--;</span><br><span class="line"></span><br><span class="line">            //判断是否剩余m个，如果是的话结束</span><br><span class="line">            if (peopleList.size() == remain) &#123;</span><br><span class="line">                System.out.println(&quot;共&quot; + total + &quot;人，依次报数，当报到&quot; + magicNum + &quot;的人自杀，&quot; + remain + &quot;个人笑着活下去.&quot;);</span><br><span class="line">                System.out.println(&quot;死掉的序号顺序为：&quot; + diedList);</span><br><span class="line">                System.out.println(&quot;笑着活下去序号为：&quot; + peopleList);</span><br><span class="line">                System.out.println(&quot;----------------------------------&quot;);</span><br><span class="line">                return peopleList;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JosephProblem test = new JosephProblem();</span><br><span class="line"></span><br><span class="line">        test.getJosephNumbers(10, 4, 1);</span><br><span class="line">        test.getJosephNumbers(10, 2, 1);</span><br><span class="line">        test.getJosephNumbers(10, 3, 1);</span><br><span class="line">        test.getJosephNumbers(20, 10, 3);</span><br><span class="line">        test.getJosephNumbers(20, 4, 6);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">共10人，依次报数，当报到4的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 2, 7, 3, 10, 9, 1, 6]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到2的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[2, 4, 6, 8, 10, 3, 7, 1, 9]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到3的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[3, 6, 9, 2, 7, 1, 8, 5, 10]</span><br><span class="line">笑着活下去序号为：[4]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到10的人自杀，3个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[10, 20, 11, 2, 14, 6, 19, 15, 9, 7, 5, 8, 13, 18, 12, 4, 17]</span><br><span class="line">笑着活下去序号为：[1, 3, 16]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到4的人自杀，6个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 12, 16, 20, 5, 10, 15, 1, 7, 14, 2, 11, 19]</span><br><span class="line">笑着活下去序号为：[3, 6, 9, 13, 17, 18]</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1564,27 +1680,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </tags>
   </entry>
   <entry>
-    <title>约瑟夫环问题</title>
-    <url>/2022/04/10/%E7%BA%A6%E7%91%9F%E5%A4%AB%E7%8E%AF%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<h1 id="约瑟夫斯问题"><a href="#约瑟夫斯问题" class="headerlink" title="约瑟夫斯问题"></a>约瑟夫斯问题</h1><p>有时也称为约瑟夫斯置换，是一个出现在计算机科学和数学中的问题。在计算机编程的算法中，类似问题又称为约瑟夫环。<br>人们站在一个等待被处决的圈子里。 计数从圆圈中的指定点开始，并沿指定方向围绕圆圈进行。 在跳过指定数量的人之后，执行下一个人。 对剩下的人重复该过程，从下一个人开始，朝同一方向跳过相同数量的人，直到只剩下一个人，并被释放。<br>问题即，给定人数、起点、方向和要跳过的数字，选择初始圆圈中的位置以避免被处决。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>有n个人编号，站成一圈：<br>1  2  3  4 … … n-1  n</p>
-<p>现在从1开始进行报数，报到k的出列自杀，然后剩下的人继续从1报数（当到达编号为n的人时，下一个报数的从编号为1的人开始进行）：<br>1  2  3  4… k(出列自杀)  1  2  …</p>
-<p>直到圈内只剩余m人，求胜利者的编号。<br>例如：当n&#x3D;6, k&#x3D;5, m&#x3D;1时，5,4,6,2,3将会被依次处决，而1将会幸免。</p>
-<p>示例代码如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class JosephProblem &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回活着的人的位置</span><br><span class="line">     *</span><br><span class="line">     * @param total 总人数</span><br><span class="line">     * @param magicNum 报数到该数字的人自杀</span><br><span class="line">     * @param remain 笑着活下去的人</span><br><span class="line">     * @return</span><br><span class="line">     */</span><br><span class="line">    private List getJosephNumbers(int total, int magicNum, int remain) &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; peopleList = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = 1; i &lt;= total; i++) &#123;</span><br><span class="line">            peopleList.add(i);</span><br><span class="line">        &#125;</span><br><span class="line">        List&lt;Integer&gt; diedList = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        int index = -1;  //当前应该删除的位置</span><br><span class="line">        while (true) &#123;</span><br><span class="line">            index = (index + magicNum) % peopleList.size();</span><br><span class="line"></span><br><span class="line">            diedList.add(peopleList.get(index));</span><br><span class="line">            peopleList.remove(index);</span><br><span class="line"></span><br><span class="line">            //从上一个位置开始计数</span><br><span class="line">            index--;</span><br><span class="line"></span><br><span class="line">            //判断是否剩余m个，如果是的话结束</span><br><span class="line">            if (peopleList.size() == remain) &#123;</span><br><span class="line">                System.out.println(&quot;共&quot; + total + &quot;人，依次报数，当报到&quot; + magicNum + &quot;的人自杀，&quot; + remain + &quot;个人笑着活下去.&quot;);</span><br><span class="line">                System.out.println(&quot;死掉的序号顺序为：&quot; + diedList);</span><br><span class="line">                System.out.println(&quot;笑着活下去序号为：&quot; + peopleList);</span><br><span class="line">                System.out.println(&quot;----------------------------------&quot;);</span><br><span class="line">                return peopleList;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        JosephProblem test = new JosephProblem();</span><br><span class="line"></span><br><span class="line">        test.getJosephNumbers(10, 4, 1);</span><br><span class="line">        test.getJosephNumbers(10, 2, 1);</span><br><span class="line">        test.getJosephNumbers(10, 3, 1);</span><br><span class="line">        test.getJosephNumbers(20, 10, 3);</span><br><span class="line">        test.getJosephNumbers(20, 4, 6);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>输出结果：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">共10人，依次报数，当报到4的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 2, 7, 3, 10, 9, 1, 6]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到2的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[2, 4, 6, 8, 10, 3, 7, 1, 9]</span><br><span class="line">笑着活下去序号为：[5]</span><br><span class="line">----------------------------------</span><br><span class="line">共10人，依次报数，当报到3的人自杀，1个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[3, 6, 9, 2, 7, 1, 8, 5, 10]</span><br><span class="line">笑着活下去序号为：[4]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到10的人自杀，3个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[10, 20, 11, 2, 14, 6, 19, 15, 9, 7, 5, 8, 13, 18, 12, 4, 17]</span><br><span class="line">笑着活下去序号为：[1, 3, 16]</span><br><span class="line">----------------------------------</span><br><span class="line">共20人，依次报数，当报到4的人自杀，6个人笑着活下去.</span><br><span class="line">死掉的序号顺序为：[4, 8, 12, 16, 20, 5, 10, 15, 1, 7, 14, 2, 11, 19]</span><br><span class="line">笑着活下去序号为：[3, 6, 9, 13, 17, 18]</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>技术</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>面试复盘-03-27</title>
     <url>/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/</url>
     <content><![CDATA[<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>这次面试场面有点大，6个面试官，但只有3个面试官提问了。前两个面试官回答的还行，后一个面试官直接问懵了。</p>
@@ -1695,36 +1790,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
       </categories>
       <tags>
         <tag>复盘</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>知识库原理</title>
-    <url>/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/</url>
-    <content><![CDATA[<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>现在大模型大行其道，我们普通人没有那么多资源，有没有办法搭建一个大模型玩一下呢，答案肯定是有的，我们可以搭建一个知识库，用一下大模型。</p>
-<p>总所周知，大模型的训练是需要大量资源的，我们没有这么多资源，那我们就得想办法绕过训练或者减少训练。这时候知识库就是一个比较好的选择，它不需要对大模型进行大量的训练，大模型只是帮我们生成一个类人话的答案。</p>
-<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>目前比较用的比较多的就是LangChain框架，这是一种基于Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。</p>
-<p><img src="/../images/LangChain/langchain+chatglm.png"></p>
-<p>可以从上面的原理图看出知识库的整个实现原理。</p>
-<p>1、先加载文件，文件可以是结构化的也可以是非结构化的</p>
-<p>2、读取文本，这就很好理解了，将加载进来的文件读取</p>
-<p>3、分割文本，将读取的文本分割成一段一段的，便于提取其中的关键字和让内容更内敛</p>
-<p>4、向量化，将分割后的文本向量化，</p>
-<p>5、存储，将向量化后的文本存入向量数据库中，当然可能也有一些结构型数据，直接存入关系型数据库中</p>
-<p>6、问句向量化，将我们提问的问句给向量化，理论上和上面的文本向量化一样，问句也是一个文本</p>
-<p>7、向量化匹配，通过问句的向量去向量库里面匹配文本，可能会匹配出多个，我们只取top n</p>
-<p>8、生成prompt，将匹配到的文本作为上下文和问题一起生成prompt</p>
-<p>9、将prompt提交给LLM生成回答</p>
-<p>上面就是知识库的原理和流程。可以看到，其实大模型在这里只是扮演一个类人化回答生成的作用，回答中的知识点其实都是在向量化匹配的过程中匹配出来的。所以这里不需要大模型做大量的训练。</p>
-<p>LangChain只是做了一个框架，上面的原理和流程也只是一个大纲，具体的细节我们还是有很多可操控空间的。</p>
-<p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
-<p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
-<p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>大模型</tag>
       </tags>
   </entry>
 </search>
