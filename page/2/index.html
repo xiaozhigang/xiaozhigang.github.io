@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,6 +178,98 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/28/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/10/28/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">可复用jar包能力架构</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-10-28 21:21:45 / 修改时间：23:10:14" itemprop="dateCreated datePublished" datetime="2023-10-28T21:21:45+08:00">2023-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h3><p>计划将原有的代码抽取成可复用的原子能力jar包，一个业务可能需要调用多个原子能力jar包，jar包调用链配置在配置文件中。</p>
+<p>实现外部调用接口，通过原子能力调用链实现原子能力包调用。 </p>
+<p>主要目的：1、实现能力抽取复用，2、实现原子能力编排。</p>
+<h3 id="1、没有架构的架构"><a href="#1、没有架构的架构" class="headerlink" title="1、没有架构的架构"></a>1、没有架构的架构</h3><p>外部业务通过接口调用service服务，service服务内部通过配置文件调用封装好的jar包。kafka作为消息中间件，为service和运行的jar收集日志。</p>
+<p>redis作为缓存中间件，为service和运行的jar提供缓存服务，而MySQL为为service和运行的jar提供持久化数据存储。</p>
+<p><img src="/../images/jar/image-20240408215632370.png" alt="image-20240408215632370"></p>
+<h3 id="2、抽取engine服务"><a href="#2、抽取engine服务" class="headerlink" title="2、抽取engine服务"></a>2、抽取engine服务</h3><p>所有的逻辑都杂糅在service服务内，很明显不合适，如果需要扩展多节点的化，那整个service服务都要部署扩展。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/10/28/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1122,100 +1214,6 @@ cd /home/elk/elasticsearch-7.9.3/bin/
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/03/30/CAP%E5%8E%9F%E5%88%99/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/06/COLA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/01/06/COLA/" class="post-title-link" itemprop="url">COLA</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-01-06 08:10:50" itemprop="dateCreated datePublished" datetime="2023-01-06T08:10:50+08:00">2023-01-06</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
-<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
-<ol>
-<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
-</li>
-<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
-</li>
-<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
-</li>
-<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/01/06/COLA/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
