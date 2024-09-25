@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="两段式提交是MySQL数据持久化的保证。 两种日志binlog和redologbinlog记录了数据库表结构和表数据变更，主要有两个作用：复制和恢复数据 redo log 是 Innodb 引擎独有的日志模块，它只记录有关 Innodb 引擎的事务日志，记录内容为 对数据页的物理操作     binlog redolog    适用对象不同 mysql server 层 Innodb 存储引擎层">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL两段式提交">
+<meta property="og:url" content="http://example.com/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="两段式提交是MySQL数据持久化的保证。 两种日志binlog和redologbinlog记录了数据库表结构和表数据变更，主要有两个作用：复制和恢复数据 redo log 是 Innodb 引擎独有的日志模块，它只记录有关 Innodb 引擎的事务日志，记录内容为 对数据页的物理操作     binlog redolog    适用对象不同 mysql server 层 Innodb 存储引擎层">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/MySQL-submit/image-20240326231349218.png">
+<meta property="article:published_time" content="2022-06-21T14:04:58.000Z">
+<meta property="article:modified_time" content="2022-06-21T14:04:58.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="log">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/MySQL-submit/image-20240326231349218.png">
+
+
+<link rel="canonical" href="http://example.com/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/","path":"2022/06/21/MySQL两段式提交/","title":"MySQL两段式提交"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>MySQL两段式提交 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%97%A5%E5%BF%97"><span class="nav-number">1.</span> <span class="nav-text">两种日志</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog%E5%92%8Credolog"><span class="nav-number">1.1.</span> <span class="nav-text">binlog和redolog</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4"><span class="nav-number">2.</span> <span class="nav-text">两段式提交</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4-1"><span class="nav-number">2.1.</span> <span class="nav-text">两段式提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E7%94%9F%E5%BC%82%E5%B8%B8"><span class="nav-number">2.2.</span> <span class="nav-text">发生异常</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="MySQL两段式提交 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL两段式提交
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-06-21 22:04:58" itemprop="dateCreated datePublished" datetime="2022-06-21T22:04:58+08:00">2022-06-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>两段式提交是MySQL数据持久化的保证。</p>
+<h2 id="两种日志"><a href="#两种日志" class="headerlink" title="两种日志"></a>两种日志</h2><h3 id="binlog和redolog"><a href="#binlog和redolog" class="headerlink" title="binlog和redolog"></a>binlog和redolog</h3><p>binlog记录了数据库表结构和表数据变更，主要有两个作用：复制和恢复数据</p>
+<p>redo log 是 Innodb 引擎独有的日志模块，它只记录有关 Innodb 引擎的事务日志，记录内容为 对数据页的物理操作</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>binlog</th>
+<th>redolog</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>适用对象不同</td>
+<td>mysql server 层</td>
+<td>Innodb 存储引擎层</td>
+</tr>
+<tr>
+<td>写入方式不同适用对象不同</td>
+<td>追加写，一个文件满了写新文件mysql server 层</td>
+<td>循环写固定文件Innodb 存储引擎层</td>
+</tr>
+<tr>
+<td>写入方式不同</td>
+<td>逻辑日志，一个事务具体操作内容</td>
+<td>物理日志，页的修改情况</td>
+</tr>
+<tr>
+<td>写入磁盘时间不同</td>
+<td>提交事务前一次写入</td>
+<td>在事务进行中有后台线程不断同步</td>
+</tr>
+<tr>
+<td>用途不同</td>
+<td>主从复制、数据备份</td>
+<td>数据恢复</td>
+</tr>
+</tbody></table>
+<h2 id="两段式提交"><a href="#两段式提交" class="headerlink" title="两段式提交"></a>两段式提交</h2><p>两种日志虽然都保证持久化，但是侧重点不同。</p>
+<p>1、redo log（重做日志）让InnoDB存储引擎拥有了崩溃恢复能力。</p>
+<p>2、binlog（归档日志）保证了MySQL集群架构的数据一致性，主从节点的同步都是通过binlog保证的。</p>
+<p>如果<strong>单独提交</strong><br>先写 redo log 后写 binlog，也就是事务可能还没有提交，系统崩溃了，虽然可以通过redo log恢复，但是binlog还没有这条数据，就会造成主从不一致 先写 binlog 后写 redo log，这个过程说明事务已经提交了，系统崩溃了，虽然binlog里面有数据，但是redo log里面没有，也会发生主从不一致，并且redo log因为不全，即使重新恢复的时候也不是最新的数据</p>
+<h3 id="两段式提交-1"><a href="#两段式提交-1" class="headerlink" title="两段式提交"></a>两段式提交</h3><p>就是将redolog的提交拆为两各阶段，prepare阶段和commit阶段，在中间插入binlog提交。</p>
+<p><img src="/../images/MySQL-submit/image-20240326231349218.png" alt="image-20240326231349218"></p>
+<h3 id="发生异常"><a href="#发生异常" class="headerlink" title="发生异常"></a>发生异常</h3><p>1、在prepare阶段写入redolog的时候发生异常，那不管redolog有没有写完，都会回滚，因为binlog没有写入，会导致日志不一样，主从数据不一致。</p>
+<p>2、在commit阶段写入binlog的时候发生异常</p>
+<pre><code>    如果在写完之前，那也会回滚，毕竟没写完和没写一样，会导致日志不一样，主从数据不一样。
+
+    如果在写完之后，那就不会回滚了，两种日志都写完了，能保证数据一致了。
+</code></pre>
+<p>3、在commit阶段提交redolog的时候发生异常，前面写完binlog就不会回滚了，那这里也不会回滚，能保证数据一致性。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/log/" rel="tag"># log</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/" rel="prev" title="MySQL的回表">
+                  <i class="fa fa-angle-left"></i> MySQL的回表
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/" rel="next" title="Git分支模型(参考阿里Aone Flow)">
+                  Git分支模型(参考阿里Aone Flow) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

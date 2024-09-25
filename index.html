@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最后不知天在水，满船清梦压星河。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="xiaozhigang">
+<meta property="og:url" content="http://example.com/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="最后不知天在水，满船清梦压星河。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="java,中间件，后端，大数据，ai">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">xiaozhigang</h1>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/25/spider%E7%88%AC%E8%99%AB%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/09/25/spider%E7%88%AC%E8%99%AB%E6%8C%87%E5%8D%97/" class="post-title-link" itemprop="url">未命名</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-25 22:54:12 / 修改时间：22:07:22" itemprop="dateCreated datePublished" datetime="2024-09-25T22:54:12+08:00">2024-09-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="安装部署指南"><a href="#安装部署指南" class="headerlink" title="安装部署指南"></a>安装部署指南</h1><h3 id="中间件安装"><a href="#中间件安装" class="headerlink" title="中间件安装"></a>中间件安装</h3><p>需要安装 redis，mysql，minio，rabbitmq 自行搜索，服务器安装即可，</p>
+<p>服务器：43.154.80.35中已有安装好的中间件，可直接使用，账号密码，代码中的setting.py文件中都有</p>
+<p>如果要修改成其他地址中间件，在setting文件中直接修改即可，数据库表格，可直接从43.154.80.35中copy</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-middle-setting.png" alt="image-20240902231051433"></p>
+<p>mq区分了队列：goods、page、post、site、user，如有需要从相应的队列取数据即可，详情可通过rabbitmq可视化界面查看<a target="_blank" rel="noopener" href="http://43.154.80.35:15672/#/queues%EF%BC%8C%E8%B4%A6%E5%8F%B7/%E5%AF%86%E7%A0%81%EF%BC%9A">http://43.154.80.35:15672/#/queues，账号/密码：</a> spider&#x2F;spider</p>
+<h3 id="网络环境安装"><a href="#网络环境安装" class="headerlink" title="网络环境安装"></a>网络环境安装</h3><h4 id="服务器要求，"><a href="#服务器要求，" class="headerlink" title="服务器要求，"></a>服务器要求，</h4><p>外网，ubuntu</p>
+<h4 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h4><p>privoxy，tor，obfs4proxy</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">a[代码]--8118端口--&gt;b[privoxy]--9050端口--&gt;c[tor]--网桥/obfs4proxy--&gt;d[暗网]</span><br></pre></td></tr></table></figure>
+
+<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>解压压缩包，网站目录下的setting文件中配置了代理端口，将请求发送到本级的8118端口</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-proxy-code.png" alt="image-20240828231130808"></p>
+<h5 id="privoxy"><a href="#privoxy" class="headerlink" title="privoxy"></a>privoxy</h5><p>1、安装：sudo apt-get install privoxy</p>
+<p>2、修改配置文件：</p>
+<p>​	进入配置文件  vim &#x2F;etc&#x2F;privoxy&#x2F;config</p>
+<p>​	修改接收代理：listen-address 127.0.0.1:8118</p>
+<p>​	修改转发数据：最后一行添加 forward-socks5t   &#x2F;               127.0.0.1:9050 .  （注意最后的点不能丢）</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-privoxy-config.png" alt="image-20240828232233501"></p>
+<p><img src="/Users/apple/blog/source/images/spider/image-privoxy-config-9050.png" alt="image-20240828232433118"></p>
+<h5 id="tor"><a href="#tor" class="headerlink" title="tor"></a>tor</h5><p>1、安装tor：sudo apt-get install tor</p>
+<p>2、安装obfs4proxy： sudo apt-get install obfs4proxy</p>
+<p>3、tor配置文件中添加网桥，vi &#x2F;etc&#x2F;tor&#x2F;torrc，进行如图配置</p>
+<p>​	配置obfs4proxy</p>
+<p>​	配置网桥，地址可用 obfs4 51.178.86.168:54874 773A7F4428AE519A892152EDA963477D85EE672A cert&#x3D;xghcVpPhAAktkvVpYY6LDsE5iVayo4ADztSEwj0YcqGERxr3+v+RqScaOCC1O&#x2F;uxeZinWA iat-mode&#x3D;0，建议多申请几个做备用，网桥也会过期不可用</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-tor-config.png" alt="image-20240828232652882"></p>
+<h3 id="驱动安装"><a href="#驱动安装" class="headerlink" title="驱动安装"></a>驱动安装</h3><h4 id="chrome和chromedriver安装"><a href="#chrome和chromedriver安装" class="headerlink" title="chrome和chromedriver安装"></a>chrome和chromedriver安装</h4><p>可借鉴：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44184990/article/details/123590435">https://blog.csdn.net/weixin_44184990/article/details/123590435</a></p>
+<p>Google-chrome：版本- Google Chrome 127.0.6533.88</p>
+<p>Chromedriver：版本- ChromeDriver 127.0.6533.88</p>
+<p>安装路径：&#x2F;usr&#x2F;bin&#x2F;</p>
+<h3 id="虚拟环境安装"><a href="#虚拟环境安装" class="headerlink" title="虚拟环境安装"></a>虚拟环境安装</h3><p>python环境：安装python，可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45536969/article/details/130124934">https://blog.csdn.net/qq_45536969/article/details/130124934</a></p>
+<p>虚拟环境：</p>
+<p>​	安装虚拟环境：安装可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_64880493/article/details/132964831">https://blog.csdn.net/m0_64880493/article/details/132964831</a></p>
+<p>​	安装依赖：安装requirements.txt文件中的所有依赖  pip install -r requirements.txt </p>
+<h3 id="代码运行"><a href="#代码运行" class="headerlink" title="代码运行"></a>代码运行</h3><p>以下均以43.154.148.210服务器为例</p>
+<p>1、打开虚拟环境，虚拟环境在 &#x2F;opt&#x2F;dwSpiders&#x2F;dw-env&#x2F;bin&#x2F;下，命令：source &#x2F;opt&#x2F;dwSpiders&#x2F;dw-env&#x2F;bin&#x2F;activate，各自安装的目录地址不一样，需要修改命中的路径，</p>
+<p>2、进入网站目录，以torrez网站为例，命令：cd &#x2F;opt&#x2F;dwSpiders&#x2F;torrez</p>
+<p>3、添加修改cookie，43.154.80.35服务器上的redis中有示例，使用tor登陆后可按示例将cookie填写到自己的redis中（注：leakbase网站没有验证码，登陆逻辑已经写好，直接第4步运行即可）</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-torrez-cookie.png" alt="image-20240902223652351"></p>
+<p>4、启动代码：python3 run_torrez.py &amp; </p>
+<p>5、查看日志：如果当前窗口运行代码，则会自动弹出日志，如果不是，则进入网站目录下的logs目录，查看当前日期日志文件。</p>
+<p>6、cookie过期：网站的cookie会过期，过期后直接在redis库中替换就行</p>
+<p>7、如需要重跑，需要删除redis相应网站下dupefilter和bloom_fliter_img，这是url请求的指纹和图片的请求指纹，去重使用。</p>
+<p>8、mq的使用，在每个网站目录下都加了mq的配置，如要使用，在setting文件中打开即可</p>
+<p><img src="/Users/apple/blog/source/images/spider/setting-mq.png" alt="image-20240902523652351"></p>
+<p>9、不建议使用start.sh统一启动，可进入各自网站目录下单独启动运行，根据不同的服务器目录，start.sh需要配置不同的虚拟环境目录和代码目录</p>
+<h3 id="中间件初始化"><a href="#中间件初始化" class="headerlink" title="中间件初始化"></a>中间件初始化</h3><h4 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h4><p>MySQL的初始化比较简单，在安装好的MySQL中安装 dw-spider 库，库中需要新建5张表（goods、original_page、post、site、user），如图。建表语句代码db目录下有。</p>
+<p><img src="/Users/apple/blog/source/images/spider/table.png" alt="image-20240902223652352"></p>
+<h4 id="minio"><a href="#minio" class="headerlink" title="minio"></a>minio</h4><p>minio的初始化也比较简单，在其中新建dw-bucket，如图。</p>
+<p><img src="/Users/apple/blog/source/images/spider/dw-bucket.png" alt="image-20240902223652353"></p>
+<h4 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h4><p>redis中需要预置8个网站的cookie：Onniforums、asap、breachforums、darkdock、dread、mgmgrand、nexus、torrez</p>
+<p>redis的key为   网站名称:网站名称_cookie，示例：asap:asap_cookie</p>
+<p>redis的value为  hash类型的键值对，如图</p>
+<p>Onniforums：<img src="/Users/apple/blog/source/images/spider/cookie-onni.png" alt="image-20240902223652354"></p>
+<p>asap：<img src="/Users/apple/blog/source/images/spider/cookie-asap.png" alt="image-20240902223652355"></p>
+<p>breachforums：<img src="/Users/apple/blog/source/images/spider/cookie-bf.png" alt="image-20240902223652356"></p>
+<p>darkdock：<img src="/Users/apple/blog/source/images/spider/cookie-darkdock.png" alt="image-20240902223652357"></p>
+<p>dread：<img src="/Users/apple/blog/source/images/spider/cookie-dread.png" alt="image-20240902223652358"></p>
+<p>mgmgrand：<img src="/Users/apple/blog/source/images/spider/cookie-mgm.png" alt="image-20240902223652359"></p>
+<p>nexus：<img src="/Users/apple/blog/source/images/spider/cookie-nexus.png" alt="image-20240902223652360"></p>
+<p>torrez：<img src="/Users/apple/blog/source/images/spider/cookie-torrez.png" alt="image-20240902223652361"></p>
+<h4 id="rabbitmq"><a href="#rabbitmq" class="headerlink" title="rabbitmq"></a>rabbitmq</h4><p>需要新建5个队列：goods、page、post、site、user。</p>
+<p>可在可视化界面新建，如图。</p>
+<p><img src="/Users/apple/blog/source/images/spider/mq-queues.png" alt="image-20240902223652361"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/13/%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/05/13/%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">测试</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-05-13 22:08:53" itemprop="dateCreated datePublished" datetime="2024-05-13T22:08:53+08:00">2024-05-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/27/spring%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/27/spring%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">spring缓存</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-27 12:11:52" itemprop="dateCreated datePublished" datetime="2024-04-27T12:11:52+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="各级缓存"><a href="#各级缓存" class="headerlink" title="各级缓存"></a>各级缓存</h3><p>spring中有三级缓存：一级二级三级。三个都是存储bean相关的内容，但是具体存储的内容有所差异。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>一级缓存</th>
+<th>二级缓存</th>
+<th>三级缓存</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>名称</td>
+<td>singletonObjects</td>
+<td>earlySingletonObjects</td>
+<td>singletonFactories</td>
+</tr>
+<tr>
+<td>类型</td>
+<td>ConcurrentHashMap</td>
+<td>HashMap</td>
+<td>HashMap</td>
+</tr>
+<tr>
+<td>定义</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+</tr>
+<tr>
+<td>缓存内容</td>
+<td>存放就绪状态的Bean</td>
+<td>早期曝光的Bean</td>
+<td>创建用于获取Bean的工厂类-ObjectFactory实例</td>
+</tr>
+</tbody></table>
+<p><img src="/../images/spring-cache/image-20240427123420433.png" alt="image-20240427123420433"></p>
+<p>一级缓存：就绪状态的bean，保存在该缓存中的Bean所实现Aware子接口的方法已经回调完毕，自定义初始化方法已经执行完毕，也经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理。</p>
+<p>二级缓存：早期曝光的bean，一般只有处于循环引用状态的bean才会被保存在该缓存中，所实现的Aware子接口方法还未回调，自定义初始化方法还未执行。</p>
+<p>三级缓存：存放获取bean的工厂类-ObjectFactory实例，在IoC容器中，所有刚被创建出来的bean，默认都会保存到该缓存中。</p>
+<h3 id="解决循环依赖问题"><a href="#解决循环依赖问题" class="headerlink" title="解决循环依赖问题"></a>解决循环依赖问题</h3><p>什么是循环依赖：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceA</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceB circularServiceB;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceB</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceA circularServiceA;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>在 A 和 B 循环依赖的场景中：</p>
+<p>B <code>populatedBean</code> 查找依赖项 A 的时候，从一级缓存中虽然未获取到 A，但是发现 A 在创建中。</p>
+<p>此时，从三级缓存中获取 A 的 <code>singletonFactory</code> 调用工厂方法，创建 <code>getEarlyBeanReference</code> A 的早期引用并返回。</p>
+<p>B 引用到 A ，B 就可以初始化完毕，然后 A 同样也可以初始化完毕了。</p>
+<p><img src="/../images/spring-cache/image-20240427154008953.png" alt="image-20240427154008953"></p>
+<h3 id="AOP代理"><a href="#AOP代理" class="headerlink" title="AOP代理"></a>AOP代理</h3><p>说是二级缓存其实已经能解决循环依赖的问题，但是为什么需要三级缓存呢。说是解决AOP代理的问题。</p>
+<p>如果只有二级缓存，虽然能解决循环依赖，但是在查询二级缓存中返回的实例，而不是我们需要的代理对象，所以添加了三级缓存，在三级对象中获取实例的时候，会经过判断，如果是代理对象则返回代理对象，如果是实例就返回实例。</p>
+<p>其实具体的我说的也不是很清楚，可以参考连接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/377878056">https://zhuanlan.zhihu.com/p/377878056</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">知识库原理</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-18 22:28:27" itemprop="dateCreated datePublished" datetime="2024-04-18T22:28:27+08:00">2024-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>现在大模型大行其道，我们普通人没有那么多资源，有没有办法搭建一个大模型玩一下呢，答案肯定是有的，我们可以搭建一个知识库，用一下大模型。</p>
+<p>总所周知，大模型的训练是需要大量资源的，我们没有这么多资源，那我们就得想办法绕过训练或者减少训练。这时候知识库就是一个比较好的选择，它不需要对大模型进行大量的训练，大模型只是帮我们生成一个类人话的答案。</p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p>目前比较用的比较多的就是LangChain框架，这是一种基于Langchain 与 ChatGLM 等大语言模型的本地知识库问答应用实现。</p>
+<p><img src="/../images/LangChain/langchain+chatglm.png"></p>
+<p>可以从上面的原理图看出知识库的整个实现原理。</p>
+<p>1、先加载文件，文件可以是结构化的也可以是非结构化的</p>
+<p>2、读取文本，这就很好理解了，将加载进来的文件读取</p>
+<p>3、分割文本，将读取的文本分割成一段一段的，便于提取其中的关键字和让内容更内敛</p>
+<p>4、向量化，将分割后的文本向量化，</p>
+<p>5、存储，将向量化后的文本存入向量数据库中，当然可能也有一些结构型数据，直接存入关系型数据库中</p>
+<p>6、问句向量化，将我们提问的问句给向量化，理论上和上面的文本向量化一样，问句也是一个文本</p>
+<p>7、向量化匹配，通过问句的向量去向量库里面匹配文本，可能会匹配出多个，我们只取top n</p>
+<p>8、生成prompt，将匹配到的文本作为上下文和问题一起生成prompt</p>
+<p>9、将prompt提交给LLM生成回答</p>
+<p>上面就是知识库的原理和流程。可以看到，其实大模型在这里只是扮演一个类人化回答生成的作用，回答中的知识点其实都是在向量化匹配的过程中匹配出来的。所以这里不需要大模型做大量的训练。</p>
+<p>LangChain只是做了一个框架，上面的原理和流程也只是一个大纲，具体的细节我们还是有很多可操控空间的。</p>
+<p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
+<p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
+<p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">配置中心分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-18 20:33:29" itemprop="dateCreated datePublished" datetime="2024-04-18T20:33:29+08:00">2024-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>配置中心可以兼顾<strong>配置实时性、配置的流程管理、以及分布式场景</strong>的应用。</p>
+<p>配置实时性：传统的静态配置方式想要修改某个配置，则需要修改后重启，如果想要实现动态修改，可以使用数据库，采用轮询的方式，访问数据库获得配置数据。轮询频率低的话对配置数据变更的感知就慢，频率高的话，就会消耗过多的性能。</p>
+<p>配置管理流程：权限管理、灰度管理、版本管理、格式检验和安全配置</p>
+<p>分布式场景：随着采用分布式开发模式，项目之间的相互引用不断增多，相互之间的调用复杂度也指数上升，需要配置中心治理。</p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p><strong>灰度发布</strong>：当配置修改影响较大时，需要先在部分实例中生效，验证配置变更符合预期之后再推送到所有实例。</p>
+<p><strong>权限管理</strong>：对配置变更的权限管控，以及对审计权限的管控</p>
+<p><strong>版本管理&amp;回滚</strong>：当配置变更不符合预期时，需要根据配置发布版本回滚</p>
+<p><strong>配置格式校验</strong>：配置数据一般会以一种配置格式存储，配置中心会对配置数据的格式进行校验，防止格式错误导致的各种问题</p>
+<p><strong>监听查询</strong>：当排查问题或者进行统计的时候，需要指导一个配置被哪些实例使用到，以及一个实例使用了哪些配置</p>
+<p><strong>多环境</strong>：生产环境中，配置中心常常需要涉及到多环境或者多集群，业务在开发环境和生产环境隔离开，或者根据不同的生产线存在多个生产环境，各环境隔离之后相互影响就小。</p>
+<p><strong>多集群</strong>：当对稳定性要求比较高，不允许各个环境相互影响的时候，需要将多环境通过多集群的方式进行物理隔离</p>
+<h3 id="常用配置中心"><a href="#常用配置中心" class="headerlink" title="常用配置中心"></a>常用配置中心</h3><h4 id="Apollo"><a href="#Apollo" class="headerlink" title="Apollo"></a>Apollo</h4><p><img src="/../images/spring-config/overall-architecture.png"></p>
+<h4 id="spring-cloud-config"><a href="#spring-cloud-config" class="headerlink" title="spring cloud config"></a>spring cloud config</h4><p><img src="/../images/spring-config/a3bb80c142c74634aa8ed67e8bf1ac3d.png" alt="overall-architecture"></p>
+<h4 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h4><p><img src="/../images/spring-config/1561217892717-1418fb9b-7faa-4324-87b9-f1740329f564.jpeg" alt="nacos_arch.jpg"></p>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>spring cloud config</th>
+<th>Apollo</th>
+<th>nacos</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置界面</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>配置实时推送</td>
+<td>支持（spring cloud bus）</td>
+<td>支持（http长轮询）</td>
+<td>支持（http长轮询）</td>
+</tr>
+<tr>
+<td>版本管理</td>
+<td>支持（git）</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>配置回滚</td>
+<td>支持（git）</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>灰度发布</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>权限管理</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多集群</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多环境</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>监听查询</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多语言</td>
+<td>java</td>
+<td>多语言</td>
+<td>多语言</td>
+</tr>
+<tr>
+<td>配置格式校验</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>分布式部署</td>
+<td>复杂</td>
+<td>复杂</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>数据一致性</td>
+<td>git保证数据一致性，config service从git读取数据</td>
+<td>数据量模拟消息队列，Apollo定时读取消息队列</td>
+<td>http异步通知</td>
+</tr>
+<tr>
+<td>通信协议</td>
+<td>http、amqp</td>
+<td>http</td>
+<td>http</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">注册中心分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-16 19:25:11" itemprop="dateCreated datePublished" datetime="2024-04-16T19:25:11+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>之前面试问到了工作中用到的注册中心和市面上的有啥异同。</p>
+<p>公司用的注册中心：Zookeeper</p>
+<p>市面上除此之外还有其他注册中心：Eureka、Consul、Nacos</p>
+<table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>所属公司</th>
+<th>组件介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zookeeper</td>
+<td>Apache</td>
+<td>Zookeeper是一个分布式协调工具，可以实现注册功能</td>
+</tr>
+<tr>
+<td>Eureka</td>
+<td>Netflix</td>
+<td>Spring最早的注册中心，目前已经进入停更进维</td>
+</tr>
+<tr>
+<td>Consul</td>
+<td>Hashicorp</td>
+<td>Consul简化了分布式环境中的服务的注册和发现流程，通过HTTP或者DNS接口发现，支持外部Saas提供者等</td>
+</tr>
+<tr>
+<td>Nacos</td>
+<td>Alibaba</td>
+<td>Nacos致力于发现、配置和管理微服务。Nacos提供了一组简单易用的特性集，快速实现动态服务发现、服务配置、服务元数据以及流量管理</td>
+</tr>
+</tbody></table>
+<h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>遵循CP原则（一致性，分区容错性），牺牲了高可用。所以任何时候请求都能得到一致的数据结果，但是不能保证每次服务请求都是可达的。比如请求的时候leader节点宕机，或者集群中半数以上节点不可用，那么将无法处理请求。</p>
+<h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><p>遵循AP原则（可用性，分区容错性），牺牲了数据一致性。也就是能保证每次服务请求都是可达的，但是不能保证每次的请求结果都是一致的。Eureka集群没有主从之分，采用的是Peer to Peer对等通信，这是一种去中心化的架构，每个节点都需要添加一个或多个有效的serviceUrl指向其他节点，每个节点都是其他节点的副本。集群中只要还有一个节点存活，那么服务就是可用的，但是不饿能保证查到的数据是最新的或者一致的。</p>
+<p>除此之外还有一种保护机制，如果在15分钟内超过85%的节点都没有正常心跳，Eureka则认为客户端与注册中心之间出现了网络故障，此时会出现以下几种情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、Eureka不再从注册表中移除因长时间没有收到心跳而过期的服务</span><br><span class="line"></span><br><span class="line">2、Eureka仍然能够接受新服务注册和查询请求，但不会同步到其他节点上，只保证当前节点可用</span><br><span class="line"></span><br><span class="line">3、当网络稳定时，当前实例新注册的信息会被同步到其他节点</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Consul"><a href="#Consul" class="headerlink" title="Consul"></a>Consul</h3><p>遵循CP原则，Hashicorp公司开发，用于实现分布式系统的服务发现与配置。使用的时Raft算法，比zookeeper使用的Paxos算法更简单，虽然保证了强一致性，但是可用性方面性能有所下降，比如在服务注册方面，Raft协议要求半数以上的节点都写入才算注册成功，leader节点宕机之后，在重新选取出leader节点之前都会导致不可用。</p>
+<h3 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h3><p>遵循AP原则，也可支持CP原则，阿里开源，nacos &#x3D; 注册中心 + 配置中心，总之很强大，推荐。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>Nacos</th>
+<th>Eureka</th>
+<th>Consul</th>
+<th>Zookeeper</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性协议</td>
+<td>CP+AP</td>
+<td>AP</td>
+<td>AP</td>
+<td>CP</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>TCP&#x2F;HTTP&#x2F;MySQL&#x2F;Client Beat</td>
+<td>Client Beat</td>
+<td>TCP&#x2F;HTTP&#x2F;gRPC&#x2F;Cmd</td>
+<td>keep alive</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>权重&#x2F;metadata&#x2F;Selector</td>
+<td>Ribbon</td>
+<td>Fabio</td>
+<td>-</td>
+</tr>
+<tr>
+<td>自动注销实例</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>访问协议</td>
+<td>HTTP&#x2F;DNS</td>
+<td>HTTP</td>
+<td>HTTP&#x2F;DNS</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>监听支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多数据中心</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>跨注册中心同步</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>SpringCloud集成</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/" class="post-title-link" itemprop="url">4月15面试复盘</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-15 21:14:54" itemprop="dateCreated datePublished" datetime="2024-04-15T21:14:54+08:00">2024-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。</p>
+<h3 id="面试问题"><a href="#面试问题" class="headerlink" title="面试问题"></a>面试问题</h3><p>有些问题记不上来了，将记忆清楚和答的不好的记录复盘。</p>
+<h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>问：</p>
+<p>我们使用的<strong>注册中心、配置中心</strong>和市面使用的spring或者nacos的异同。</p>
+<p>复盘：</p>
+<p>公司使用的是zookeeper，市面常见的主要有4种<strong>Eureka、Zookeeper、Consul、Nacos</strong>。</p>
+<p>具体的对比差异没有答好，简述了注册中心<strong>AP，CP</strong>的差异。</p>
+<p>在配置中心上，目前常用的有<strong>springcloud config、nacos、apollo</strong></p>
+<p>具体的差异也没答上。</p>
+<p>后续整理归纳一篇文章。</p>
+<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>问：自定义经典线程池拒绝策略</p>
+<p>复盘：</p>
+<p>相当于知识盲区了，没有答上，只知道有4种拒绝策略：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、AbortPolicy：默认拒绝策略，抛出RejectExecutionException异常</span><br><span class="line"></span><br><span class="line">2、CallerRunsPolicy：不抛异常，而是让提交任务的线程自己去执行这个任务</span><br><span class="line"></span><br><span class="line">3、DiscardOldestPolicy：策略会丢失队列中最老的以恶搞任务，然后重新尝试新提交被拒绝的任务</span><br><span class="line"></span><br><span class="line">4、DiscardPolicy：抛弃被拒绝的任务，不会做任何处理也不会抛出异常。</span><br></pre></td></tr></table></figure>
+
+<p>自定义的拒绝策略没有了解过，可以写篇文章总结了解一下。</p>
+<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>问：优化SQL方案</p>
+<p>复盘：知道一些优化方案，但是没有条理性</p>
+<p>需要整理一下，最好整理成一个全面的方法论</p>
+<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>问：redis和数据库同步一致性方案</p>
+<p>复盘：知道新跟新数据库，再更新缓存</p>
+<p>但是全面的方法论没有将出来。</p>
+<h4 id="问题5"><a href="#问题5" class="headerlink" title="问题5"></a>问题5</h4><p>问：jdk 虚拟线程，新版jdk特性</p>
+<p>复盘：jdk8之后都没有了解，这块短板等补齐，目前面试很少问到这个，但是得了解补齐.</p>
+<p>问：新版jdk的垃圾回收器</p>
+<p>复盘：同上</p>
+<h4 id="问题6"><a href="#问题6" class="headerlink" title="问题6"></a>问题6</h4><p>问：jdk调优工具</p>
+<p>复盘：知识盲点。得补齐，可能后续面试工作中用不到，但是得了解一下。</p>
+<h4 id="问题7"><a href="#问题7" class="headerlink" title="问题7"></a>问题7</h4><p>问：如何打破双亲加载机制</p>
+<p>复盘：知道双亲加载机制，但是如何打破倒是没有深入了解，自己也写篇文章总结一下。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总体来说，每个问题都有自己知道的点，但是好多没有全面的回答。<strong>回答的都是一个个的点，没有梳理成一个面</strong>，体现自己的逻辑性，条理性和全面性</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/" class="post-title-link" itemprop="url">面试复盘-03-27</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-03-27 18:39:52" itemprop="dateCreated datePublished" datetime="2024-03-27T18:39:52+08:00">2024-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-28 21:09:36" itemprop="dateModified" datetime="2024-03-28T21:09:36+08:00">2024-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>这次面试场面有点大，6个面试官，但只有3个面试官提问了。前两个面试官回答的还行，后一个面试官直接问懵了。</p>
+<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><p>19年毕业，4年多工作经验，华为这边工作。</p>
+<p>目前团队业务是以洞察、评估、规划和收益四个部分向运营商提供数字化机会点发现。</p>
+<p>项目是以全球数据沙盘项目为基础，业务向外扩展OTN to 楼宇，OTN综合承载等项目。</p>
+<p>自己近项目组以来，从构建测试网络开始了解全球数据沙盘项目，到路网算法开始参与项目，然后开始OTN to 楼宇参与业务拓展，到最后的模型收编和原子能力编排重构项目。</p>
+<h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>可以说一下自己参与<strong>开源项目dubbo</strong>，个人学习构建<strong>商城项目</strong>的框架代码，以及个人<strong>博客文章</strong>的分享。</p>
+<p>也可以说一下自己在团队内的定位。</p>
+<p>可以画个<strong>思维导图</strong>，下次按思维导图介绍。</p>
+<p><img src="/../images/black-03-27/image-20240328200205037.png"></p>
+<h2 id="第一个面试官"><a href="#第一个面试官" class="headerlink" title="第一个面试官"></a>第一个面试官</h2><h3 id="MySQL索引"><a href="#MySQL索引" class="headerlink" title="MySQL索引"></a>MySQL索引</h3><p>问：简述一下mysql的索引</p>
+<p>答：索引类似于书的目录，加快查找数据，它的存在空间换时间。空间就不用说了，索引的存在必然消耗空间，时间的话就是提高了查找效率，减少了消耗的时间。索引分为<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，以InnoDB而言，索引以B+数的形式存储，只不过聚簇和非聚簇在存储细节上有所不同。聚簇也就是主键索引，在叶子节点上是以主键和数据一起存放的，而非聚簇索引的叶子节点存储的是普通索引和主键。在查找数据的时候，如果是主键查询责直接通过B+数找到数据，非聚簇索引的话，要通过B+树先找到主键，在通过主键查到数据，这个过程叫做回表。为了提高查找的效率，所以我们一般在查询的时候尽量使用索引，且减少回表。</p>
+<h4 id="回溯-1"><a href="#回溯-1" class="headerlink" title="回溯"></a>回溯</h4><p>点应该都答到了，感觉面试官还比较满意回答，具体的细节和描述的方法可以更提高一点，显得更有条理性。</p>
+<p>总述：索引类似于书的目录，空间换时间，占用了磁盘空间，减少了查找时间。</p>
+<p>分述：分<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，二者在存储上的差异（B+树叶节点的不同），在查询上的差异（回表）。以及我们在实际使用的时候需要注意的点（减少回表，最左覆盖，索引下推，等）。</p>
+<p>追问：既然说到B+树，说一下10个节点的红黑树需要查询一个节点的时间消耗</p>
+<p>答：时间复杂度O(ln)，红黑树的第一层是一个节点，第二层是2个节点，第三层是4个，第5层是8个。查询的话上来先比较根节点，如果比根节点大往右，否则往左…（简述了一下查询流程）…查询像二分查找，先找中间值，比大小等</p>
+<h4 id="回溯-2"><a href="#回溯-2" class="headerlink" title="回溯"></a>回溯</h4><p>应该是面试官想听到的，现场感觉面试官比较满意，但是自己不是很清楚红黑树，不清楚红黑树的非叶子节点是否保存了数据，还是和B+树一样只做比较。</p>
+<p>增加实际业务中的的案例，走联合索引的案例，调换where中的条件顺序。</p>
+<h3 id="SpringMVC流程"><a href="#SpringMVC流程" class="headerlink" title="SpringMVC流程"></a>SpringMVC流程</h3><p>问：说一下MVC的查询流程</p>
+<p>答：<strong>客户端</strong> 请求到 <strong>DispatcherServlet</strong>， <strong>DispatcherServlet</strong>到<strong>HandlerMapping</strong>，然后返回结果给<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在将handler转发到适配器，适配器会有一些过滤拦截啥的，通过后到处理器，也就是controller-&gt;service-&gt;map，然后结果在原路返回到<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在拿到结果后回去调用视图解析器啥的，去将返回的结果解析渲染。</p>
+<h4 id="回溯-3"><a href="#回溯-3" class="headerlink" title="回溯"></a>回溯</h4><p>回答面试官比较满意，听其语义主要想听到<strong>DispatcherServlet</strong>，但是此流程中记得是在适配器中会有拦截过滤，不是特别确定，已经返回结果后的视图解析渲染，两个组件名称记得不是特别清楚。</p>
+<p><img src="/../images/black-03-27/2474678-20221205141025926-329048743.png" alt="img"></p>
+<h3 id="服务间通信"><a href="#服务间通信" class="headerlink" title="服务间通信"></a>服务间通信</h3><p>问：你们有多模块多服务吗，服务间的调用是用的什么。</p>
+<p>答：有，上面自我介绍中也说到了，我们所有业务基本可以分为：洞察，评估，规划，收益，四个模块。模块间的调用用的是http请求。</p>
+<p>追问：请求的结果是要转换的，你们是怎么转换的。</p>
+<p>答：我们的请求不涉及到请求结果的转换，不是那种强依赖。我们模块间的数据交互都是放在数据库的，比如洞察处理完的数据会放在数据库，然后调用评估的模块开始处理，评估模块处理的时候会调用数据库的数据处理，处理的结果会放回数据库，而不是返回给评估模块，这样更解耦。</p>
+<h4 id="回溯-4"><a href="#回溯-4" class="headerlink" title="回溯"></a>回溯</h4><p>其实对这请求调用的方式记得不是特别清楚了，需要复习回顾一下。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Andy19891117/article/details/134981402">https://blog.csdn.net/Andy19891117/article/details/134981402</a></p>
+<p>RPC调用和http调用，RPC基于传输层TCP协议，Http基于应用层http协议，所以RPC调用的传输效率更高。Http规定了返回的格式而RPC没有。</p>
+<h2 id="第二个面试官"><a href="#第二个面试官" class="headerlink" title="第二个面试官"></a>第二个面试官</h2><h3 id="jar包加载"><a href="#jar包加载" class="headerlink" title="jar包加载"></a>jar包加载</h3><p>问：简历中说的到的原子能力编排是怎么理解的，包是spring jar还是啥，编排是怎么理解。</p>
+<p>答：jar包是fast jar，不是那种有启动类的可执行jar包，编排的话，是我们把能力抽取成一个个的jar包，再以可视化配置的方式，类似于链式调用。</p>
+<p>追问：编排的结果，jar包的顺序执行，这个是以什么数据结构存储的。</p>
+<p>答：存在数据库中，是以字符串的形式存储的，在读取到数据库中字符串，在以特定的字符将字符串分割开，然后遍历执行。</p>
+<p>追问：前端是怎么配置调用后端的jar的</p>
+<p>答：我们是按迭代内的业务需求配置上线的，前台只是提供一个可视化的界面供开发配置，其实我们更习惯直接在配置文件xml中配置，配置完的xml文件会提交到代码仓，在我们的部署阶段，会将这配置文件解析成字符串保存在数据库中，供读取。</p>
+<p>追问：这个项目里的调度和引擎服务怎么理解。</p>
+<p>答：这个网关，调度，引擎内容都比较简单，网关的话直接对外，调度只负责调用原子能力jar，引擎是加载运行jar。这么分是为了职责更单一内敛。</p>
+<p>追问：jar包是怎么加载的。</p>
+<p>答：读取到lib目录下的依赖，先将依赖通过双亲依赖加载给加载进来，然后在通过同一规范的jar包入口，开始调用jar内的方法。</p>
+<p>追问：双亲加载有三个加载器，加载器是啥。</p>
+<p>答：记得不是特别清了，只记得一个是系统加载，两个是加载外部文件依赖加载。</p>
+<h4 id="回溯-5"><a href="#回溯-5" class="headerlink" title="回溯"></a>回溯</h4><p>面试感觉一般，虽然大部分都答到了，但是还有结果点不熟。</p>
+<p>1、jar包的分类不熟</p>
+<p>fat jar</p>
+<p>2、jar包的加载，了解大概流程，不了解其具体细节。</p>
+<p>3、三个父加载器忘了，没想起来名字。</p>
+<p>4、怎么卸载jar包</p>
+<p>启动类加载器（Bootstrap Class Loader）：也称为根类加载器，它负责加载Java虚拟机的核心类库，如java.lang.Object等。启动类加载器是虚拟机实现的一部分，它通常是由本地代码实现的，不是Java类。</p>
+<p>扩展类加载器（Extension Class Loader）：它是用来加载Java扩展类库的类加载器。扩展类库包括javax和java.util等包，它们位于jre&#x2F;lib&#x2F;ext目录下。</p>
+<p>应用程序类加载器（Application Class Loader）：也称为系统类加载器，它负责加载应用程序的类。它会搜索应用程序的类路径（包括用户定义的类路径和系统类路径），并加载类文件。</p>
+<h3 id="注解加载"><a href="#注解加载" class="headerlink" title="注解加载"></a>注解加载</h3><p>问：注解是怎么加载的</p>
+<p>答：看过源码，记得不是特别清了，spring启动类上会有enable开启注解加载，后面通过一层层的调用，大概3~4层，读取到lib目录下的文件，然后再通过条件判断是否加载。</p>
+<h4 id="回溯-6"><a href="#回溯-6" class="headerlink" title="回溯"></a>回溯</h4><p>回答一般，之前确实看过，现在确实忘了</p>
+<p><strong>自动配置原理</strong>：SpringBoot 项目的核心注解 @SpringBootApplication，这个注解位于启动类上方。@SpringBootApplication 看作是 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解的集合。自动装配核心功能的实现是通过@EnableAutoConfiguration内部的AutoConfigurationImportSelector类。AutoConfigurationImportSelector 类实现了 ImportSelector 接口，也就实现了这个接口中的 selectImports 方法，<strong>该方法主要用于获取所有符合条件的类的全限定类名，需要为这些类创建对象并加载到 IoC 容器中</strong>。@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
+<p>​	@EnableAutoConfiguration：启用 SpringBoot 的自动配置机制。</p>
+<p>​	@Configuration：允许在上下文中注册额外的 bean 或导入其他配置类，作用与 applicationContext.xml 的功能相同。</p>
+<p>​	@ComponentScan： 扫描包下的类中添加了@Component (@Service，@Controller，@Repostory，@RestController)注解的类 ，并添加的到spring的容器中，可以自定义不扫描某些 bean。</p>
+<p><img src="/../images/black-03-27/image-20240329210812763.png" alt="image-20240329210812763"></p>
+<p>getAutoConfigurationEntry：</p>
+<p><strong>第 1 步：</strong>判断自动装配开关是否打开。默认 spring.boot.enableautoconfiguration &#x3D; true，可在 application.properties 或 application.yml 中设置</p>
+<p><strong>第 2 步：</strong>用于获取 EnableAutoConfiguration 注解中的 exclude 和 excludeName。</p>
+<p><strong>第 3 步：</strong>从 META-INF&#x2F;spring.factories 读取需要自动装配的所有配置类。</p>
+<p><strong>第 4 步：</strong>这一步有经历了一遍筛选过滤，@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59749089/article/details/131280769">https://blog.csdn.net/m0_59749089/article/details/131280769</a></p>
+<h2 id="第三个面试官"><a href="#第三个面试官" class="headerlink" title="第三个面试官"></a>第三个面试官</h2><h3 id="bean加载"><a href="#bean加载" class="headerlink" title="bean加载"></a>bean加载</h3><p>问：如果我想再bean初始化时候改变其变量值，或者说再方法前打印一个日志。</p>
+<p>答：使用代理，再调用方法前后打印日志。</p>
+<p>追问：不是代理，是在初始化的时候。</p>
+<p>答：在xml文件中，配置修改，在bean初始化的时候给其赋值。</p>
+<h4 id="回溯-7"><a href="#回溯-7" class="headerlink" title="回溯"></a>回溯</h4><p>貌似这也不是面试官想要的，确实不知道是啥，得查资料研究看看。</p>
+<p>bean的加载过程：</p>
+<p>加载bean信息–&gt;实例化bean–&gt;属性填充–&gt;初始化阶段–&gt;后置处理</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_46897923/article/details/129850717">https://blog.csdn.net/m0_46897923/article/details/129850717</a></p>
+<h3 id="容器化"><a href="#容器化" class="headerlink" title="容器化"></a>容器化</h3><p>问：你们容器化用的怎么样。</p>
+<p>答：我们部门目前才开始推，我们还没有开始使用容器化，但是自己也搭环境简单使用过容器化，比如部署一个redis、mysql等。</p>
+<h4 id="回溯-8"><a href="#回溯-8" class="headerlink" title="回溯"></a>回溯</h4><p>熟悉了解一下容器化，这方面得了解确实不够，只是简单得使用了一下。</p>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>问：核心线程数10，最大线程数20，现有1w个并发，为什么线程数一直是10，不是队列里有1w。</p>
+<p>答：不知，尝试分析，是不是资源不够，没办法新增。</p>
+<h4 id="回溯-9"><a href="#回溯-9" class="headerlink" title="回溯"></a>回溯</h4><p>确实不知，等了解。</p>
+<p>问：synchronized的用法</p>
+<p>答：修饰代码块或者方法，注意synchronized()中括号内的内容，可以是变量，对象和class类，对应锁的颗粒不一样。</p>
+<p>追问：对象和class类有什么不一样。</p>
+<p>答：对象是可以重复new的，但是class类只有一个，跟静态变量一样，用的时候要注意，别用错导致没锁好。</p>
+<p>追问：线程的睡眠和唤醒是怎么样的。</p>
+<p>答：A、B两个线程，A运行到某个地方，停住了睡眠了，B开始运行，运行到某个地方，通过A的方法唤醒A。</p>
+<h4 id="回溯-10"><a href="#回溯-10" class="headerlink" title="回溯"></a>回溯</h4><p>1、感觉追问的对象和类有什么不一样，没回答到他想要的，复习一下。</p>
+<p>2、睡眠唤醒的模型有点忘了，再代码实操一下。</p>
+<h3 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h3><p>问：kafka里的消费者组是什么。</p>
+<p>答：消费者的集合，一堆消费者组成的一个集合。</p>
+<p>问：topic里的分区能被消费者组内的多个消费者消费吗</p>
+<p>答：不能，一个分区只能被消费者组内一个消费者消费。</p>
+<p>问：怎么保证生产者生产的消息，顺序消费。</p>
+<p>答：都放在一个分区内，kafka不保证topic内的消息是顺序的，但是保证分区内的数据是顺序消费的。</p>
+<p>问：消息是怎么划分分区的。</p>
+<p>答：根据key的计算，具体的计算方法不知道。</p>
+<p>问：如果key为null会怎么样。</p>
+<p>答：不知</p>
+<h4 id="回溯-11"><a href="#回溯-11" class="headerlink" title="回溯"></a>回溯</h4><p>1、消费者组的概念</p>
+<p>2、分区和消费者组、消费者的消费关系模型</p>
+<p>3、分区的指定逻辑。</p>
+<p>4、key为null会怎样。</p>
+<p>随机选取一个分区缓存发送，过了分区的缓存时间后在随机选取一个分区缓存发送。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709">https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="post-title-link" itemprop="url">添加聊天办公机器人</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-26 22:05:23 / 修改时间：23:18:50" itemprop="dateCreated datePublished" datetime="2024-03-26T22:05:23+08:00">2024-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
+<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>1、代码开源，不需要冲头开发，基本拿来可用。</p>
+<p>2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225843904.png"></p>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。</p>
+<h3 id="交互性"><a href="#交互性" class="headerlink" title="交互性"></a>交互性</h3><p>1、通过开放接口和外部交互，如钉钉，微信。降低交互成本，提升交互沟通效率。</p>
+<h3 id="优越性"><a href="#优越性" class="headerlink" title="优越性"></a>优越性</h3><p>1、人工智能的参与，提升员工工作效率，通过员工和人工智能沟通可以提升员工的工作效率，比如程序员可以问个代码怎么写啊类似的，不做缀叙。</p>
+<p>2、部署在内部服务器的化，还可以通过其和内部任务交互，比如日常的一些小任务，可以程序化之后，部署服务器，暴露接口和人工智能交互，我们通过聊天软件通知智能机器人，让他去触发这些任务。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225800266.png"></p>
+<p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
+<p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
+<h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/" class="post-title-link" itemprop="url">浅谈ChatGPT</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-16 20:26:53" itemprop="dateCreated datePublished" datetime="2024-02-16T20:26:53+08:00">2024-02-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-26 23:25:40" itemprop="dateModified" datetime="2024-02-26T23:25:40+08:00">2024-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>下面谈一谈我对chatGPT的简单认知，这也是看了许多资料总结出来的，没有去实际去研究chatGPT的代码，我姑且言之，有兴趣的同学姑且听之。</p>
+<p>去年chatGPT大火，才让我们对人工智能有了更深一步的了解。之前认为的智能聊天就是像那些客服机器人一样，反反复复就那么几句话，跟智障一样，现在看到chatGPT这么厉害，宛若神明。</p>
+<h2 id="归根到底的数学概率"><a href="#归根到底的数学概率" class="headerlink" title="归根到底的数学概率"></a>归根到底的数学概率</h2><p>​        其实大家可以简单理解，chatGPT的语言生成是一个数学概率模型，他的一个词语到生成下一个词语是采用概率最大的词语生成，就比如说，你输入一堆数据提供chatGPT训练，其中词语A后面接词语B的次数最多也就是概率最大，那么下次chatGPT给你生成回复的时候词语A后面接词语B的概率也最大。当然这也是简单说，实际肯定没这么简单。如下图，<strong>伟大的国家</strong> 这个概率是99%，拎一个选项是1%。那自然会生成 <strong>中国是个伟大的国家</strong> 。</p>
+<p><img src="/../images/ai-chatgpt/ea478ffa1e61f12af5ebc8d25602f919.webp" alt="img"></p>
+<h2 id="语言模型的两个方向"><a href="#语言模型的两个方向" class="headerlink" title="语言模型的两个方向"></a>语言模型的两个方向</h2><p>​       其实在语言模型这块一直有两个方向，一个是语义理解，一个是语句生成。语义理解是谷歌主要研究的方向，这个类似于完形填空。而语句生成是0penAI的主要方向，也就是我们现在看到的chatGPT，这个类似于写作文。这两种的应用环境和使用的算法也是不一样的，简单的说一下，语义理解，是根据前后文，两个维度计算出中间的缺失，谷歌已经做到了很高的准确率，这就对我们英语考试中的完形填空很友好了。而语句生成就跟我们写作文一样，从头写到尾，只有一个维度支撑。这就是谷歌Bert和openAI的ChatGPT的差别，双向和自回归。</p>
+<p><img src="/../images/ai-chatgpt/6254574f3a2cc5105494612a0dfad723.webp" alt="img"></p>
+<h2 id="数学-技术"><a href="#数学-技术" class="headerlink" title="数学+技术"></a>数学+技术</h2><p>​        Bert和ChatGPT都是基于Transformer实现的，啥是Transformer呢，简单理解就是我们上面说的根据概率最大生成文字。只不过这生成的实现很复杂，大概说-下，我们输入的句子会被拆分成一个一个的单词(token),根据这些单词计算向量权重，最后根据这些解析拆分后的向量权重计算概率生成输出。这些向量是怎么计算的呢，我们看个例子，国王-男人+女人&#x3D;女王，这种向量的计算是不是很有意思。</p>
+<p><img src="/../images/ai-chatgpt/66a2a20fa52ed120f7e5c9658a352120.webp" alt="img"></p>
+<h2 id="监督学习"><a href="#监督学习" class="headerlink" title="监督学习"></a>监督学习</h2><p>​        当然上面的过程也只是其中的训练的一环，还有重要的监督学习。ChatGPT根据概率输出的东西很难保证准确性，毕竟是没有思想的机器，所以这时候就需要我们监督学习，给他的输出打分，正确的分数就高，错误的分数就低，这要提高了正确回答的权重，也就影响了概率和输出。</p>
+<p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
+<p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

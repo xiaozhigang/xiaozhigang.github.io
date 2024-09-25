@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="安装部署指南中间件安装需要安装 redis，mysql，minio，rabbitmq 自行搜索，服务器安装即可， 服务器：43.154.80.35中已有安装好的中间件，可直接使用，账号密码，代码中的setting.py文件中都有 如果要修改成其他地址中间件，在setting文件中直接修改即可，数据库表格，可直接从43.154.80.35中copy  mq区分了队列：goods、page、post、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="xiaozhigang">
+<meta property="og:url" content="http://example.com/2024/09/25/spider%E7%88%AC%E8%99%AB%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="安装部署指南中间件安装需要安装 redis，mysql，minio，rabbitmq 自行搜索，服务器安装即可， 服务器：43.154.80.35中已有安装好的中间件，可直接使用，账号密码，代码中的setting.py文件中都有 如果要修改成其他地址中间件，在setting文件中直接修改即可，数据库表格，可直接从43.154.80.35中copy  mq区分了队列：goods、page、post、">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/image-middle-setting.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/image-proxy-code.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/image-privoxy-config.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/image-privoxy-config-9050.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/image-tor-config.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/image-torrez-cookie.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/setting-mq.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/table.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/dw-bucket.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-onni.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-asap.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-bf.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-darkdock.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-dread.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-mgm.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-nexus.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/cookie-torrez.png">
+<meta property="og:image" content="http://example.com/Users/apple/blog/source/images/spider/mq-queues.png">
+<meta property="article:published_time" content="2024-09-25T14:54:12.000Z">
+<meta property="article:modified_time" content="2024-09-25T14:07:22.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="java,中间件，后端，大数据，ai">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/Users/apple/blog/source/images/spider/image-middle-setting.png">
+
+
+<link rel="canonical" href="http://example.com/2024/09/25/spider%E7%88%AC%E8%99%AB%E6%8C%87%E5%8D%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/09/25/spider%E7%88%AC%E8%99%AB%E6%8C%87%E5%8D%97/","path":"2024/09/25/spider爬虫指南/","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97"><span class="nav-number">1.</span> <span class="nav-text">安装部署指南</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.1.</span> <span class="nav-text">中间件安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.2.</span> <span class="nav-text">网络环境安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A6%81%E6%B1%82%EF%BC%8C"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">服务器要求，</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">安装软件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-number">1.0.2.2.1.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#privoxy"><span class="nav-number">1.0.2.2.2.</span> <span class="nav-text">privoxy</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#tor"><span class="nav-number">1.0.2.2.3.</span> <span class="nav-text">tor</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.3.</span> <span class="nav-text">驱动安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#chrome%E5%92%8Cchromedriver%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">chrome和chromedriver安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.4.</span> <span class="nav-text">虚拟环境安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%E8%BF%90%E8%A1%8C"><span class="nav-number">1.0.5.</span> <span class="nav-text">代码运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E4%BB%B6%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">1.0.6.</span> <span class="nav-text">中间件初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql"><span class="nav-number">1.0.6.1.</span> <span class="nav-text">mysql</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#minio"><span class="nav-number">1.0.6.2.</span> <span class="nav-text">minio</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis"><span class="nav-number">1.0.6.3.</span> <span class="nav-text">redis</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#rabbitmq"><span class="nav-number">1.0.6.4.</span> <span class="nav-text">rabbitmq</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/09/25/spider%E7%88%AC%E8%99%AB%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-09-25 22:54:12 / 修改时间：22:07:22" itemprop="dateCreated datePublished" datetime="2024-09-25T22:54:12+08:00">2024-09-25</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="安装部署指南"><a href="#安装部署指南" class="headerlink" title="安装部署指南"></a>安装部署指南</h1><h3 id="中间件安装"><a href="#中间件安装" class="headerlink" title="中间件安装"></a>中间件安装</h3><p>需要安装 redis，mysql，minio，rabbitmq 自行搜索，服务器安装即可，</p>
+<p>服务器：43.154.80.35中已有安装好的中间件，可直接使用，账号密码，代码中的setting.py文件中都有</p>
+<p>如果要修改成其他地址中间件，在setting文件中直接修改即可，数据库表格，可直接从43.154.80.35中copy</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-middle-setting.png" alt="image-20240902231051433"></p>
+<p>mq区分了队列：goods、page、post、site、user，如有需要从相应的队列取数据即可，详情可通过rabbitmq可视化界面查看<a target="_blank" rel="noopener" href="http://43.154.80.35:15672/#/queues%EF%BC%8C%E8%B4%A6%E5%8F%B7/%E5%AF%86%E7%A0%81%EF%BC%9A">http://43.154.80.35:15672/#/queues，账号/密码：</a> spider&#x2F;spider</p>
+<h3 id="网络环境安装"><a href="#网络环境安装" class="headerlink" title="网络环境安装"></a>网络环境安装</h3><h4 id="服务器要求，"><a href="#服务器要求，" class="headerlink" title="服务器要求，"></a>服务器要求，</h4><p>外网，ubuntu</p>
+<h4 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h4><p>privoxy，tor，obfs4proxy</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">a[代码]--8118端口--&gt;b[privoxy]--9050端口--&gt;c[tor]--网桥/obfs4proxy--&gt;d[暗网]</span><br></pre></td></tr></table></figure>
+
+<h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>解压压缩包，网站目录下的setting文件中配置了代理端口，将请求发送到本级的8118端口</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-proxy-code.png" alt="image-20240828231130808"></p>
+<h5 id="privoxy"><a href="#privoxy" class="headerlink" title="privoxy"></a>privoxy</h5><p>1、安装：sudo apt-get install privoxy</p>
+<p>2、修改配置文件：</p>
+<p>​	进入配置文件  vim &#x2F;etc&#x2F;privoxy&#x2F;config</p>
+<p>​	修改接收代理：listen-address 127.0.0.1:8118</p>
+<p>​	修改转发数据：最后一行添加 forward-socks5t   &#x2F;               127.0.0.1:9050 .  （注意最后的点不能丢）</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-privoxy-config.png" alt="image-20240828232233501"></p>
+<p><img src="/Users/apple/blog/source/images/spider/image-privoxy-config-9050.png" alt="image-20240828232433118"></p>
+<h5 id="tor"><a href="#tor" class="headerlink" title="tor"></a>tor</h5><p>1、安装tor：sudo apt-get install tor</p>
+<p>2、安装obfs4proxy： sudo apt-get install obfs4proxy</p>
+<p>3、tor配置文件中添加网桥，vi &#x2F;etc&#x2F;tor&#x2F;torrc，进行如图配置</p>
+<p>​	配置obfs4proxy</p>
+<p>​	配置网桥，地址可用 obfs4 51.178.86.168:54874 773A7F4428AE519A892152EDA963477D85EE672A cert&#x3D;xghcVpPhAAktkvVpYY6LDsE5iVayo4ADztSEwj0YcqGERxr3+v+RqScaOCC1O&#x2F;uxeZinWA iat-mode&#x3D;0，建议多申请几个做备用，网桥也会过期不可用</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-tor-config.png" alt="image-20240828232652882"></p>
+<h3 id="驱动安装"><a href="#驱动安装" class="headerlink" title="驱动安装"></a>驱动安装</h3><h4 id="chrome和chromedriver安装"><a href="#chrome和chromedriver安装" class="headerlink" title="chrome和chromedriver安装"></a>chrome和chromedriver安装</h4><p>可借鉴：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44184990/article/details/123590435">https://blog.csdn.net/weixin_44184990/article/details/123590435</a></p>
+<p>Google-chrome：版本- Google Chrome 127.0.6533.88</p>
+<p>Chromedriver：版本- ChromeDriver 127.0.6533.88</p>
+<p>安装路径：&#x2F;usr&#x2F;bin&#x2F;</p>
+<h3 id="虚拟环境安装"><a href="#虚拟环境安装" class="headerlink" title="虚拟环境安装"></a>虚拟环境安装</h3><p>python环境：安装python，可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45536969/article/details/130124934">https://blog.csdn.net/qq_45536969/article/details/130124934</a></p>
+<p>虚拟环境：</p>
+<p>​	安装虚拟环境：安装可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_64880493/article/details/132964831">https://blog.csdn.net/m0_64880493/article/details/132964831</a></p>
+<p>​	安装依赖：安装requirements.txt文件中的所有依赖  pip install -r requirements.txt </p>
+<h3 id="代码运行"><a href="#代码运行" class="headerlink" title="代码运行"></a>代码运行</h3><p>以下均以43.154.148.210服务器为例</p>
+<p>1、打开虚拟环境，虚拟环境在 &#x2F;opt&#x2F;dwSpiders&#x2F;dw-env&#x2F;bin&#x2F;下，命令：source &#x2F;opt&#x2F;dwSpiders&#x2F;dw-env&#x2F;bin&#x2F;activate，各自安装的目录地址不一样，需要修改命中的路径，</p>
+<p>2、进入网站目录，以torrez网站为例，命令：cd &#x2F;opt&#x2F;dwSpiders&#x2F;torrez</p>
+<p>3、添加修改cookie，43.154.80.35服务器上的redis中有示例，使用tor登陆后可按示例将cookie填写到自己的redis中（注：leakbase网站没有验证码，登陆逻辑已经写好，直接第4步运行即可）</p>
+<p><img src="/Users/apple/blog/source/images/spider/image-torrez-cookie.png" alt="image-20240902223652351"></p>
+<p>4、启动代码：python3 run_torrez.py &amp; </p>
+<p>5、查看日志：如果当前窗口运行代码，则会自动弹出日志，如果不是，则进入网站目录下的logs目录，查看当前日期日志文件。</p>
+<p>6、cookie过期：网站的cookie会过期，过期后直接在redis库中替换就行</p>
+<p>7、如需要重跑，需要删除redis相应网站下dupefilter和bloom_fliter_img，这是url请求的指纹和图片的请求指纹，去重使用。</p>
+<p>8、mq的使用，在每个网站目录下都加了mq的配置，如要使用，在setting文件中打开即可</p>
+<p><img src="/Users/apple/blog/source/images/spider/setting-mq.png" alt="image-20240902523652351"></p>
+<p>9、不建议使用start.sh统一启动，可进入各自网站目录下单独启动运行，根据不同的服务器目录，start.sh需要配置不同的虚拟环境目录和代码目录</p>
+<h3 id="中间件初始化"><a href="#中间件初始化" class="headerlink" title="中间件初始化"></a>中间件初始化</h3><h4 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h4><p>MySQL的初始化比较简单，在安装好的MySQL中安装 dw-spider 库，库中需要新建5张表（goods、original_page、post、site、user），如图。建表语句代码db目录下有。</p>
+<p><img src="/Users/apple/blog/source/images/spider/table.png" alt="image-20240902223652352"></p>
+<h4 id="minio"><a href="#minio" class="headerlink" title="minio"></a>minio</h4><p>minio的初始化也比较简单，在其中新建dw-bucket，如图。</p>
+<p><img src="/Users/apple/blog/source/images/spider/dw-bucket.png" alt="image-20240902223652353"></p>
+<h4 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h4><p>redis中需要预置8个网站的cookie：Onniforums、asap、breachforums、darkdock、dread、mgmgrand、nexus、torrez</p>
+<p>redis的key为   网站名称:网站名称_cookie，示例：asap:asap_cookie</p>
+<p>redis的value为  hash类型的键值对，如图</p>
+<p>Onniforums：<img src="/Users/apple/blog/source/images/spider/cookie-onni.png" alt="image-20240902223652354"></p>
+<p>asap：<img src="/Users/apple/blog/source/images/spider/cookie-asap.png" alt="image-20240902223652355"></p>
+<p>breachforums：<img src="/Users/apple/blog/source/images/spider/cookie-bf.png" alt="image-20240902223652356"></p>
+<p>darkdock：<img src="/Users/apple/blog/source/images/spider/cookie-darkdock.png" alt="image-20240902223652357"></p>
+<p>dread：<img src="/Users/apple/blog/source/images/spider/cookie-dread.png" alt="image-20240902223652358"></p>
+<p>mgmgrand：<img src="/Users/apple/blog/source/images/spider/cookie-mgm.png" alt="image-20240902223652359"></p>
+<p>nexus：<img src="/Users/apple/blog/source/images/spider/cookie-nexus.png" alt="image-20240902223652360"></p>
+<p>torrez：<img src="/Users/apple/blog/source/images/spider/cookie-torrez.png" alt="image-20240902223652361"></p>
+<h4 id="rabbitmq"><a href="#rabbitmq" class="headerlink" title="rabbitmq"></a>rabbitmq</h4><p>需要新建5个队列：goods、page、post、site、user。</p>
+<p>可在可视化界面新建，如图。</p>
+<p><img src="/Users/apple/blog/source/images/spider/mq-queues.png" alt="image-20240902223652361"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/05/13/%E6%B5%8B%E8%AF%95/" rel="prev" title="测试">
+                  <i class="fa fa-angle-left"></i> 测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

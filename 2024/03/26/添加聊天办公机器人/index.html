@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。 可行性1、代码开源，不需要冲头开发，基本拿来可用。 2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。  安全性1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。 交互性1、通过开放接口和外部交互，如钉钉，微信。降">
+<meta property="og:type" content="article">
+<meta property="og:title" content="添加聊天办公机器人">
+<meta property="og:url" content="http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。 可行性1、代码开源，不需要冲头开发，基本拿来可用。 2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。  安全性1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。 交互性1、通过开放接口和外部交互，如钉钉，微信。降">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/ChatGPT-rabbit/image-20240326225843904.png">
+<meta property="og:image" content="http://example.com/images/ChatGPT-rabbit/image-20240326225800266.png">
+<meta property="article:published_time" content="2024-03-26T14:05:23.000Z">
+<meta property="article:modified_time" content="2024-03-26T15:18:50.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="ChatGPT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/ChatGPT-rabbit/image-20240326225843904.png">
+
+
+<link rel="canonical" href="http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/","path":"2024/03/26/添加聊天办公机器人/","title":"添加聊天办公机器人"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>添加聊天办公机器人 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%AF%E8%A1%8C%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">可行性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">安全性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E6%80%A7"><span class="nav-number">3.</span> <span class="nav-text">交互性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E8%B6%8A%E6%80%A7"><span class="nav-number">4.</span> <span class="nav-text">优越性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%BA%E4%BC%9A%E7%82%B9"><span class="nav-number">5.</span> <span class="nav-text">机会点</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="添加聊天办公机器人 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          添加聊天办公机器人
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-26 22:05:23 / 修改时间：23:18:50" itemprop="dateCreated datePublished" datetime="2024-03-26T22:05:23+08:00">2024-03-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
+<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>1、代码开源，不需要冲头开发，基本拿来可用。</p>
+<p>2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225843904.png"></p>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。</p>
+<h3 id="交互性"><a href="#交互性" class="headerlink" title="交互性"></a>交互性</h3><p>1、通过开放接口和外部交互，如钉钉，微信。降低交互成本，提升交互沟通效率。</p>
+<h3 id="优越性"><a href="#优越性" class="headerlink" title="优越性"></a>优越性</h3><p>1、人工智能的参与，提升员工工作效率，通过员工和人工智能沟通可以提升员工的工作效率，比如程序员可以问个代码怎么写啊类似的，不做缀叙。</p>
+<p>2、部署在内部服务器的化，还可以通过其和内部任务交互，比如日常的一些小任务，可以程序化之后，部署服务器，暴露接口和人工智能交互，我们通过聊天软件通知智能机器人，让他去触发这些任务。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225800266.png"></p>
+<p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
+<p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
+<h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ChatGPT/" rel="tag"># ChatGPT</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/16/%E6%B5%85%E8%B0%88ChatGPT/" rel="prev" title="浅谈ChatGPT">
+                  <i class="fa fa-angle-left"></i> 浅谈ChatGPT
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/" rel="next" title="面试复盘-03-27">
+                  面试复盘-03-27 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

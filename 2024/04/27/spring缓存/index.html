@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="各级缓存spring中有三级缓存：一级二级三级。三个都是存储bean相关的内容，但是具体存储的内容有所差异。     一级缓存 二级缓存 三级缓存    名称 singletonObjects earlySingletonObjects singletonFactories   类型 ConcurrentHashMap HashMap HashMap   定义 定义是在DefaultSinglet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring缓存">
+<meta property="og:url" content="http://example.com/2024/04/27/spring%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="各级缓存spring中有三级缓存：一级二级三级。三个都是存储bean相关的内容，但是具体存储的内容有所差异。     一级缓存 二级缓存 三级缓存    名称 singletonObjects earlySingletonObjects singletonFactories   类型 ConcurrentHashMap HashMap HashMap   定义 定义是在DefaultSinglet">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/spring-cache/image-20240427123420433.png">
+<meta property="og:image" content="http://example.com/images/spring-cache/image-20240427154008953.png">
+<meta property="article:published_time" content="2024-04-27T04:11:52.000Z">
+<meta property="article:modified_time" content="2024-04-27T04:11:52.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="缓存">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/spring-cache/image-20240427123420433.png">
+
+
+<link rel="canonical" href="http://example.com/2024/04/27/spring%E7%BC%93%E5%AD%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/27/spring%E7%BC%93%E5%AD%98/","path":"2024/04/27/spring缓存/","title":"spring缓存"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>spring缓存 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E7%BA%A7%E7%BC%93%E5%AD%98"><span class="nav-number">1.</span> <span class="nav-text">各级缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E5%BE%AA%E7%8E%AF%E4%BE%9D%E8%B5%96%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">解决循环依赖问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AOP%E4%BB%A3%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">AOP代理</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/27/spring%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="spring缓存 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          spring缓存
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-27 12:11:52" itemprop="dateCreated datePublished" datetime="2024-04-27T12:11:52+08:00">2024-04-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="各级缓存"><a href="#各级缓存" class="headerlink" title="各级缓存"></a>各级缓存</h3><p>spring中有三级缓存：一级二级三级。三个都是存储bean相关的内容，但是具体存储的内容有所差异。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>一级缓存</th>
+<th>二级缓存</th>
+<th>三级缓存</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>名称</td>
+<td>singletonObjects</td>
+<td>earlySingletonObjects</td>
+<td>singletonFactories</td>
+</tr>
+<tr>
+<td>类型</td>
+<td>ConcurrentHashMap</td>
+<td>HashMap</td>
+<td>HashMap</td>
+</tr>
+<tr>
+<td>定义</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+<td>定义是在DefaultSingletonBeanRegistry类中</td>
+</tr>
+<tr>
+<td>缓存内容</td>
+<td>存放就绪状态的Bean</td>
+<td>早期曝光的Bean</td>
+<td>创建用于获取Bean的工厂类-ObjectFactory实例</td>
+</tr>
+</tbody></table>
+<p><img src="/../images/spring-cache/image-20240427123420433.png" alt="image-20240427123420433"></p>
+<p>一级缓存：就绪状态的bean，保存在该缓存中的Bean所实现Aware子接口的方法已经回调完毕，自定义初始化方法已经执行完毕，也经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理。</p>
+<p>二级缓存：早期曝光的bean，一般只有处于循环引用状态的bean才会被保存在该缓存中，所实现的Aware子接口方法还未回调，自定义初始化方法还未执行。</p>
+<p>三级缓存：存放获取bean的工厂类-ObjectFactory实例，在IoC容器中，所有刚被创建出来的bean，默认都会保存到该缓存中。</p>
+<h3 id="解决循环依赖问题"><a href="#解决循环依赖问题" class="headerlink" title="解决循环依赖问题"></a>解决循环依赖问题</h3><p>什么是循环依赖：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceA</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceB circularServiceB;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceB</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceA circularServiceA;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>在 A 和 B 循环依赖的场景中：</p>
+<p>B <code>populatedBean</code> 查找依赖项 A 的时候，从一级缓存中虽然未获取到 A，但是发现 A 在创建中。</p>
+<p>此时，从三级缓存中获取 A 的 <code>singletonFactory</code> 调用工厂方法，创建 <code>getEarlyBeanReference</code> A 的早期引用并返回。</p>
+<p>B 引用到 A ，B 就可以初始化完毕，然后 A 同样也可以初始化完毕了。</p>
+<p><img src="/../images/spring-cache/image-20240427154008953.png" alt="image-20240427154008953"></p>
+<h3 id="AOP代理"><a href="#AOP代理" class="headerlink" title="AOP代理"></a>AOP代理</h3><p>说是二级缓存其实已经能解决循环依赖的问题，但是为什么需要三级缓存呢。说是解决AOP代理的问题。</p>
+<p>如果只有二级缓存，虽然能解决循环依赖，但是在查询二级缓存中返回的实例，而不是我们需要的代理对象，所以添加了三级缓存，在三级对象中获取实例的时候，会经过判断，如果是代理对象则返回代理对象，如果是实例就返回实例。</p>
+<p>其实具体的我说的也不是很清楚，可以参考连接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/377878056">https://zhuanlan.zhihu.com/p/377878056</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%BC%93%E5%AD%98/" rel="tag"># 缓存</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/18/%E7%9F%A5%E8%AF%86%E5%BA%93%E6%9E%B6%E6%9E%84/" rel="prev" title="知识库原理">
+                  <i class="fa fa-angle-left"></i> 知识库原理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/13/%E6%B5%8B%E8%AF%95/" rel="next" title="测试">
+                  测试 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

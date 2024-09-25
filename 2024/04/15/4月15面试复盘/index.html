@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。 面试问题有些问题记不上来了，将记忆清楚和答的不好的记录复盘。 问题1问： 我们使用的注册中心、配置中心和市面使用的spring或者nacos的异同。 复盘： 公司使用的是zookeeper，市面常见的主要有4种Eureka、Zookeeper、Consul、Nacos。 具体的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4月15面试复盘">
+<meta property="og:url" content="http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="简述今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。 面试问题有些问题记不上来了，将记忆清楚和答的不好的记录复盘。 问题1问： 我们使用的注册中心、配置中心和市面使用的spring或者nacos的异同。 复盘： 公司使用的是zookeeper，市面常见的主要有4种Eureka、Zookeeper、Consul、Nacos。 具体的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-04-15T13:14:54.000Z">
+<meta property="article:modified_time" content="2024-04-15T13:14:54.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="复盘">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/","path":"2024/04/15/4月15面试复盘/","title":"4月15面试复盘"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>4月15面试复盘 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">面试问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%981"><span class="nav-number">2.1.</span> <span class="nav-text">问题1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%982"><span class="nav-number">2.2.</span> <span class="nav-text">问题2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%983"><span class="nav-number">2.3.</span> <span class="nav-text">问题3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%984"><span class="nav-number">2.4.</span> <span class="nav-text">问题4</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%985"><span class="nav-number">2.5.</span> <span class="nav-text">问题5</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%986"><span class="nav-number">2.6.</span> <span class="nav-text">问题6</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%987"><span class="nav-number">2.7.</span> <span class="nav-text">问题7</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="4月15面试复盘 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          4月15面试复盘
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-15 21:14:54" itemprop="dateCreated datePublished" datetime="2024-04-15T21:14:54+08:00">2024-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。</p>
+<h3 id="面试问题"><a href="#面试问题" class="headerlink" title="面试问题"></a>面试问题</h3><p>有些问题记不上来了，将记忆清楚和答的不好的记录复盘。</p>
+<h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>问：</p>
+<p>我们使用的<strong>注册中心、配置中心</strong>和市面使用的spring或者nacos的异同。</p>
+<p>复盘：</p>
+<p>公司使用的是zookeeper，市面常见的主要有4种<strong>Eureka、Zookeeper、Consul、Nacos</strong>。</p>
+<p>具体的对比差异没有答好，简述了注册中心<strong>AP，CP</strong>的差异。</p>
+<p>在配置中心上，目前常用的有<strong>springcloud config、nacos、apollo</strong></p>
+<p>具体的差异也没答上。</p>
+<p>后续整理归纳一篇文章。</p>
+<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>问：自定义经典线程池拒绝策略</p>
+<p>复盘：</p>
+<p>相当于知识盲区了，没有答上，只知道有4种拒绝策略：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、AbortPolicy：默认拒绝策略，抛出RejectExecutionException异常</span><br><span class="line"></span><br><span class="line">2、CallerRunsPolicy：不抛异常，而是让提交任务的线程自己去执行这个任务</span><br><span class="line"></span><br><span class="line">3、DiscardOldestPolicy：策略会丢失队列中最老的以恶搞任务，然后重新尝试新提交被拒绝的任务</span><br><span class="line"></span><br><span class="line">4、DiscardPolicy：抛弃被拒绝的任务，不会做任何处理也不会抛出异常。</span><br></pre></td></tr></table></figure>
+
+<p>自定义的拒绝策略没有了解过，可以写篇文章总结了解一下。</p>
+<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>问：优化SQL方案</p>
+<p>复盘：知道一些优化方案，但是没有条理性</p>
+<p>需要整理一下，最好整理成一个全面的方法论</p>
+<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>问：redis和数据库同步一致性方案</p>
+<p>复盘：知道新跟新数据库，再更新缓存</p>
+<p>但是全面的方法论没有将出来。</p>
+<h4 id="问题5"><a href="#问题5" class="headerlink" title="问题5"></a>问题5</h4><p>问：jdk 虚拟线程，新版jdk特性</p>
+<p>复盘：jdk8之后都没有了解，这块短板等补齐，目前面试很少问到这个，但是得了解补齐.</p>
+<p>问：新版jdk的垃圾回收器</p>
+<p>复盘：同上</p>
+<h4 id="问题6"><a href="#问题6" class="headerlink" title="问题6"></a>问题6</h4><p>问：jdk调优工具</p>
+<p>复盘：知识盲点。得补齐，可能后续面试工作中用不到，但是得了解一下。</p>
+<h4 id="问题7"><a href="#问题7" class="headerlink" title="问题7"></a>问题7</h4><p>问：如何打破双亲加载机制</p>
+<p>复盘：知道双亲加载机制，但是如何打破倒是没有深入了解，自己也写篇文章总结一下。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总体来说，每个问题都有自己知道的点，但是好多没有全面的回答。<strong>回答的都是一个个的点，没有梳理成一个面</strong>，体现自己的逻辑性，条理性和全面性</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%8D%E7%9B%98/" rel="tag"># 复盘</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/" rel="prev" title="面试复盘-03-27">
+                  <i class="fa fa-angle-left"></i> 面试复盘-03-27
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" rel="next" title="注册中心分析">
+                  注册中心分析 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
