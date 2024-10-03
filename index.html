@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,74 +178,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/05/13/%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/05/13/%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">测试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-05-13 22:08:53" itemprop="dateCreated datePublished" datetime="2024-05-13T22:08:53+08:00">2024-05-13</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1418,6 +1350,104 @@
 <h3 id="拉取过程中丢失"><a href="#拉取过程中丢失" class="headerlink" title="拉取过程中丢失"></a>拉取过程中丢失</h3><p>设置 enable.auto.commit &#x3D; false，在consumer端消费消息操作完成以后再手动提交 offset，类似于下文中的代码示例</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">consumerMsg</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="comment">//这里的poll(100)指的是kafka server端没有消息时，连接等待的时间，超过该时间立即返回空给consumer</span></span><br><span class="line">        ConsumerRecords&lt;String,String&gt; records = consomer.poll(<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">            <span class="comment">// 这里是消费消息的逻辑（简单逻辑输入到控制台）</span></span><br><span class="line">            System.out.printIn(record.value));</span><br><span class="line">            <span class="comment">//提交偏移量</span></span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                consumer.commitSync();  <span class="comment">//同步提交 如果异步的话，可以使用 consumer.commitAsync();</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span>(CommitFailedException ex)&#123;</span><br><span class="line">                log.error(<span class="string">&quot;commit fail&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/28/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/10/28/%E5%8F%AF%E5%A4%8D%E7%94%A8jar%E5%8C%85%E8%83%BD%E5%8A%9B%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">可复用jar包能力架构</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-10-28 21:21:45 / 修改时间：23:10:14" itemprop="dateCreated datePublished" datetime="2023-10-28T21:21:45+08:00">2023-10-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h3><p>计划将原有的代码抽取成可复用的原子能力jar包，一个业务可能需要调用多个原子能力jar包，jar包调用链配置在配置文件中。</p>
+<p>实现外部调用接口，通过原子能力调用链实现原子能力包调用。 </p>
+<p>主要目的：1、实现能力抽取复用，2、实现原子能力编排。</p>
+<h3 id="1、没有架构的架构"><a href="#1、没有架构的架构" class="headerlink" title="1、没有架构的架构"></a>1、没有架构的架构</h3><p>外部业务通过接口调用service服务，service服务内部通过配置文件调用封装好的jar包。kafka作为消息中间件，为service和运行的jar收集日志。</p>
+<p>redis作为缓存中间件，为service和运行的jar提供缓存服务，而MySQL为为service和运行的jar提供持久化数据存储。</p>
+<p><img src="/../images/jar/image-20240408215632370.png" alt="image-20240408215632370"></p>
+<h3 id="2、抽取engine服务"><a href="#2、抽取engine服务" class="headerlink" title="2、抽取engine服务"></a>2、抽取engine服务</h3><p>所有的逻辑都杂糅在service服务内，很明显不合适，如果需要扩展多节点的化，那整个service服务都要部署扩展。</p>
+<p>其实扩展多节点，主要是为了可复用的jar包能在多节点运行，提高运行效率。</p>
+<p>那么我们抽取出一个engine服务，只做加载运行jar包，这样扩展多节点的话，只要扩展engine服务就行。</p>
+<p>在抽取完之后，engine和service就不是一个服务了，service调用engine可以通过http请求，但是engine还得向service返回心跳。最好的就是通过kafka来实现这个心跳检测。</p>
+<p><img src="/../images/jar/image-20240408221643046.png" alt="image-20240408221643046"></p>
+<h3 id="3、拆分service"><a href="#3、拆分service" class="headerlink" title="3、拆分service"></a>3、拆分service</h3><p>为了提高可拓展性，我们抽出了engine服务，现在的service其实还负责两件事，第一个就是对外的接口暴露，第二个就是内部原子能力的调度。</p>
+<p>现在为了使职责更内敛，我们将service再次拆分，拆分成：getaway和schedule</p>
+<p><img src="/../images/jar/image-20240408225007616.png" alt="image-20240408225007616"></p>
+<h3 id="4、新增注册中心"><a href="#4、新增注册中心" class="headerlink" title="4、新增注册中心"></a>4、新增注册中心</h3><p>现在又多了getaway和schedule服务，那么服务间的检测就不能只用kafka做的心跳检测了，得增加一个注册中心，这样都方便调度，尤其使engine有多节点部署的需求。engine和schedule都注册在nacos中，getaway和是schedule的调度都是先从nacos中获取相应的服务地址和端口，然后再开始调取相应接口。</p>
+<p><img src="/../images/jar/image-20240408225340577.png" alt="image-20240408225340577"></p>
+<h3 id="5、调用链的转移"><a href="#5、调用链的转移" class="headerlink" title="5、调用链的转移"></a>5、调用链的转移</h3><p>原本的调用链是在配置文件中的，经过service的拆分，现在应该在schedule的配置文件中。</p>
+<p>虽然调用链是在开发中就已经配置好的，但是我们将调用链移动到MySQL中，这样可以更好的扩展。可以通过其他途径改动MySQL中的调用链，实现实时变更。</p>
+<p>由于调用链这种配置不会随便改动，可以通过预加载，将其加载到redis中，这样可以减小MySQL的压力。</p>
+<p><img src="/../images/jar/image-20240408230847003.png" alt="image-20240408230847003"></p>
 
       
     </div>
