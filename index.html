@@ -215,9 +215,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2024-09-25 22:54:12 / 修改时间：22:07:22" itemprop="dateCreated datePublished" datetime="2024-09-25T22:54:12+08:00">2024-09-25</time>
+      <time title="创建时间：2024-09-25 22:54:12" itemprop="dateCreated datePublished" datetime="2024-09-25T22:54:12+08:00">2024-09-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-10-03 09:33:13" itemprop="dateModified" datetime="2024-10-03T09:33:13+08:00">2024-10-03</time>
     </span>
 
   
@@ -230,30 +236,44 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="安装部署指南"><a href="#安装部署指南" class="headerlink" title="安装部署指南"></a>安装部署指南</h1><h3 id="中间件安装"><a href="#中间件安装" class="headerlink" title="中间件安装"></a>中间件安装</h3><p>需要安装 redis，mysql，minio，rabbitmq 自行搜索，服务器安装即可，</p>
-<p>服务器：43.154.80.35中已有安装好的中间件，可直接使用，账号密码，代码中的setting.py文件中都有</p>
-<p>如果要修改成其他地址中间件，在setting文件中直接修改即可，数据库表格，可直接从43.154.80.35中copy</p>
-<p><img src="/Users/apple/blog/source/images/spider/image-middle-setting.png" alt="image-20240902231051433"></p>
-<p>mq区分了队列：goods、page、post、site、user，如有需要从相应的队列取数据即可，详情可通过rabbitmq可视化界面查看<a target="_blank" rel="noopener" href="http://43.154.80.35:15672/#/queues%EF%BC%8C%E8%B4%A6%E5%8F%B7/%E5%AF%86%E7%A0%81%EF%BC%9A">http://43.154.80.35:15672/#/queues，账号/密码：</a> spider&#x2F;spider</p>
+          <h1 id="安装部署指南"><a href="#安装部署指南" class="headerlink" title="安装部署指南"></a>安装部署指南</h1><p>开发过程均使用的Ubuntu，下面说明指南均基于Ubuntu使用。</p>
+<h3 id="中间件安装"><a href="#中间件安装" class="headerlink" title="中间件安装"></a>中间件安装</h3><p>需要安装 redis，mysql，minio，rabbitmq 自行搜索，服务器安装即可。</p>
+<p>redis参考链接：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1639658">https://cloud.tencent.com/developer/article/1639658</a></p>
+<p>mysql参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xz2005/article/details/130145465">https://blog.csdn.net/xz2005/article/details/130145465</a></p>
+<p>minio参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hunttown/p/17358797.html">https://www.cnblogs.com/hunttown/p/17358797.html</a></p>
+<p>rabbitmq参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/hunttown/p/17352729.html">https://www.cnblogs.com/hunttown/p/17352729.html</a></p>
+<p>安装验证：redis和mysql可用本地连接工具可连接使用，minio和rabbitmq均有可视化界面，可在可视化界面登陆打开。</p>
+<p>注意：注意服务器的端口有没有打开</p>
+<p>服务器43.154.80.35中已有安装好的中间件，可直接使用，账号密码，代码中的setting.py文件中都有，如果要修改成其他地址中间件，可直接在replace.py中修改相应字段，运行统一修改。</p>
+<p>注：现在settings.py文件设置的是服务器43.154.80.35的内网ip，服务器账号密码和各中间件账号密码私信发送。</p>
 <h3 id="网络环境安装"><a href="#网络环境安装" class="headerlink" title="网络环境安装"></a>网络环境安装</h3><h4 id="服务器要求，"><a href="#服务器要求，" class="headerlink" title="服务器要求，"></a>服务器要求，</h4><p>外网，ubuntu</p>
 <h4 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h4><p>privoxy，tor，obfs4proxy</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">a[代码]--8118端口--&gt;b[privoxy]--9050端口--&gt;c[tor]--网桥/obfs4proxy--&gt;d[暗网]</span><br></pre></td></tr></table></figure>
 
 <h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>解压压缩包，网站目录下的setting文件中配置了代理端口，将请求发送到本级的8118端口</p>
-<p><img src="/Users/apple/blog/source/images/spider/image-proxy-code.png" alt="image-20240828231130808"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-proxy-code.png" alt="image-20240828231130808"></p>
 <h5 id="privoxy"><a href="#privoxy" class="headerlink" title="privoxy"></a>privoxy</h5><p>1、安装：sudo apt-get install privoxy</p>
 <p>2、修改配置文件：</p>
 <p>​	进入配置文件  vim &#x2F;etc&#x2F;privoxy&#x2F;config</p>
 <p>​	修改接收代理：listen-address 127.0.0.1:8118</p>
 <p>​	修改转发数据：最后一行添加 forward-socks5t   &#x2F;               127.0.0.1:9050 .  （注意最后的点不能丢）</p>
-<p><img src="/Users/apple/blog/source/images/spider/image-privoxy-config.png" alt="image-20240828232233501"></p>
-<p><img src="/Users/apple/blog/source/images/spider/image-privoxy-config-9050.png" alt="image-20240828232433118"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-privoxy-config.png" alt="image-20240828232233501"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-privoxy-config-9050.png" alt="image-20240828232433118"></p>
+<p>​	配置完重启使配置生效</p>
 <h5 id="tor"><a href="#tor" class="headerlink" title="tor"></a>tor</h5><p>1、安装tor：sudo apt-get install tor</p>
 <p>2、安装obfs4proxy： sudo apt-get install obfs4proxy</p>
 <p>3、tor配置文件中添加网桥，vi &#x2F;etc&#x2F;tor&#x2F;torrc，进行如图配置</p>
+<p>​	查看tor 9050端口是否打开，若没有打开，去掉注释打开端口</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-tor-port.png" alt="image-20241003092814823"></p>
 <p>​	配置obfs4proxy</p>
 <p>​	配置网桥，地址可用 obfs4 51.178.86.168:54874 773A7F4428AE519A892152EDA963477D85EE672A cert&#x3D;xghcVpPhAAktkvVpYY6LDsE5iVayo4ADztSEwj0YcqGERxr3+v+RqScaOCC1O&#x2F;uxeZinWA iat-mode&#x3D;0，建议多申请几个做备用，网桥也会过期不可用</p>
-<p><img src="/Users/apple/blog/source/images/spider/image-tor-config.png" alt="image-20240828232652882"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-tor-config.png" alt="image-20240828232652882"></p>
+<p>​	配置完重启使配置生效</p>
+<h4 id="验证网络通路"><a href="#验证网络通路" class="headerlink" title="验证网络通路"></a>验证网络通路</h4><p>检测privoxy端口使用：netstat -an | grep 8118</p>
+<p>检测tor端口使用：netstat -an | grep 9050</p>
+<p>检测整个网络通路：curl -x <a target="_blank" rel="noopener" href="http://127.0.0.1:8118/">http://127.0.0.1:8118</a> <a target="_blank" rel="noopener" href="http://u5lyidiw4lpkonoctpqzxgyk6xop7w7w3oho4dzzsi272rwnjhyx7ayd.onion/">http://u5lyidiw4lpkonoctpqzxgyk6xop7w7w3oho4dzzsi272rwnjhyx7ayd.onion/</a></p>
+<p>通路截图：</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-link.png" alt="image-20241003091320866"></p>
 <h3 id="驱动安装"><a href="#驱动安装" class="headerlink" title="驱动安装"></a>驱动安装</h3><h4 id="chrome和chromedriver安装"><a href="#chrome和chromedriver安装" class="headerlink" title="chrome和chromedriver安装"></a>chrome和chromedriver安装</h4><p>可借鉴：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44184990/article/details/123590435">https://blog.csdn.net/weixin_44184990/article/details/123590435</a></p>
 <p>Google-chrome：版本- Google Chrome 127.0.6533.88</p>
 <p>Chromedriver：版本- ChromeDriver 127.0.6533.88</p>
@@ -266,32 +286,41 @@
 <p>1、打开虚拟环境，虚拟环境在 &#x2F;opt&#x2F;dwSpiders&#x2F;dw-env&#x2F;bin&#x2F;下，命令：source &#x2F;opt&#x2F;dwSpiders&#x2F;dw-env&#x2F;bin&#x2F;activate，各自安装的目录地址不一样，需要修改命中的路径，</p>
 <p>2、进入网站目录，以torrez网站为例，命令：cd &#x2F;opt&#x2F;dwSpiders&#x2F;torrez</p>
 <p>3、添加修改cookie，43.154.80.35服务器上的redis中有示例，使用tor登陆后可按示例将cookie填写到自己的redis中（注：leakbase网站没有验证码，登陆逻辑已经写好，直接第4步运行即可）</p>
-<p><img src="/Users/apple/blog/source/images/spider/image-torrez-cookie.png" alt="image-20240902223652351"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-torrez-cookie.png" alt="image-20240902223652351"></p>
 <p>4、启动代码：python3 run_torrez.py &amp; </p>
 <p>5、查看日志：如果当前窗口运行代码，则会自动弹出日志，如果不是，则进入网站目录下的logs目录，查看当前日期日志文件。</p>
 <p>6、cookie过期：网站的cookie会过期，过期后直接在redis库中替换就行</p>
 <p>7、如需要重跑，需要删除redis相应网站下dupefilter和bloom_fliter_img，这是url请求的指纹和图片的请求指纹，去重使用。</p>
 <p>8、mq的使用，在每个网站目录下都加了mq的配置，如要使用，在setting文件中打开即可</p>
-<p><img src="/Users/apple/blog/source/images/spider/setting-mq.png" alt="image-20240902523652351"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/setting-mq.png" alt="image-20240902523652351"></p>
 <p>9、不建议使用start.sh统一启动，可进入各自网站目录下单独启动运行，根据不同的服务器目录，start.sh需要配置不同的虚拟环境目录和代码目录</p>
 <h3 id="中间件初始化"><a href="#中间件初始化" class="headerlink" title="中间件初始化"></a>中间件初始化</h3><h4 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h4><p>MySQL的初始化比较简单，在安装好的MySQL中安装 dw-spider 库，库中需要新建5张表（goods、original_page、post、site、user），如图。建表语句代码db目录下有。</p>
-<p><img src="/Users/apple/blog/source/images/spider/table.png" alt="image-20240902223652352"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/table.png" alt="image-20240902223652352"></p>
 <h4 id="minio"><a href="#minio" class="headerlink" title="minio"></a>minio</h4><p>minio的初始化也比较简单，在其中新建dw-bucket，如图。</p>
-<p><img src="/Users/apple/blog/source/images/spider/dw-bucket.png" alt="image-20240902223652353"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/dw-bucket.png" alt="image-20240902223652353"></p>
 <h4 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h4><p>redis中需要预置8个网站的cookie：Onniforums、asap、breachforums、darkdock、dread、mgmgrand、nexus、torrez</p>
 <p>redis的key为   网站名称:网站名称_cookie，示例：asap:asap_cookie</p>
 <p>redis的value为  hash类型的键值对，如图</p>
-<p>Onniforums：<img src="/Users/apple/blog/source/images/spider/cookie-onni.png" alt="image-20240902223652354"></p>
-<p>asap：<img src="/Users/apple/blog/source/images/spider/cookie-asap.png" alt="image-20240902223652355"></p>
-<p>breachforums：<img src="/Users/apple/blog/source/images/spider/cookie-bf.png" alt="image-20240902223652356"></p>
-<p>darkdock：<img src="/Users/apple/blog/source/images/spider/cookie-darkdock.png" alt="image-20240902223652357"></p>
-<p>dread：<img src="/Users/apple/blog/source/images/spider/cookie-dread.png" alt="image-20240902223652358"></p>
-<p>mgmgrand：<img src="/Users/apple/blog/source/images/spider/cookie-mgm.png" alt="image-20240902223652359"></p>
-<p>nexus：<img src="/Users/apple/blog/source/images/spider/cookie-nexus.png" alt="image-20240902223652360"></p>
-<p>torrez：<img src="/Users/apple/blog/source/images/spider/cookie-torrez.png" alt="image-20240902223652361"></p>
+<p>Onniforums：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-onni.png" alt="image-20240902223652354"></p>
+<p>asap：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-asap.png" alt="image-20240902223652355"></p>
+<p>breachforums：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-bf.png" alt="image-20240902223652356"></p>
+<p>darkdock：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-darkdock.png" alt="image-20240902223652357"></p>
+<p>dread：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-dread.png" alt="image-20240902223652358"></p>
+<p>mgmgrand：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-mgm.png" alt="image-20240902223652359"></p>
+<p>nexus：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-nexus.png" alt="image-20240902223652360"></p>
+<p>torrez：<img src="/Users/xiaozhigang/blog/source/images/spider/cookie-torrez.png" alt="image-20240902223652361"></p>
+<p>下图为代码运行后的redis截图，其中截了torrez网站和单独的bloom_filter_img。</p>
+<p>bloom_filter_img：为所有图片请求过滤所用，内存放所有已请求的图片地址，其内存放的图片地址不会二次请求，如果重跑需删除，代码运行后会自行添加。</p>
+<p>dupefilter：为站内地址请求过滤所有，内存放所有已请求的地址hash值，其内已存放的地址不会二次请求，如果重跑需要删除，代码运行后会自动添加。</p>
+<p>start_urls：为代码运行时，起始请求的地址，重跑时需要删除，运行后会自动添加，起始地址请求后会自动删除。</p>
+<p>torrez_cookie：为网站cookie，运行时需要添加，且保证cookie在有效期内。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/image-2redis.png" alt="image-20240928172856612"></p>
 <h4 id="rabbitmq"><a href="#rabbitmq" class="headerlink" title="rabbitmq"></a>rabbitmq</h4><p>需要新建5个队列：goods、page、post、site、user。</p>
 <p>可在可视化界面新建，如图。</p>
-<p><img src="/Users/apple/blog/source/images/spider/mq-queues.png" alt="image-20240902223652361"></p>
+<p><img src="/Users/xiaozhigang/blog/source/images/spider/mq-queues.png" alt="image-20240902223652361"></p>
+<p>其初始交换机为scrapy，无需配置，代码运行时会自动配置。</p>
+<p>注：每个队列都在每个网站的mqPipeline.py文件中绑定，不建议修改。</p>
+<h4 id="中间件配置修改"><a href="#中间件配置修改" class="headerlink" title="中间件配置修改"></a>中间件配置修改</h4><p>代码中有replace.py文件，运行次文件可统一修改当前文件夹下的setting.py文件中的中间件配置。replcae.py中的old_str字段为当前中间件配置，new_str字段为需要修改后的中间件配置，代码运行将setting文件中的old_str配置修改成new_str配置。</p>
 
       
     </div>
