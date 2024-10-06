@@ -250,7 +250,11 @@
 <p>注：现在settings.py文件设置的是服务器43.154.80.35的内网ip，服务器账号密码和各中间件账号密码私信发送。</p>
 <h3 id="网络环境安装"><a href="#网络环境安装" class="headerlink" title="网络环境安装"></a>网络环境安装</h3><h4 id="服务器要求，"><a href="#服务器要求，" class="headerlink" title="服务器要求，"></a>服务器要求，</h4><p>外网，ubuntu</p>
 <h4 id="安装软件"><a href="#安装软件" class="headerlink" title="安装软件"></a>安装软件</h4><p>privoxy，tor，obfs4proxy</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line"></span><br><span class="line">a[代码]--8118端口--&gt;b[privoxy]--9050端口--&gt;c[tor]--网桥/obfs4proxy--&gt;d[暗网]</span><br></pre></td></tr></table></figure>
+<pre class="mermaid">graph LR
+
+a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[暗网]</pre>
+
+
 
 <h5 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h5><p>解压压缩包，网站目录下的setting文件中配置了代理端口，将请求发送到本级的8118端口</p>
 <p><img src="/../images/spider/image-proxy-code.png" alt="image-20240828231130808"></p>
@@ -1551,6 +1555,7 @@
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
+
     </div>
   </footer>
 
@@ -1573,7 +1578,7 @@
 <script src="/js/third-party/search/local-search.js"></script>
 
 
-  <script class="next-config" data-name="mermaid" type="application/json">{"enable":"ture","theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
   <script src="/js/third-party/tags/mermaid.js"></script>
 
 
