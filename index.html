@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -161,7 +161,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-count">29</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,6 +178,94 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/10/11/minio%E5%A4%8D%E5%88%B6%E5%A4%87%E4%BB%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/10/11/minio%E5%A4%8D%E5%88%B6%E5%A4%87%E4%BB%BD/" class="post-title-link" itemprop="url">minio复制备份</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-10-11 21:39:52 / 修改时间：22:09:36" itemprop="dateCreated datePublished" datetime="2024-10-11T21:39:52+08:00">2024-10-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>实现备份，将源minio数据备份到其他minio上。</p>
+<h2 id="先决条件"><a href="#先决条件" class="headerlink" title="先决条件"></a>先决条件</h2><p>1、minio版本相同，最好相同，如果版本不同可能会发生未知错误。</p>
+<p>2、站点复制需要开启桶级别版本控制（Bucket Versioning），并且会自动开启已创建的Bucket的版本控制。不可以关闭站点复制的MinIO部署上的版本控制功能。</p>
+<p><img src="/../images/minio/minio-bucket.png" alt="image-20241011222201154"></p>
+<p>3、源minio中有Bucket，并且有数据。目标minio中没有任何Bucket和Object。</p>
+<p>4、源minio和目标minio最好有相同的IDP，IDP可在页面设置，且设置足够的权限。</p>
+<p><img src="/../images/minio/minio-user.png" alt="image-20241011222424095"></p>
+<h2 id="操作设置"><a href="#操作设置" class="headerlink" title="操作设置"></a>操作设置</h2><p>页面上直接添加备份minio，设置好url和账号密码即可。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/minio/minio-site-1.png" alt="image-20241011222607409"></p>
+<p><img src="/../images/minio/minio-user-2.png" alt="image-20241011222727288"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -327,6 +415,29 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 <p>其初始交换机为scrapy，无需配置，代码运行时会自动配置。</p>
 <p>注：每个队列都在每个网站的mqPipeline.py文件中绑定，不建议修改。</p>
 <h4 id="中间件配置修改"><a href="#中间件配置修改" class="headerlink" title="中间件配置修改"></a>中间件配置修改</h4><p>代码中有replace.py文件，运行次文件可统一修改当前文件夹下的setting.py文件中的中间件配置。replcae.py中的old_str字段为当前中间件配置，new_str字段为需要修改后的中间件配置，代码运行将setting文件中的old_str配置修改成new_str配置。</p>
+<p>wget -O - <a target="_blank" rel="noopener" href="https://min.io/docs/minio/linux/examples/ReplicationAdminPolicy.json">https://min.io/docs/minio/linux/examples/ReplicationAdminPolicy.json</a> | <br>mc admin policy create minio-main ReplicationAdminPolicy &#x2F;dev&#x2F;stdin<br>mc admin user add minio-main ReplicationAdmin LongRandomSecretKey<br>mc admin policy attach minio-main ReplicationAdminPolicy –user ReplicationAdmin</p>
+<p>mc admin policy attach minio-main ReplicationAdminPolicy –user ReplicationAdmin</p>
+<p>mc alias set minio-slave <a target="_blank" rel="noopener" href="http://43.154.195.176:9000/">http://43.154.195.176:9000</a> minioadmin minioadmin</p>
+<p>wget -O - <a target="_blank" rel="noopener" href="https://min.io/docs/minio/linux/examples/ReplicationRemoteUserPolicy.json">https://min.io/docs/minio/linux/examples/ReplicationRemoteUserPolicy.json</a><br>mc admin policy create minio-slave ReplicationRemoteUserPolicy &#x2F;dev&#x2F;stdin<br>mc admin user add minio-slave ReplicationRemoteUser LongRandomSecretKey<br>mc admin policy attach minio-slave ReplicationRemoteUserPolicy –user ReplicationRemoteUser</p>
+<p>mc replicate add minio-source&#x2F;dw-bucket –remote-bucket <a target="_blank" rel="noopener" href="http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket">http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket</a>  –replicate “delete,delete-marker,existing-objects”</p>
+<p>mc replicate add minio-source&#x2F;dw-bucket<br>–remote-bucket <a target="_blank" rel="noopener" href="http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket">http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket</a><br>   –replicate “delete,delete-marker,existing-objects”</p>
+<p>mc replicate add minio-source&#x2F;dw-bucket  <br>–remote-bucket ‘<a target="_blank" rel="noopener" href="http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket">http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket</a>‘ <br>   –replicate “delete,delete-marker,existing-objects”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mc replicate add                                                     \</span><br><span class="line">   --remote-bucket https://user:secret@minio.mysite.tld:9001/bucket  \</span><br><span class="line">   --replicate &quot;delete,delete-marker,existing-objects&quot;               \</span><br><span class="line">   myminio/mydata</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p>mc replicate add minio-source&#x2F;sourcebucket –remote-bucket &39;    –replicate &34;</p>
+<p>mc config host add minio_master <a target="_blank" rel="noopener" href="http://http//43.154.80.35:9000">http://http://43.154.80.35:9000</a> minio-username minio-password<br>mc config host add minio_slave <a target="_blank" rel="noopener" href="http://43.154.195.176:9000/">http://43.154.195.176:9000</a> minio-username minio-password</p>
+<p><strong>Remote service connection error (Remote service endpoint offline, target bucket: dw-bucket or remote service credentials: LongRandomSecretKey invalid Get “<a target="_blank" rel="noopener" href="https://43.154.195.176:9000/dw-bucket/?location=">https://43.154.195.176:9000/dw-bucket/?location=</a>“: http: server gave HTTP response to HTTPS client)</strong></p>
+<p>mc config host add minio_master <a target="_blank" rel="noopener" href="http://http//43.154.80.35:9000">http://http://43.154.80.35:9000</a> minioadmin minioadmin<br>mc config host add minio_slave  <a target="_blank" rel="noopener" href="http://43.154.195.176:9000/">http://43.154.195.176:9000</a> minioadmin minioadmin</p>
+<p>iIwWDr1XrjnpPps194v9</p>
+<p>n4pxy5MOtUV3YagdLdEDnuM6owgGkGBBXbF55W6K</p>
+<p>DtTT4FJK4FDeyhcBmJeq</p>
+<p>dHyP04tChkumOqg0e2EU24hufftIPYWgrmflD699</p>
+<p>Igad7aBC1fKgDv54RyK1</p>
+<p>fvo7z0hO19v6CAwhcUZShI6TiZp7Ko7HlfIwJvoH</p>
 
       
     </div>
@@ -1411,111 +1522,6 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 <p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
 <p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/13/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/11/13/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/" class="post-title-link" itemprop="url">kafka保证消息不丢失</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-11-13 21:23:57" itemprop="dateCreated datePublished" datetime="2023-11-13T21:23:57+08:00">2023-11-13</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>在kafka的使用过程中，消息传递有下图三个步骤，消息的丢失也就在这三个步骤中：发送过程中丢失、同步过程中丢失、拉取过程中丢失。</p>
-<p><img src="/../images/kafka/image-20240331213103843.png" alt="image-20240331213103843"></p>
-<h3 id="发送过程中丢失"><a href="#发送过程中丢失" class="headerlink" title="发送过程中丢失"></a>发送过程中丢失</h3><h4 id="发送方式"><a href="#发送方式" class="headerlink" title="发送方式"></a>发送方式</h4><p>生产者的发送方式有三种：</p>
-<p>1、简单发送，不关心发送结果，所以发送失败消息丢失也不知道。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="comment">//这里只是把消息放进了一个缓冲区中，然后使用单独的线程将消息发送到服务端</span></span><br><span class="line">   producer.send(record);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(Exception)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>2、同步发送，等待发送返回</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="comment">//send方法返回的是Future&lt;RecordMetaData&gt; 对象，然后我们可以调用get()方法等待响应</span></span><br><span class="line">   Future&lt;RecordMetaData&gt; future = producer.send(record); </span><br><span class="line">   future.get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(Exception)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>3、异步发送，执行回调方法</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">DemoProducerCallback</span> <span class="keyword">implements</span> <span class="title class_">Callback</span>&#123;</span><br><span class="line">   <span class="meta">@override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCompletion</span><span class="params">(RecordMetadata recordMetadata,Exception e)</span>&#123;</span><br><span class="line">       <span class="comment">//发生错误的回调方法,可以写入日志，或写入DB通过其它线程重重试，保证最终的数据送达</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line">producer.send(record，<span class="keyword">new</span> <span class="title class_">DemoProducerCallback</span>()))</span><br></pre></td></tr></table></figure>
-
-<p>在这三种发送方法中，第一种方法，无返回，不感知，所以也无法保证消息不丢失。所以要保证消息不丢失，只能选择第二种或者第三种，一般情况下更推荐第三种。</p>
-<h4 id="acks参数设置"><a href="#acks参数设置" class="headerlink" title="acks参数设置"></a>acks参数设置</h4><p>在生产者中有acks参数，该参数指定了kafka的多少个副本同步后才算消息发送成功。该参数取值范围：</p>
-<p>1、acks&#x3D;0，表示生产者在消息后不管有没有在leader磁盘上落盘，就认为消息发送成功。</p>
-<p>2、acks&#x3D;1，表示生产者在消息后，在leader磁盘上落盘，就认为消息发送成功，不管其他follower有没有同步。</p>
-<p>3、acks&#x3D;all，表示生产者在消息后，在leader磁盘上落盘，其他follower都同步落盘， 认为消息发送成功。</p>
-<p><img src="/../images/kafka/image-20240331222238322.png" alt="image-20240331222238322"></p>
-<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>通过设置发送方式和acks参数，可以保证在发送方式中不丢失，甚至acks参数都可以保证后面的同步过程中消息不丢失。</p>
-<p>发送方式一般设置为异步发送，acks参数默认设置为1。</p>
-<h3 id="同步过程中丢失"><a href="#同步过程中丢失" class="headerlink" title="同步过程中丢失"></a>同步过程中丢失</h3><p>在同步过程中，除了上面说的答acks参数，还有其他副本机制保证消息不丢失。避免leader节点的崩溃导致消息的丢失。</p>
-<p>broker中的配置项,unclean.leader.election.enable &#x3D; false，表示不允许非ISR中的副本被选举为首领，以免数据丢失。</p>
-<p>ISR：是指与leader保持一定程度（这种范围是可通过参数进行配置的）同步的副本和 leader 共同被称为ISR</p>
-<p>OSR：与leader同步时，滞后很多的副本（不包括leader）被称为OSR</p>
-<p>AR，分区中所有的副本统称为AR。AR &#x3D; ISR + OSR</p>
-<h3 id="拉取过程中丢失"><a href="#拉取过程中丢失" class="headerlink" title="拉取过程中丢失"></a>拉取过程中丢失</h3><p>设置 enable.auto.commit &#x3D; false，在consumer端消费消息操作完成以后再手动提交 offset，类似于下文中的代码示例</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">consumerMsg</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="comment">//这里的poll(100)指的是kafka server端没有消息时，连接等待的时间，超过该时间立即返回空给consumer</span></span><br><span class="line">        ConsumerRecords&lt;String,String&gt; records = consomer.poll(<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">            <span class="comment">// 这里是消费消息的逻辑（简单逻辑输入到控制台）</span></span><br><span class="line">            System.out.printIn(record.value));</span><br><span class="line">            <span class="comment">//提交偏移量</span></span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                consumer.commitSync();  <span class="comment">//同步提交 如果异步的话，可以使用 consumer.commitAsync();</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span>(CommitFailedException ex)&#123;</span><br><span class="line">                log.error(<span class="string">&quot;commit fail&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 
       
     </div>
