@@ -150,18 +150,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">35</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,117 +178,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/11/16/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">深度学习</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-11-16 20:26:53" itemprop="dateCreated datePublished" datetime="2024-11-16T20:26:53+08:00">2024-11-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-02-26 23:25:40" itemprop="dateModified" datetime="2024-02-26T23:25:40+08:00">2024-02-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>​	在大模型大行其道的今天，学习使用大模型已经是我们程序猿不可或缺的一部分。网传的大模型神乎其神，貌似无所不能，那么大模型的底层到底是什么，是怎么一步一步的发展到今天的大模型的呢。其实大模型的底层本质就是深度学习，只不是跟我们了解的深度学习不一样的是大模型的参数比较多，甚至可以说多的可怕。了解完深度学习之后你就知道为什么参数可以作为大模型的一个指标了。</p>
-<p>​	其实深度学习大致可以划分成三步：构建函数模型、计算缺失值、优化。</p>
-<h2 id="案例背景"><a href="#案例背景" class="headerlink" title="案例背景"></a>案例背景</h2><p>​	已知店铺A，11月份每一天的每一天的营业额，我们怎么计算预测12月前3天的营业额。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20241230182713456.png" alt="image-20241230182713456"></p>
-<h2 id="简单模型预测"><a href="#简单模型预测" class="headerlink" title="简单模型预测"></a>简单模型预测</h2><p>​	按照我们上述说的三个步骤，将整个过程划分成三步，构建函数模型，计算缺失值，计算参数。</p>
-<h3 id="构建函数模型"><a href="#构建函数模型" class="headerlink" title="构建函数模型"></a>构建函数模型</h3><p>​	这里我们先构建一个简单的预测模型，其实预测模型就是一个关系函数，就是被预测的结果和前面输入之间的关系函数，在这里就是12月前3天的营业额和11月营业额之间的关系。关系函数我们表示为 y&#x3D;f(x)，在这里我们先构建一个最简单的预测模型，假设后一天的营业额和前一天的营业额之间的关系函数是 y&#x3D;ax+b，y是后一天我们预测的营业额，x是当日的营业额。</p>
-<h3 id="计算缺失值"><a href="#计算缺失值" class="headerlink" title="计算缺失值"></a>计算缺失值</h3><p>​	现在我们知道了营业额之间的预测函数和11月整个月的营业额，这样我们就可以计算出整个11月真是营业额和我们预测函数计算出来的预测营业额之间的差值L。<br>$$<br>L&#x3D;\frac{1}{N} \Sigma(|y- \hat{y}|)<br>$$<br>​	上面的公式，就是11月的预测值和实际值的差值求平均值。如果我们随机选取一个较小的a、b的初始值，就能计算出缺失值L的值，当我们不停的变幻a、b值之后，就会得到不同的L值。不同的a、b值和L可以构建出下图这样一个统计图，其中蓝色区域是L的较小值，红色是交大值。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102085812272.png" alt="image-20250102085812272"></p>
-<h3 id="计算参数"><a href="#计算参数" class="headerlink" title="计算参数"></a>计算参数</h3><p>​	根据公式，我们是能算出缺失值L的，但是由于我们的预测模型是 y&#x3D;ax+b，那么我们的缺失值的结果这也一定包含着这两个参数，换而言之就是这两个参数影响着我们的计算结果缺失值L。实际情况中，我们总是希望误差越小越好，也就是缺失值L越小越好。</p>
-<p>​	在数学中，我们求最小值，一般都和斜率相关，找到L的斜率等于0的值，我们应该就能找到一个合适a、b值。我们将L对a、b求偏导，就能找到L相对小的点。这样也就得出了合适的a、b值，从而得到了一个合适的预测函数y&#x3D;ax+b。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102090855503.png" alt="image-20250102090855503"></p>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>​	上面我们只是选了一个最简单的折线模型去计算预测值，折线模型只是最简单的模型，在本质上就有所不足，不能很好的预测多参数曲线值。如下图，如果我们用折线模型去模拟计算那条红色的折线，就不是很好计算模拟。如果我们多加几个参数，就比较好计算模拟了。</p>
-<p>​	可以使用sigmoid(x)的函数(下图蓝色折线1)，多几个参数模拟出红色折线。蓝色折线0、1、2、3相加就等于红色折线，折线0是一个常数a，折线2是 c<em>sigmoid(x+b)，折线3是d</em>sigmoid(x+e)。从而得出：*</p>
-<p><em>y&#x3D;sigmoid(x) + a + c</em>sigmoid(x+b) + d*sigmoid(x+e)</p>
-<p>$$<br>y&#x3D;b+\sum_iC_i*sigmoid(b_i+w_ix)<br>$$<br>同时我们可以看到，销售额呈周期性变化。我们可以通过一个周期内销售额去计算预测值，公式如下。<br>$$<br>y&#x3D;b+\sum_ic_isigmoid(b_i+\sum_jw_{ij}x_j)<br>$$</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102180023235.png" alt="image-20250102180023235"></p>
-<p>​	我们根据上面的公式可以计算出预测值，上述的公式5得出，如果我们计算出在得知前三个销售额的情况下，预测出的销售额。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112154212786.png" alt="image-20250112154212786"></p>
-<p>​	上面的演示结果可以得出<br>$$<br>y &#x3D; b + \sum_i c_i sigmoid(r_i)<br>$$<br>​	如果我们将 sigmoid(r) 看出一个整体的话，可以简化成<br>$$<br>y &#x3D; b + c^T<em>a<br>$$<br>​	整个公式：<br>$$<br>y&#x3D;b+c^T</em>a &#x3D; b+c^T * \sigma(b+wx)<br>$$<br>​	注意上面的两个b不是同一个值。</p>
-<p>​	整个计算逻辑，如图展示：</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112164453491.png" alt="image-20250112164453491"></p>
-<p>​	上面的计算模型只是模拟计算了一层，我们可以模拟计算多层，深度学习的本质就是让我们模拟计算跟多的层次以达到更好的效果，如果我们模拟计算两层的话，可以将我们第一层计算出来的a，再来一次计算。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112165402027.png" alt="image-20250112165402027">总结</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>​	整个深度学习的过程就是推导出一个合适的计算模型。推导模型的过程可以分为三步：<strong>构建函数模型，计算缺失值，计算参数</strong>。在后面的优化过程中，我们总共优化了三个点：</p>
-<p>1、模型替换，更换成了一个更有弹性的模型</p>
-<p>2、增加模型输入，以上述销售额为例，从前一天的销售额预测后一天的销售额变成前几天的销售额预测后一天</p>
-<p>3、增加训练层数，将一层计算变成多层计算</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1451,7 +1340,7 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/26/%E6%9F%A5%E4%BA%BA%E5%90%8D%E9%A1%B9%E7%9B%AE%E6%95%B0%E6%8D%AE%E8%B0%83%E7%A0%94/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1469,7 +1358,7 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/03/26/%E6%9F%A5%E4%BA%BA%E5%90%8D%E9%A1%B9%E7%9B%AE%E6%95%B0%E6%8D%AE%E8%B0%83%E7%A0%94/" class="post-title-link" itemprop="url">查人名项目数据调研</a>
+          <a href="/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="post-title-link" itemprop="url">添加聊天办公机器人</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1489,7 +1378,7 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%B7%A5%E4%BD%9C/" itemprop="url" rel="index"><span itemprop="name">工作</span></a>
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
         </span>
     </span>
 
@@ -1503,57 +1392,123 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
     
     
     <div class="post-body" itemprop="articleBody">
-          <h3 id="背景简述"><a href="#背景简述" class="headerlink" title="背景简述"></a>背景简述</h3><p>查人名项目需要个人数据支撑，按上一版本数据来看，需要9部分数据：</p>
-<p>1、基本信息模块：用户id，全名，别名，性别，出生日期，年龄，头像</p>
-<p>2、联系信息模块：电话号码，电子邮件，电子邮件最近活跃时间</p>
-<p>3、地址历史模块：所处城市、当前地址，过去地址</p>
-<p>4、社交账号模块：社交平台名称，用户名</p>
-<p>5、犯罪记录模块：犯罪类型，逮捕日期，判决日期</p>
-<p>6、财务与资产模块：财产估值，财务状态标签</p>
-<p>7、工作与职业信息模块：公司，职位，职级，资历</p>
-<p>8、其他附加信息模块：婚姻状态，学历，校园，课程</p>
-<p>9、家庭关系模块：关系类型，成员基本信息</p>
-<h3 id="调研范围"><a href="#调研范围" class="headerlink" title="调研范围"></a>调研范围</h3><p>希望投放美国，故调研美国主流网站的相关数据，脸书和推特。</p>
-<p>facebook：<a target="_blank" rel="noopener" href="https://www.facebook.com/">https://www.facebook.com/</a></p>
-<p>twitter：<a target="_blank" rel="noopener" href="https://x.com/home">https://x.com/home</a></p>
-<h3 id="方案考虑"><a href="#方案考虑" class="headerlink" title="方案考虑"></a>方案考虑</h3><p>三种解决方案：</p>
-<p>1、调用两大网站的开放接口，官方api</p>
-<p>2、编写爬虫爬取</p>
-<p>3、调用三方库爬取</p>
-<h5 id="优缺点对比"><a href="#优缺点对比" class="headerlink" title="优缺点对比"></a>优缺点对比</h5><table>
-<thead>
-<tr>
-<th align="center">方案</th>
-<th align="center">优点</th>
-<th align="center">缺点</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">官方api</td>
-<td align="center">数据合法、稳定、功能强大</td>
-<td align="center">需要开发者账号，有权限限制</td>
-</tr>
-<tr>
-<td align="center">网页爬虫</td>
-<td align="center">灵活，可爬取自定义内容</td>
-<td align="center">法律风险，反爬机制复杂</td>
-</tr>
-<tr>
-<td align="center">三方工具</td>
-<td align="center">快速上手，适合简单需求</td>
-<td align="center">可能不稳定，违反规则风险</td>
-</tr>
-</tbody></table>
-<h3 id="信息满足度"><a href="#信息满足度" class="headerlink" title="信息满足度"></a>信息满足度</h3><p>针对上述三种方案总结信息满足度</p>
-<h4 id="官方api"><a href="#官方api" class="headerlink" title="官方api"></a>官方api</h4><p>Facebook：<a target="_blank" rel="noopener" href="https://developers.facebook.com/">https://developers.facebook.com/</a></p>
-<p>Twitter：<a target="_blank" rel="noopener" href="https://developer.x.com/en">https://developer.x.com/en</a></p>
-<h4 id="网页爬虫"><a href="#网页爬虫" class="headerlink" title="网页爬虫"></a>网页爬虫</h4><p>从页面内容上看，只有极少部分信息满足我们的字段要求。</p>
-<p>Facebook：邮件、地址、社交账号信息</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/ymhd-data/image-facebook-user.png" alt="image-facebook-user"></p>
-<p>Twitter</p>
-<p>基本拿不到什么可用信息，最基本的名字都不一定是正确的。可以拿到用户的社交信息</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/ymhd-data/image-twitter-user.png" alt="image-twitter-user"></p>
-<h4 id="三方工具"><a href="#三方工具" class="headerlink" title="三方工具"></a>三方工具</h4><p>待调研，目前没看到可用的三方工具</p>
+          <p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
+<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>1、代码开源，不需要冲头开发，基本拿来可用。</p>
+<p>2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225843904.png"></p>
+<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。</p>
+<h3 id="交互性"><a href="#交互性" class="headerlink" title="交互性"></a>交互性</h3><p>1、通过开放接口和外部交互，如钉钉，微信。降低交互成本，提升交互沟通效率。</p>
+<h3 id="优越性"><a href="#优越性" class="headerlink" title="优越性"></a>优越性</h3><p>1、人工智能的参与，提升员工工作效率，通过员工和人工智能沟通可以提升员工的工作效率，比如程序员可以问个代码怎么写啊类似的，不做缀叙。</p>
+<p>2、部署在内部服务器的化，还可以通过其和内部任务交互，比如日常的一些小任务，可以程序化之后，部署服务器，暴露接口和人工智能交互，我们通过聊天软件通知智能机器人，让他去触发这些任务。</p>
+<p><img src="/../images/ChatGPT-rabbit/image-20240326225800266.png"></p>
+<p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
+<p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
+<h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">深度学习</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-26 20:26:53 / 修改时间：23:25:40" itemprop="dateCreated datePublished" datetime="2024-02-26T20:26:53+08:00">2024-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>​	在大模型大行其道的今天，学习使用大模型已经是我们程序猿不可或缺的一部分。网传的大模型神乎其神，貌似无所不能，那么大模型的底层到底是什么，是怎么一步一步的发展到今天的大模型的呢。其实大模型的底层本质就是深度学习，只不是跟我们了解的深度学习不一样的是大模型的参数比较多，甚至可以说多的可怕。了解完深度学习之后你就知道为什么参数可以作为大模型的一个指标了。</p>
+<p>​	其实深度学习大致可以划分成三步：构建函数模型、计算缺失值、优化。</p>
+<h2 id="案例背景"><a href="#案例背景" class="headerlink" title="案例背景"></a>案例背景</h2><p>​	已知店铺A，11月份每一天的每一天的营业额，我们怎么计算预测12月前3天的营业额。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20241230182713456.png" alt="image-20241230182713456"></p>
+<h2 id="简单模型预测"><a href="#简单模型预测" class="headerlink" title="简单模型预测"></a>简单模型预测</h2><p>​	按照我们上述说的三个步骤，将整个过程划分成三步，构建函数模型，计算缺失值，计算参数。</p>
+<h3 id="构建函数模型"><a href="#构建函数模型" class="headerlink" title="构建函数模型"></a>构建函数模型</h3><p>​	这里我们先构建一个简单的预测模型，其实预测模型就是一个关系函数，就是被预测的结果和前面输入之间的关系函数，在这里就是12月前3天的营业额和11月营业额之间的关系。关系函数我们表示为 y&#x3D;f(x)，在这里我们先构建一个最简单的预测模型，假设后一天的营业额和前一天的营业额之间的关系函数是 y&#x3D;ax+b，y是后一天我们预测的营业额，x是当日的营业额。</p>
+<h3 id="计算缺失值"><a href="#计算缺失值" class="headerlink" title="计算缺失值"></a>计算缺失值</h3><p>​	现在我们知道了营业额之间的预测函数和11月整个月的营业额，这样我们就可以计算出整个11月真是营业额和我们预测函数计算出来的预测营业额之间的差值L。<br>$$<br>L&#x3D;\frac{1}{N} \Sigma(|y- \hat{y}|)<br>$$<br>​	上面的公式，就是11月的预测值和实际值的差值求平均值。如果我们随机选取一个较小的a、b的初始值，就能计算出缺失值L的值，当我们不停的变幻a、b值之后，就会得到不同的L值。不同的a、b值和L可以构建出下图这样一个统计图，其中蓝色区域是L的较小值，红色是交大值。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102085812272.png" alt="image-20250102085812272"></p>
+<h3 id="计算参数"><a href="#计算参数" class="headerlink" title="计算参数"></a>计算参数</h3><p>​	根据公式，我们是能算出缺失值L的，但是由于我们的预测模型是 y&#x3D;ax+b，那么我们的缺失值的结果这也一定包含着这两个参数，换而言之就是这两个参数影响着我们的计算结果缺失值L。实际情况中，我们总是希望误差越小越好，也就是缺失值L越小越好。</p>
+<p>​	在数学中，我们求最小值，一般都和斜率相关，找到L的斜率等于0的值，我们应该就能找到一个合适a、b值。我们将L对a、b求偏导，就能找到L相对小的点。这样也就得出了合适的a、b值，从而得到了一个合适的预测函数y&#x3D;ax+b。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102090855503.png" alt="image-20250102090855503"></p>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>​	上面我们只是选了一个最简单的折线模型去计算预测值，折线模型只是最简单的模型，在本质上就有所不足，不能很好的预测多参数曲线值。如下图，如果我们用折线模型去模拟计算那条红色的折线，就不是很好计算模拟。如果我们多加几个参数，就比较好计算模拟了。</p>
+<p>​	可以使用sigmoid(x)的函数(下图蓝色折线1)，多几个参数模拟出红色折线。蓝色折线0、1、2、3相加就等于红色折线，折线0是一个常数a，折线2是 c<em>sigmoid(x+b)，折线3是d</em>sigmoid(x+e)。从而得出：*</p>
+<p><em>y&#x3D;sigmoid(x) + a + c</em>sigmoid(x+b) + d*sigmoid(x+e)</p>
+<p>$$<br>y&#x3D;b+\sum_iC_i*sigmoid(b_i+w_ix)<br>$$<br>同时我们可以看到，销售额呈周期性变化。我们可以通过一个周期内销售额去计算预测值，公式如下。<br>$$<br>y&#x3D;b+\sum_ic_isigmoid(b_i+\sum_jw_{ij}x_j)<br>$$</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102180023235.png" alt="image-20250102180023235"></p>
+<p>​	我们根据上面的公式可以计算出预测值，上述的公式5得出，如果我们计算出在得知前三个销售额的情况下，预测出的销售额。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112154212786.png" alt="image-20250112154212786"></p>
+<p>​	上面的演示结果可以得出<br>$$<br>y &#x3D; b + \sum_i c_i sigmoid(r_i)<br>$$<br>​	如果我们将 sigmoid(r) 看出一个整体的话，可以简化成<br>$$<br>y &#x3D; b + c^T<em>a<br>$$<br>​	整个公式：<br>$$<br>y&#x3D;b+c^T</em>a &#x3D; b+c^T * \sigma(b+wx)<br>$$<br>​	注意上面的两个b不是同一个值。</p>
+<p>​	整个计算逻辑，如图展示：</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112164453491.png" alt="image-20250112164453491"></p>
+<p>​	上面的计算模型只是模拟计算了一层，我们可以模拟计算多层，深度学习的本质就是让我们模拟计算跟多的层次以达到更好的效果，如果我们模拟计算两层的话，可以将我们第一层计算出来的a，再来一次计算。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112165402027.png" alt="image-20250112165402027">总结</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>​	整个深度学习的过程就是推导出一个合适的计算模型。推导模型的过程可以分为三步：<strong>构建函数模型，计算缺失值，计算参数</strong>。在后面的优化过程中，我们总共优化了三个点：</p>
+<p>1、模型替换，更换成了一个更有弹性的模型</p>
+<p>2、增加模型输入，以上述销售额为例，从前一天的销售额预测后一天的销售额变成前几天的销售额预测后一天</p>
+<p>3、增加训练层数，将一层计算变成多层计算</p>
 
       
     </div>
