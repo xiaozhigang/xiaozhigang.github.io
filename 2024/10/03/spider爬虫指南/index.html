@@ -174,18 +174,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -351,29 +351,6 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 <p>其初始交换机为scrapy，无需配置，代码运行时会自动配置。</p>
 <p>注：每个队列都在每个网站的mqPipeline.py文件中绑定，不建议修改。</p>
 <h4 id="中间件配置修改"><a href="#中间件配置修改" class="headerlink" title="中间件配置修改"></a>中间件配置修改</h4><p>代码中有replace.py文件，运行次文件可统一修改当前文件夹下的setting.py文件中的中间件配置。replcae.py中的old_str字段为当前中间件配置，new_str字段为需要修改后的中间件配置，代码运行将setting文件中的old_str配置修改成new_str配置。</p>
-<p>wget -O - <a target="_blank" rel="noopener" href="https://min.io/docs/minio/linux/examples/ReplicationAdminPolicy.json">https://min.io/docs/minio/linux/examples/ReplicationAdminPolicy.json</a> | <br>mc admin policy create minio-main ReplicationAdminPolicy &#x2F;dev&#x2F;stdin<br>mc admin user add minio-main ReplicationAdmin LongRandomSecretKey<br>mc admin policy attach minio-main ReplicationAdminPolicy –user ReplicationAdmin</p>
-<p>mc admin policy attach minio-main ReplicationAdminPolicy –user ReplicationAdmin</p>
-<p>mc alias set minio-slave <a target="_blank" rel="noopener" href="http://43.154.195.176:9000/">http://43.154.195.176:9000</a> minioadmin minioadmin</p>
-<p>wget -O - <a target="_blank" rel="noopener" href="https://min.io/docs/minio/linux/examples/ReplicationRemoteUserPolicy.json">https://min.io/docs/minio/linux/examples/ReplicationRemoteUserPolicy.json</a><br>mc admin policy create minio-slave ReplicationRemoteUserPolicy &#x2F;dev&#x2F;stdin<br>mc admin user add minio-slave ReplicationRemoteUser LongRandomSecretKey<br>mc admin policy attach minio-slave ReplicationRemoteUserPolicy –user ReplicationRemoteUser</p>
-<p>mc replicate add minio-source&#x2F;dw-bucket –remote-bucket <a target="_blank" rel="noopener" href="http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket">http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket</a>  –replicate “delete,delete-marker,existing-objects”</p>
-<p>mc replicate add minio-source&#x2F;dw-bucket<br>–remote-bucket <a target="_blank" rel="noopener" href="http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket">http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket</a><br>   –replicate “delete,delete-marker,existing-objects”</p>
-<p>mc replicate add minio-source&#x2F;dw-bucket  <br>–remote-bucket ‘<a target="_blank" rel="noopener" href="http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket">http://ReplicationRemoteUser:LongRandomSecretKey@43.154.195.176/:9000/dw-bucket</a>‘ <br>   –replicate “delete,delete-marker,existing-objects”</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mc replicate add                                                     \</span><br><span class="line">   --remote-bucket https://user:secret@minio.mysite.tld:9001/bucket  \</span><br><span class="line">   --replicate &quot;delete,delete-marker,existing-objects&quot;               \</span><br><span class="line">   myminio/mydata</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>mc replicate add minio-source&#x2F;sourcebucket –remote-bucket &39;    –replicate &34;</p>
-<p>mc config host add minio_master <a target="_blank" rel="noopener" href="http://http//43.154.80.35:9000">http://http://43.154.80.35:9000</a> minio-username minio-password<br>mc config host add minio_slave <a target="_blank" rel="noopener" href="http://43.154.195.176:9000/">http://43.154.195.176:9000</a> minio-username minio-password</p>
-<p><strong>Remote service connection error (Remote service endpoint offline, target bucket: dw-bucket or remote service credentials: LongRandomSecretKey invalid Get “<a target="_blank" rel="noopener" href="https://43.154.195.176:9000/dw-bucket/?location=">https://43.154.195.176:9000/dw-bucket/?location=</a>“: http: server gave HTTP response to HTTPS client)</strong></p>
-<p>mc config host add minio_master <a target="_blank" rel="noopener" href="http://http//43.154.80.35:9000">http://http://43.154.80.35:9000</a> minioadmin minioadmin<br>mc config host add minio_slave  <a target="_blank" rel="noopener" href="http://43.154.195.176:9000/">http://43.154.195.176:9000</a> minioadmin minioadmin</p>
-<p>iIwWDr1XrjnpPps194v9</p>
-<p>n4pxy5MOtUV3YagdLdEDnuM6owgGkGBBXbF55W6K</p>
-<p>DtTT4FJK4FDeyhcBmJeq</p>
-<p>dHyP04tChkumOqg0e2EU24hufftIPYWgrmflD699</p>
-<p>Igad7aBC1fKgDv54RyK1</p>
-<p>fvo7z0hO19v6CAwhcUZShI6TiZp7Ko7HlfIwJvoH</p>
 
     </div>
 
@@ -417,7 +394,7 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 
   <div class="copyright">
     &copy; 2022 – 
-    <span itemprop="copyrightYear">2024</span>
+    <span itemprop="copyrightYear">2025</span>
     <span class="with-love">
       <i class="fa fa-heart"></i>
     </span>
