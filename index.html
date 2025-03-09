@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">35</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,6 +178,132 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/02/18/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-25-02-17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/02/18/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-25-02-17/" class="post-title-link" itemprop="url">面试复盘-25-02-17</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-02-18 18:39:52 / 修改时间：21:09:36" itemprop="dateCreated datePublished" datetime="2025-02-18T18:39:52+08:00">2025-02-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>25年第一次面试，电话面试，这次面试没有准备好，还没来得及复习。</p>
+<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><p>19年毕业，5年多工作经验，目前正在优美互动这边工作。</p>
+<p>定位：高开，之前带领三四个人，目前因为团队规模，各自一摊。</p>
+<p>目前团队业务是做一些小应用投放海外市场，赚取一些收益。进入团队快一年的时间，参与了文生图和人名查询等项目。</p>
+<p>之前华为团队也工作了三年左右的时间，业务是以洞察、评估、规划和收益四个部分向运营商提供数字化机会点发现。自己也参与了全球数据沙盘项目，到路网算法开始参与项目，然后开始OTN to 楼宇参与业务拓展，到最后的模型收编和原子能力编排重构项目。</p>
+<p>业务爱好：打篮球，跑步，看看书，有时间也会写写博客。</p>
+<h3 id="项目经验"><a href="#项目经验" class="headerlink" title="项目经验"></a>项目经验</h3><h4 id="知识库"><a href="#知识库" class="headerlink" title="知识库"></a>知识库</h4><h4 id="文生图"><a href="#文生图" class="headerlink" title="文生图"></a>文生图</h4><h4 id="原子能力"><a href="#原子能力" class="headerlink" title="原子能力"></a>原子能力</h4><h3 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h3><h4 id="什么情况下redis的查询会很慢"><a href="#什么情况下redis的查询会很慢" class="headerlink" title="什么情况下redis的查询会很慢"></a>什么情况下redis的查询会很慢</h4><p>两种情况，传输的时候很慢，redis处理的时候很慢</p>
+<p>1、传输的时候很慢：网速不好，网络服务器部署太远。</p>
+<p>2、redis处理很慢：</p>
+<p>​	1、存在bigkey，hotkey，占用了带宽和处理速度</p>
+<p>​	2、存在复杂查询，复杂度在O(n)</p>
+<p>​	</p>
+<h4 id="redis中的大key怎么删除"><a href="#redis中的大key怎么删除" class="headerlink" title="redis中的大key怎么删除"></a>redis中的大key怎么删除</h4><p>1、<strong>分隔</strong>：将一个bigkey分隔成多个小key，例如将一个含有上万字段的hash按照一定的策略拆分成多个hash</p>
+<p>2、<strong>手动清理</strong>：redis4.0+可以使用 UNLINK 命令来异步删除一个或者多个指定的key，redis4.0以下可以考虑使用SCAN命令结合DEL命令来份批次删除。</p>
+<p>3、<strong>采用合适的数据结构</strong>：例如二进制数据不使用String保存，使用HyperLogLog统计页面UV</p>
+<p>4、<strong>开启lazy-free（惰性删除&#x2F;延迟释放）</strong>：lazy-free特性式redis4.0开始引进的，指的是让redis采用异步的方式延迟释放key使用的内存，将该操作交给单独的子线程处理，避免阻塞主线程。</p>
+<h3 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h3><h4 id="怎么优化sql"><a href="#怎么优化sql" class="headerlink" title="怎么优化sql"></a>怎么优化sql</h4><p>万变不离其宗，所有查询的优化都是基于底层存储结构。</p>
+<p>​	1、innerbd是以B+树的形式保存的，根据索引和id构建了B+树，所以我们在查询的时候要注意使用索引，这样可以更快的找到数据。但是在使用的时候要注意最左匹配原则和隐式计算。</p>
+<p>​	2、索引B+数据的叶子结点保存的只是数据的id并不是数据的所有值，所以即使根据索引找到了数据的叶子结点，如果叶子结点的字段不够查询需要，还要根据id去找具体数据，这个过程叫做回表，但是如果叶子结点包含的字段值够我们查询需要，就不需要去查询具体数据，减少了回表这个过程。</p>
+<p>​	3、查看执行计划，根据执行计划优化sql。</p>
+<h4 id="执行计划怎么查看"><a href="#执行计划怎么查看" class="headerlink" title="执行计划怎么查看"></a>执行计划怎么查看</h4><p><img src="/Users/xiaozhigang/blog/source/images/back-02-17/image-20250309103934302.png" alt="image-20250309103934302"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/tannins_/article/details/140007565">https://blog.csdn.net/tannins_/article/details/140007565</a></p>
+<p>比较重要的字段：</p>
+<p>select_type：查询类型 simple 简单语句， primary 复杂查询， union 联合查询 等等</p>
+<p>table：对应的表</p>
+<p>type：索引类型，all &lt; index &lt; range &lt; eq_ref &lt; const &lt; system </p>
+<p>possible_key：分析时可能用到的索引</p>
+<p>key：实际使用的索引</p>
+<p>key_len：使用到索引的长度</p>
+<p>ref：哪些列或者常量被用于查找索引列上的值</p>
+<p>row：估算查找到满足条件的记录所需要的读取的行数</p>
+<p>extra：执行计划的其他信息</p>
+<h3 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h3><h4 id="线程池的参数"><a href="#线程池的参数" class="headerlink" title="线程池的参数"></a>线程池的参数</h4><p>两个线程数：核心线程数和最大线程数</p>
+<p>两个停留时间相关：停留时间值和时间单位</p>
+<p>三个过程相关：产生的工厂方法，排队的队列，拒绝的策略</p>
+<h4 id="线程池参数中的排序队列的注意点"><a href="#线程池参数中的排序队列的注意点" class="headerlink" title="线程池参数中的排序队列的注意点"></a>线程池参数中的排序队列的注意点</h4><p>队列的选择</p>
+<p>​	一般分为：直接提交队列，有界任务队列，无界任务队列，优先任务队列，延迟队列。</p>
+<p>​	SynchronousQueue：直接提交队列，此队列不存储任何元素，直接将每个插入操作必须等待一个对应的移除操作，反之依然。通常用于创建无界线程池，最大线程数实际取决于系统或JVM的限制</p>
+<p>​	ArrayBlockingQueue：有界队列，此队列是一个基于数据结构的有界阻塞队列，新元素插入队列时，如果队列已满，则插入线程会被阻塞直到队列中有空间可用。使用有界队列，可以更好的控制资源的使用防止资源耗尽。</p>
+<p>​	LinkedBlockingQueue：此队列按照先进先出的排序规则对元素进行排序，且队列的容量Integer.MAX_VALUE，使用无界队列时，线程池的大小将只受到corePoolSize的约束，因为任务可以在队列中无限期的执行等待，然而，这可能导致资源耗尽。</p>
+<p>​	PriorityBlockingQueue：优先队列，此队列根据元素的优先级进行排序，优先级高的元素先被移除，对于按优先级执行任务的应用场景非常有用。</p>
+<p>​	DelayQueue：延迟队列，此队列中的元素只有当起指定延迟时间到了才能够从队列中获取到该元素</p>
+<p>注意控制队列的长度，避免造成内存溢出</p>
+<h4 id="线程池中公平锁的线程是怎么唤醒的"><a href="#线程池中公平锁的线程是怎么唤醒的" class="headerlink" title="线程池中公平锁的线程是怎么唤醒的"></a>线程池中公平锁的线程是怎么唤醒的</h4><p>理解有点问题，公平锁是指一个锁，而线程池是一个池，线程池中的排序队列是可以有多种队列，但是队列的本质还是从头部获取第一个元素，所以线程池还是总是从队列中获取第一个元素，只是可能有排序方式的不一样，导致不一定是先入先出。</p>
+<h3 id="jvm"><a href="#jvm" class="headerlink" title="jvm"></a>jvm</h3><h4 id="cpu飙升怎么排查"><a href="#cpu飙升怎么排查" class="headerlink" title="cpu飙升怎么排查"></a>cpu飙升怎么排查</h4><p>1、使用top命令查看系统cpu占用情况，找出占用最高的进程pid</p>
+<p>2、使用命令查找进程内占用cpu最高的线程id：ps H -eo pid,tid,%cpu | grep 最高的进程pid</p>
+<p>3、根绝线程id查找堆栈信息，注意要将线程id转化成16进制</p>
+<p>4、在根据堆栈信息定位问题</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1404,111 +1530,6 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 <p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
 <p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
 <h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/02/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="post-title-link" itemprop="url">深度学习</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2024-02-26 20:26:53 / 修改时间：23:25:40" itemprop="dateCreated datePublished" datetime="2024-02-26T20:26:53+08:00">2024-02-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>​	在大模型大行其道的今天，学习使用大模型已经是我们程序猿不可或缺的一部分。网传的大模型神乎其神，貌似无所不能，那么大模型的底层到底是什么，是怎么一步一步的发展到今天的大模型的呢。其实大模型的底层本质就是深度学习，只不是跟我们了解的深度学习不一样的是大模型的参数比较多，甚至可以说多的可怕。了解完深度学习之后你就知道为什么参数可以作为大模型的一个指标了。</p>
-<p>​	其实深度学习大致可以划分成三步：构建函数模型、计算缺失值、优化。</p>
-<h2 id="案例背景"><a href="#案例背景" class="headerlink" title="案例背景"></a>案例背景</h2><p>​	已知店铺A，11月份每一天的每一天的营业额，我们怎么计算预测12月前3天的营业额。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20241230182713456.png" alt="image-20241230182713456"></p>
-<h2 id="简单模型预测"><a href="#简单模型预测" class="headerlink" title="简单模型预测"></a>简单模型预测</h2><p>​	按照我们上述说的三个步骤，将整个过程划分成三步，构建函数模型，计算缺失值，计算参数。</p>
-<h3 id="构建函数模型"><a href="#构建函数模型" class="headerlink" title="构建函数模型"></a>构建函数模型</h3><p>​	这里我们先构建一个简单的预测模型，其实预测模型就是一个关系函数，就是被预测的结果和前面输入之间的关系函数，在这里就是12月前3天的营业额和11月营业额之间的关系。关系函数我们表示为 y&#x3D;f(x)，在这里我们先构建一个最简单的预测模型，假设后一天的营业额和前一天的营业额之间的关系函数是 y&#x3D;ax+b，y是后一天我们预测的营业额，x是当日的营业额。</p>
-<h3 id="计算缺失值"><a href="#计算缺失值" class="headerlink" title="计算缺失值"></a>计算缺失值</h3><p>​	现在我们知道了营业额之间的预测函数和11月整个月的营业额，这样我们就可以计算出整个11月真是营业额和我们预测函数计算出来的预测营业额之间的差值L。<br>$$<br>L&#x3D;\frac{1}{N} \Sigma(|y- \hat{y}|)<br>$$<br>​	上面的公式，就是11月的预测值和实际值的差值求平均值。如果我们随机选取一个较小的a、b的初始值，就能计算出缺失值L的值，当我们不停的变幻a、b值之后，就会得到不同的L值。不同的a、b值和L可以构建出下图这样一个统计图，其中蓝色区域是L的较小值，红色是交大值。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102085812272.png" alt="image-20250102085812272"></p>
-<h3 id="计算参数"><a href="#计算参数" class="headerlink" title="计算参数"></a>计算参数</h3><p>​	根据公式，我们是能算出缺失值L的，但是由于我们的预测模型是 y&#x3D;ax+b，那么我们的缺失值的结果这也一定包含着这两个参数，换而言之就是这两个参数影响着我们的计算结果缺失值L。实际情况中，我们总是希望误差越小越好，也就是缺失值L越小越好。</p>
-<p>​	在数学中，我们求最小值，一般都和斜率相关，找到L的斜率等于0的值，我们应该就能找到一个合适a、b值。我们将L对a、b求偏导，就能找到L相对小的点。这样也就得出了合适的a、b值，从而得到了一个合适的预测函数y&#x3D;ax+b。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102090855503.png" alt="image-20250102090855503"></p>
-<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>​	上面我们只是选了一个最简单的折线模型去计算预测值，折线模型只是最简单的模型，在本质上就有所不足，不能很好的预测多参数曲线值。如下图，如果我们用折线模型去模拟计算那条红色的折线，就不是很好计算模拟。如果我们多加几个参数，就比较好计算模拟了。</p>
-<p>​	可以使用sigmoid(x)的函数(下图蓝色折线1)，多几个参数模拟出红色折线。蓝色折线0、1、2、3相加就等于红色折线，折线0是一个常数a，折线2是 c<em>sigmoid(x+b)，折线3是d</em>sigmoid(x+e)。从而得出：*</p>
-<p><em>y&#x3D;sigmoid(x) + a + c</em>sigmoid(x+b) + d*sigmoid(x+e)</p>
-<p>$$<br>y&#x3D;b+\sum_iC_i*sigmoid(b_i+w_ix)<br>$$<br>同时我们可以看到，销售额呈周期性变化。我们可以通过一个周期内销售额去计算预测值，公式如下。<br>$$<br>y&#x3D;b+\sum_ic_isigmoid(b_i+\sum_jw_{ij}x_j)<br>$$</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250102180023235.png" alt="image-20250102180023235"></p>
-<p>​	我们根据上面的公式可以计算出预测值，上述的公式5得出，如果我们计算出在得知前三个销售额的情况下，预测出的销售额。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112154212786.png" alt="image-20250112154212786"></p>
-<p>​	上面的演示结果可以得出<br>$$<br>y &#x3D; b + \sum_i c_i sigmoid(r_i)<br>$$<br>​	如果我们将 sigmoid(r) 看出一个整体的话，可以简化成<br>$$<br>y &#x3D; b + c^T<em>a<br>$$<br>​	整个公式：<br>$$<br>y&#x3D;b+c^T</em>a &#x3D; b+c^T * \sigma(b+wx)<br>$$<br>​	注意上面的两个b不是同一个值。</p>
-<p>​	整个计算逻辑，如图展示：</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112164453491.png" alt="image-20250112164453491"></p>
-<p>​	上面的计算模型只是模拟计算了一层，我们可以模拟计算多层，深度学习的本质就是让我们模拟计算跟多的层次以达到更好的效果，如果我们模拟计算两层的话，可以将我们第一层计算出来的a，再来一次计算。</p>
-<p><img src="/Users/xiaozhigang/blog/source/images/deep-learning/image-20250112165402027.png" alt="image-20250112165402027">总结</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>​	整个深度学习的过程就是推导出一个合适的计算模型。推导模型的过程可以分为三步：<strong>构建函数模型，计算缺失值，计算参数</strong>。在后面的优化过程中，我们总共优化了三个点：</p>
-<p>1、模型替换，更换成了一个更有弹性的模型</p>
-<p>2、增加模型输入，以上述销售额为例，从前一天的销售额预测后一天的销售额变成前几天的销售额预测后一天</p>
-<p>3、增加训练层数，将一层计算变成多层计算</p>
 
       
     </div>
