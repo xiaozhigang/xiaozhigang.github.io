@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -287,6 +287,114 @@
 <p>2、使用命令查找进程内占用cpu最高的线程id：ps H -eo pid,tid,%cpu | grep 最高的进程pid</p>
 <p>3、根绝线程id查找堆栈信息，注意要将线程id转化成16进制</p>
 <p>4、在根据堆栈信息定位问题</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/11/18/dify%E8%BF%9E%E6%8E%A5deepseek/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/11/18/dify%E8%BF%9E%E6%8E%A5deepseek/" class="post-title-link" itemprop="url">dify通过ollama连接deepseek</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-11-18 22:28:27" itemprop="dateCreated datePublished" datetime="2024-11-18T22:28:27+08:00">2024-11-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>首先我们得明白一下概念，dify、ollama、deepseek都是什么？</p>
+<p>dify：一个平台，一个简单易用开源的LLMOps(Language Model Operations)平台，我们可以在上面可视化的开发编排AI应用。</p>
+<p>ollama：一个开源的大模型服务工具，帮助用户快速在本地运行大模型。</p>
+<p>deepseek：国产的大模型。</p>
+<p>所以我们要在dify编排大模型应用，就需要有一个大模型，而ollama刚好可以帮我部署运行大模型。所以ollama在这里更像是dify平台和deepseek大模型之间的连接工具。</p>
+<h3 id="ollama安装"><a href="#ollama安装" class="headerlink" title="ollama安装"></a>ollama安装</h3><p>可以在ollama官网直接下载安装<a target="_blank" rel="noopener" href="https://ollama.com/%E3%80%82">https://ollama.com/。</a></p>
+<p>linux安装命令：curl -fsSL <a target="_blank" rel="noopener" href="https://ollama.com/install.sh">https://ollama.com/install.sh</a> | sh</p>
+<p>安装之后可以通过 ollama -v 命令查看是否安装好。</p>
+<p><img src="/../images/dify-ollama-deepseek/image-ollama-install.png" alt="image-20250320165712115"></p>
+<p>ollama的默认端口是11434，安装完可以通过浏览器打开ip和port界面，可以看到界面提示 ollama is running</p>
+<p><img src="/../images/dify-ollama-deepseek/image-ollama-port.png" alt="image-20250320172632758"></p>
+<p>有默认端口，就可以改端口，可以通过修改启动文件，从而制定端口</p>
+<p>vim &#x2F;etc&#x2F;systemd&#x2F;system&#x2F;ollama.service</p>
+<p>可以看到这里我指定了9876端口</p>
+<p><img src="/../images/dify-ollama-deepseek/image-ollama-change-port.png" alt="image-20250320172913316"></p>
+<h3 id="deepseek安装"><a href="#deepseek安装" class="headerlink" title="deepseek安装"></a>deepseek安装</h3><p>直接运行ollama run deepseek-r1:7b命令按转，当然也可以安装其他版本或者其他厂商的大模型。</p>
+<p><img src="/../images/dify-ollama-deepseek/image-deepseek-inastll.png" alt="image-20250320170141452"></p>
+<h3 id="dify安装"><a href="#dify安装" class="headerlink" title="dify安装"></a>dify安装</h3><p>这里我是通过docker安装的，docker的安装过程就详细展示，可自行搜索教程安装docker。</p>
+<p>dify的安装命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/langgenius/dify.git</span><br><span class="line">cd dify/docker</span><br><span class="line">cp .env.example .env</span><br><span class="line">docker compose up -d </span><br></pre></td></tr></table></figure>
+
+<p>其中dify默认的端口是80，我们要想修改端口的话，可以在 .env 环境配置中修改端口号。可以看到，这里我改成了8080。改完重启dify</p>
+<p><img src="/../images/dify-ollama-deepseek/image-dify-port.png" alt="image-20250320170830107"></p>
+<h3 id="dify连接deepseek"><a href="#dify连接deepseek" class="headerlink" title="dify连接deepseek"></a>dify连接deepseek</h3><p>通过浏览器打开 <a href="http://ip:port">http://ip:port</a> 界面  ip为自己主机ip，port为上面自己设置的port。在一系列账号密码注册之后到主页面。在主页面的个人账号下设置里配置大模型。<img src="/../images/dify-ollama-deepseek/image-dify-setting.png" alt="image-20250320171734695"></p>
+<p>在setting里面，找到模型厂商（Model Provider），在下面的 to be configured 的配置中找到ollama的配置，安装好插件配置，成功安装后如图。</p>
+<p><img src="/../images/dify-ollama-deepseek/image-plug-install.png" alt="image-20250320172145700"></p>
+<p>在右下角中的Add model中添加模型。</p>
+<p><img src="/../images/dify-ollama-deepseek/image-dify-add-model.png" alt="image-20250320173110641"></p>
+<p>model name：一定要注意，写的是具体部署的模型型号，我们部署的deepseek-r1:7b，那这里也要填写deepseek-r1:7b，开始我以为可以随意命名，结果搞了半天都没连接上。</p>
+<p>base url：填写上面ollama可以在浏览器打开的地址。</p>
+<p>连接完就可以使用了，后面再分享怎么构建知识库怎么使用。</p>
 
       
     </div>
@@ -1440,96 +1548,6 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 <p>4、key为null会怎样。</p>
 <p>随机选取一个分区缓存发送，过了分区的缓存时间后在随机选取一个分区缓存发送。</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709">https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/" class="post-title-link" itemprop="url">添加聊天办公机器人</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-      
-
-      <time title="创建时间：2024-03-26 22:05:23 / 修改时间：23:18:50" itemprop="dateCreated datePublished" datetime="2024-03-26T22:05:23+08:00">2024-03-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>现在chatgpt这么火，我们也可以通过人工智能为我们的工作提供便利。</p>
-<h3 id="可行性"><a href="#可行性" class="headerlink" title="可行性"></a>可行性</h3><p>1、代码开源，不需要冲头开发，基本拿来可用。</p>
-<p>2、单业务领域小数据量训练的可行性，单个公司一般聚焦于一个领域业务，多领域公司可以下分到各部门。单业务领域的训练数据就会小很多，基本可以内部清洗提供。</p>
-<p><img src="/../images/ChatGPT-rabbit/image-20240326225843904.png"></p>
-<h3 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h3><p>1、内部服务器部署，机器人服务部署于内部服务器，保证数据安全性。</p>
-<h3 id="交互性"><a href="#交互性" class="headerlink" title="交互性"></a>交互性</h3><p>1、通过开放接口和外部交互，如钉钉，微信。降低交互成本，提升交互沟通效率。</p>
-<h3 id="优越性"><a href="#优越性" class="headerlink" title="优越性"></a>优越性</h3><p>1、人工智能的参与，提升员工工作效率，通过员工和人工智能沟通可以提升员工的工作效率，比如程序员可以问个代码怎么写啊类似的，不做缀叙。</p>
-<p>2、部署在内部服务器的化，还可以通过其和内部任务交互，比如日常的一些小任务，可以程序化之后，部署服务器，暴露接口和人工智能交互，我们通过聊天软件通知智能机器人，让他去触发这些任务。</p>
-<p><img src="/../images/ChatGPT-rabbit/image-20240326225800266.png"></p>
-<p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
-<p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
-<h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
 
       
     </div>

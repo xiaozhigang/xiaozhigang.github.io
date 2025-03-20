@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-count">37</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,6 +178,133 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/05/25/DDD%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="url">DDD分层架构规范</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-05-25 20:09:23" itemprop="dateCreated datePublished" datetime="2023-05-25T20:09:23+08:00">2023-05-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="分层架构图"><a href="#分层架构图" class="headerlink" title="分层架构图"></a>分层架构图</h2><p><img src="/../images/DDD/DDD.png" alt="DDD"></p>
+<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><ol>
+<li><p>Controller层：接口层，负责对前端展示的路由和适配；如果需要的话，消费事件和发送消息通知等也可以放在这里；</p>
+</li>
+<li><p>Application层：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理</p>
+</li>
+<li><p>Domain层：领域是应用的核心，主要是封装了核心业务逻辑，通过领域服务（Domain Service）、领域对象（Entity）的方法对App层提供业务实体和业务逻辑计算；</p>
+</li>
+<li><p>Infrastructure层：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等；</p>
+</li>
+</ol>
+<h2 id="分层说明"><a href="#分层说明" class="headerlink" title="分层说明"></a>分层说明</h2><ul>
+<li>APP层采用CQE模型，查询和命令分离</li>
+<li>AppService调用实体和IRepo进行编排实现简单业务，通过调用DomainService实现复杂业务场景</li>
+<li>AppService和DomainService均为无状态服务</li>
+<li>App只允许调用仓储以及实体自带方法，不允许写任何方法，避免出现AppService过大的情况</li>
+<li>DomainService封装所有跨实体的业务逻辑</li>
+<li>为避免出现AppService之间或者Domainservice之间相互调用，抽取出两者公共部分为一个Helper</li>
+</ul>
+<h2 id="聚合根和实体"><a href="#聚合根和实体" class="headerlink" title="聚合根和实体"></a>聚合根和实体</h2><ul>
+<li>按聚合根分包，和包名一样的实体为聚合根</li>
+<li>可以识别的聚合根就写成聚合根，否则做成实体</li>
+<li>聚合根的一致性由自己保障</li>
+<li>跨实体的操作放到领域服务中</li>
+</ul>
+<blockquote>
+<p>领域对象实体为充血模型，为一般业务对象，具备业务属性和业务行为</p>
+</blockquote>
+<ul>
+<li>实体都有自己的唯一标识通常</li>
+<li>实体可以不和表一一对应，通常操作单个表，可以操作多表</li>
+</ul>
+<h2 id="领域服务"><a href="#领域服务" class="headerlink" title="领域服务"></a>领域服务</h2><blockquote>
+<p>某个操作过程或转换过程不是实体的职责时，我们便应该将该操作放在一个单独的接口中，即领域服务。</p>
+</blockquote>
+<ul>
+<li>用于实现某个领域的任务，不适合放在实体对象上时，就放在领域服务上</li>
+<li>放在实体的静态方法上有悖DDD</li>
+<li>避免在实体中调用资源库，数据通过AppService调用Repo传入</li>
+<li>如果有复杂逻辑，其中间的状态依赖前面步骤结果查询数据库作为后续逻辑的输入，通过把Repo传入到Domainservice的方式达到无状态效果</li>
+</ul>
+<h2 id="传输对象"><a href="#传输对象" class="headerlink" title="传输对象"></a>传输对象</h2><ul>
+<li>DTO：接受Controller层发来的请求，返回结果</li>
+<li>Entity ：将DTO转换为要操作的领域层对象</li>
+</ul>
+<h2 id="无状态"><a href="#无状态" class="headerlink" title="无状态"></a>无状态</h2><ul>
+<li>一次请求所需的全部信息，要么都包含在这个请求里，要么可以从外部获取到（比如说数据库），服务本身不存储任何信息</li>
+<li>有状态服务（stateful service）则相反，它会在自身保存一些数据，先后的请求是有关联的</li>
+<li>无状态服务的优势在于可以很方便地水平伸缩</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1134,133 +1261,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/" class="post-title-link" itemprop="url">MySQL两段式提交</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-06-21 22:04:58" itemprop="dateCreated datePublished" datetime="2022-06-21T22:04:58+08:00">2022-06-21</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>两段式提交是MySQL数据持久化的保证。</p>
-<h2 id="两种日志"><a href="#两种日志" class="headerlink" title="两种日志"></a>两种日志</h2><h3 id="binlog和redolog"><a href="#binlog和redolog" class="headerlink" title="binlog和redolog"></a>binlog和redolog</h3><p>binlog记录了数据库表结构和表数据变更，主要有两个作用：复制和恢复数据</p>
-<p>redo log 是 Innodb 引擎独有的日志模块，它只记录有关 Innodb 引擎的事务日志，记录内容为 对数据页的物理操作</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>binlog</th>
-<th>redolog</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>适用对象不同</td>
-<td>mysql server 层</td>
-<td>Innodb 存储引擎层</td>
-</tr>
-<tr>
-<td>写入方式不同适用对象不同</td>
-<td>追加写，一个文件满了写新文件mysql server 层</td>
-<td>循环写固定文件Innodb 存储引擎层</td>
-</tr>
-<tr>
-<td>写入方式不同</td>
-<td>逻辑日志，一个事务具体操作内容</td>
-<td>物理日志，页的修改情况</td>
-</tr>
-<tr>
-<td>写入磁盘时间不同</td>
-<td>提交事务前一次写入</td>
-<td>在事务进行中有后台线程不断同步</td>
-</tr>
-<tr>
-<td>用途不同</td>
-<td>主从复制、数据备份</td>
-<td>数据恢复</td>
-</tr>
-</tbody></table>
-<h2 id="两段式提交"><a href="#两段式提交" class="headerlink" title="两段式提交"></a>两段式提交</h2><p>两种日志虽然都保证持久化，但是侧重点不同。</p>
-<p>1、redo log（重做日志）让InnoDB存储引擎拥有了崩溃恢复能力。</p>
-<p>2、binlog（归档日志）保证了MySQL集群架构的数据一致性，主从节点的同步都是通过binlog保证的。</p>
-<p>如果<strong>单独提交</strong><br>先写 redo log 后写 binlog，也就是事务可能还没有提交，系统崩溃了，虽然可以通过redo log恢复，但是binlog还没有这条数据，就会造成主从不一致 先写 binlog 后写 redo log，这个过程说明事务已经提交了，系统崩溃了，虽然binlog里面有数据，但是redo log里面没有，也会发生主从不一致，并且redo log因为不全，即使重新恢复的时候也不是最新的数据</p>
-<h3 id="两段式提交-1"><a href="#两段式提交-1" class="headerlink" title="两段式提交"></a>两段式提交</h3><p>就是将redolog的提交拆为两各阶段，prepare阶段和commit阶段，在中间插入binlog提交。</p>
-<p><img src="/../images/MySQL-submit/image-20240326231349218.png" alt="image-20240326231349218"></p>
-<h3 id="发生异常"><a href="#发生异常" class="headerlink" title="发生异常"></a>发生异常</h3><p>1、在prepare阶段写入redolog的时候发生异常，那不管redolog有没有写完，都会回滚，因为binlog没有写入，会导致日志不一样，主从数据不一致。</p>
-<p>2、在commit阶段写入binlog的时候发生异常</p>
-<pre><code>    如果在写完之前，那也会回滚，毕竟没写完和没写一样，会导致日志不一样，主从数据不一样。
-
-    如果在写完之后，那就不会回滚了，两种日志都写完了，能保证数据一致了。
-</code></pre>
-<p>3、在commit阶段提交redolog的时候发生异常，前面写完binlog就不会回滚了，那这里也不会回滚，能保证数据一致性。</p>
-
       
     </div>
 
