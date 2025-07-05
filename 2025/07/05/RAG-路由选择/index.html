@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述​	RAG的主流程其实比较简单，流程前面已经说过了，简单看一下下面的图了解一下就行。  ​	从上面的图，可以看到，RAG在回答用户问题的时候，最少做了两次交互：1、与向量数据库的交互，2、与大模型的交互。如果我们对向量数据库和大模型有了细分，比如物理相关文档都放在物理向量数据库，物理大模型也是全部都用物理数据训练的，如果用户提问的是物理问题，那与物理向量数据库和物理大模型交互是不是能得到更好的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG-丰富提示词">
+<meta property="og:url" content="http://example.com/2025/07/05/RAG-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="简述​	RAG的主流程其实比较简单，流程前面已经说过了，简单看一下下面的图了解一下就行。  ​	从上面的图，可以看到，RAG在回答用户问题的时候，最少做了两次交互：1、与向量数据库的交互，2、与大模型的交互。如果我们对向量数据库和大模型有了细分，比如物理相关文档都放在物理向量数据库，物理大模型也是全部都用物理数据训练的，如果用户提问的是物理问题，那与物理向量数据库和物理大模型交互是不是能得到更好的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/rag-ext/rag_base_uml.png">
+<meta property="article:published_time" content="2025-07-05T07:28:52.000Z">
+<meta property="article:modified_time" content="2025-07-05T07:28:52.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/rag-ext/rag_base_uml.png">
+
+
+<link rel="canonical" href="http://example.com/2025/07/05/RAG-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/07/05/RAG-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9/","path":"2025/07/05/RAG-路由选择/","title":"RAG-丰富提示词"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RAG-丰富提示词 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9"><span class="nav-number">2.</span> <span class="nav-text">路由选择</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B7%AF%E7%94%B1"><span class="nav-number">2.1.</span> <span class="nav-text">向量数据库路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D%E6%A8%A1%E7%89%88%E8%B7%AF%E7%94%B1"><span class="nav-number">2.2.</span> <span class="nav-text">提示词模版路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E8%B7%AF%E7%94%B1"><span class="nav-number">2.3.</span> <span class="nav-text">大模型路由</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9%E6%96%B9%E6%B3%95"><span class="nav-number">2.4.</span> <span class="nav-text">其他路由选择方法</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/05/RAG-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RAG-丰富提示词 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RAG-丰富提示词
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-05 15:28:52" itemprop="dateCreated datePublished" datetime="2025-07-05T15:28:52+08:00">2025-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/rag/" itemprop="url" rel="index"><span itemprop="name">rag</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>​	RAG的主流程其实比较简单，流程前面已经说过了，简单看一下下面的图了解一下就行。</p>
+<p><img src="/../images/rag-ext/rag_base_uml.png" alt="image-20250621160518166"></p>
+<p>​	从上面的图，可以看到，RAG在回答用户问题的时候，最少做了两次交互：1、与向量数据库的交互，2、与大模型的交互。如果我们对向量数据库和大模型有了细分，比如物理相关文档都放在物理向量数据库，物理大模型也是全部都用物理数据训练的，如果用户提问的是物理问题，那与物理向量数据库和物理大模型交互是不是能得到更好的答案，答案是肯定的，毕竟没有其他数据的污染，会查询生产的更快更准。</p>
+<h3 id="路由选择"><a href="#路由选择" class="headerlink" title="路由选择"></a>路由选择</h3><p>​	从上面我们看到了两个地方可以做路由选择：向量数据库、大模型。其实除了这两个地方，还有一个隐形的地方，那就是提示词模版。我们调用大模型的时候是要输入提示词的，提示词都是按模版输入的，如果我们细分做好分类，按不同的问题选择特定的模版，也能提高我们生成更好答案的概率。</p>
+<p>​	说直白一点，就是根据问题的类型，选择相应的向量库、模版和大模型。</p>
+<h4 id="向量数据库路由"><a href="#向量数据库路由" class="headerlink" title="向量数据库路由"></a>向量数据库路由</h4><p>​	其实我们是没有办法直接区分用户问题的类型的，但是我们可以让大模型去做区分。拿到区分后的结果，去选择相应的路由。</p>
+<pre class="mermaid">graph LR
+A(开始) --> B[划定分类范围]
+B --> C[大模型判断分类]
+C --> D[选择向量库]
+D --> E(结束)</pre>
+
+<p>​	1、划定分类：根据我们已有的向量数据库设置好分类，规范好分类种类。</p>
+<p>​	2、大模型判断：输入用户问题，和我们设置好的分类，让大模型判断出用户输入问题是分类中的哪一类，或者说与分类中哪一类相关性最高。</p>
+<p>​	3、选择向量库：根据大模型的判断结果，选择已有的向量库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Literal</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_core.pydantic_v1 <span class="keyword">import</span> BaseModel, Field</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># Data model</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RouteQuery</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Route a user query to the most relevant datasource.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    datasource: <span class="type">Literal</span>[<span class="string">&quot;python_docs&quot;</span>, <span class="string">&quot;js_docs&quot;</span>, <span class="string">&quot;golang_docs&quot;</span>] = Field(</span><br><span class="line">        ...,</span><br><span class="line">        description=<span class="string">&quot;Given a user question choose which datasource would be most relevant for answering their question&quot;</span>,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># LLM with function call </span></span><br><span class="line">llm = ChatOpenAI(model=<span class="string">&quot;gpt-3.5-turbo-0125&quot;</span>, temperature=<span class="number">0</span>)</span><br><span class="line">structured_llm = llm.with_structured_output(RouteQuery)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prompt </span></span><br><span class="line">system = <span class="string">&quot;&quot;&quot;You are an expert at routing a user question to the appropriate data source.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Based on the programming language the question is referring to, route it to the relevant data source.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;system&quot;</span>, system),</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Define router </span></span><br><span class="line">router = prompt | structured_llm</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="提示词模版路由"><a href="#提示词模版路由" class="headerlink" title="提示词模版路由"></a>提示词模版路由</h4><p>​	套路显然和上面的向量库的套路一样，用大模型获取到分类，在用分类去获取预设好的提示词模版。代码类同，能拿到对应的分类，找到分类对应的模版即可。</p>
+<pre class="mermaid">graph LR
+A(开始) --> B[划定分类范围]
+B --> C[大模型判断分类]
+C --> D[选择提示词模版]
+D --> E(结束)</pre>
+
+
+
+<h4 id="大模型路由"><a href="#大模型路由" class="headerlink" title="大模型路由"></a>大模型路由</h4><p>​	套路一样，用大模型的判断结果去选择相应的大模型。代码类同。</p>
+<pre class="mermaid">graph LR
+A(开始) --> B[划定分类范围]
+B --> C[大模型判断分类]
+C --> D[选择大模型]
+D --> E(结束)</pre>
+
+
+
+<h4 id="其他路由选择方法"><a href="#其他路由选择方法" class="headerlink" title="其他路由选择方法"></a>其他路由选择方法</h4><p>​	除了上述使用大模型判断分类，还有没有其他方法判断分类，肯定是有的。以向量计算相关性，判断出最相关的分类。使用embeddings计算出预设模版的向量，再计算出用户问题的向量，最后找出与问题向量最相关的预设模版。能找出模版也就知道预设模版的分类，使用分类去找向量库和大模型即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.utils.math <span class="keyword">import</span> cosine_similarity</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnableLambda, RunnablePassthrough</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI, OpenAIEmbeddings</span><br><span class="line"></span><br><span class="line"><span class="comment"># Two prompts</span></span><br><span class="line">physics_template = <span class="string">&quot;&quot;&quot;You are a very smart physics professor. \</span></span><br><span class="line"><span class="string">You are great at answering questions about physics in a concise and easy to understand manner. \</span></span><br><span class="line"><span class="string">When you don&#x27;t know the answer to a question you admit that you don&#x27;t know.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is a question:</span></span><br><span class="line"><span class="string">&#123;query&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">math_template = <span class="string">&quot;&quot;&quot;You are a very good mathematician. You are great at answering math questions. \</span></span><br><span class="line"><span class="string">You are so good because you are able to break down hard problems into their component parts, \</span></span><br><span class="line"><span class="string">answer the component parts, and then put them together to answer the broader question.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is a question:</span></span><br><span class="line"><span class="string">&#123;query&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Embed prompts</span></span><br><span class="line">embeddings = OpenAIEmbeddings()</span><br><span class="line">prompt_templates = [physics_template, math_template]</span><br><span class="line">prompt_embeddings = embeddings.embed_documents(prompt_templates)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Route question to prompt </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">prompt_router</span>(<span class="params"><span class="built_in">input</span></span>):</span><br><span class="line">    <span class="comment"># Embed question</span></span><br><span class="line">    query_embedding = embeddings.embed_query(<span class="built_in">input</span>[<span class="string">&quot;query&quot;</span>])</span><br><span class="line">    <span class="comment"># Compute similarity</span></span><br><span class="line">    similarity = cosine_similarity([query_embedding], prompt_embeddings)[<span class="number">0</span>]</span><br><span class="line">    most_similar = prompt_templates[similarity.argmax()]</span><br><span class="line">    <span class="comment"># Chosen prompt </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Using MATH&quot;</span> <span class="keyword">if</span> most_similar == math_template <span class="keyword">else</span> <span class="string">&quot;Using PHYSICS&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> PromptTemplate.from_template(most_similar)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">chain = (</span><br><span class="line">    &#123;<span class="string">&quot;query&quot;</span>: RunnablePassthrough()&#125;</span><br><span class="line">    | RunnableLambda(prompt_router)</span><br><span class="line">    | ChatOpenAI()</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(chain.invoke(<span class="string">&quot;What&#x27;s a black hole&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/07/01/spring%E4%B8%AD%E7%9A%84%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" rel="prev" title="Spring的自动加载配置">
+                  <i class="fa fa-angle-left"></i> Spring的自动加载配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -27,6 +27,7 @@
 <meta property="og:description" content="简述都知道spring的自动加载是通过注解实现的，但是这注解又是怎么实现的呢？ 通过@SpringBootApplication注解开启，读取配置文件中的配置类，然后过滤掉不需要的配置类，最后将剩余的配置类加载配置。 具体过程上面说了一下大概的概念，接下来我们分析一下具体的执行过程。 1、开启自动加载都知道自动开启加载注解@SpringBootApplication，但是这个注解是个复合注解，他是">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/images/spring/image-20240401205815186.png">
+<meta property="og:image" content="http://example.com/images/spring/image-20250705155304630.png">
 <meta property="og:image" content="http://example.com/images/spring/image-20240401215546520.png">
 <meta property="og:image" content="http://example.com/images/spring/image-20240401232921570.png">
 <meta property="og:image" content="http://example.com/images/spring/image-20240401233308499.png">
@@ -159,18 +160,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -255,6 +256,7 @@
 
 <p><img src="/../images/spring/image-20240401205815186.png" alt="image-20240401205815186"></p>
 <p>@EnableAutoConfiguration注解继续下钻，主要有@AutoConfigurationPackage和@Import({AutoConfigurationImportSelector.class})两个注解，@AutoConfigurationPackage继续下钻主要有@Import({AutoConfigurationPackages.Registrar.class})这个注解。</p>
+<p><img src="/../images/spring/image-20250705155304630.png" alt="image-20250705155304630"></p>
 <p>所以基本可以理解</p>
 <p>@EnableAutoConfiguration &#x3D; @Import({AutoConfigurationImportSelector.class}) + @Import({AutoConfigurationPackages.Registrar.class})</p>
 <p>即自动加载主要是依赖AutoConfigurationImportSelector.class，AutoConfigurationPackages.Registrar.class两个类。</p>

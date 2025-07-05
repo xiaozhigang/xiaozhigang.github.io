@@ -150,18 +150,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,6 +178,367 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/05/RAG-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/07/05/RAG-%E8%B7%AF%E7%94%B1%E9%80%89%E6%8B%A9/" class="post-title-link" itemprop="url">RAG-丰富提示词</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-05 15:28:52" itemprop="dateCreated datePublished" datetime="2025-07-05T15:28:52+08:00">2025-07-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/rag/" itemprop="url" rel="index"><span itemprop="name">rag</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>​	RAG的主流程其实比较简单，流程前面已经说过了，简单看一下下面的图了解一下就行。</p>
+<p><img src="/../images/rag-ext/rag_base_uml.png" alt="image-20250621160518166"></p>
+<p>​	从上面的图，可以看到，RAG在回答用户问题的时候，最少做了两次交互：1、与向量数据库的交互，2、与大模型的交互。如果我们对向量数据库和大模型有了细分，比如物理相关文档都放在物理向量数据库，物理大模型也是全部都用物理数据训练的，如果用户提问的是物理问题，那与物理向量数据库和物理大模型交互是不是能得到更好的答案，答案是肯定的，毕竟没有其他数据的污染，会查询生产的更快更准。</p>
+<h3 id="路由选择"><a href="#路由选择" class="headerlink" title="路由选择"></a>路由选择</h3><p>​	从上面我们看到了两个地方可以做路由选择：向量数据库、大模型。其实除了这两个地方，还有一个隐形的地方，那就是提示词模版。我们调用大模型的时候是要输入提示词的，提示词都是按模版输入的，如果我们细分做好分类，按不同的问题选择特定的模版，也能提高我们生成更好答案的概率。</p>
+<p>​	说直白一点，就是根据问题的类型，选择相应的向量库、模版和大模型。</p>
+<h4 id="向量数据库路由"><a href="#向量数据库路由" class="headerlink" title="向量数据库路由"></a>向量数据库路由</h4><p>​	其实我们是没有办法直接区分用户问题的类型的，但是我们可以让大模型去做区分。拿到区分后的结果，去选择相应的路由。</p>
+<pre class="mermaid">graph LR
+A(开始) --> B[划定分类范围]
+B --> C[大模型判断分类]
+C --> D[选择向量库]
+D --> E(结束)</pre>
+
+<p>​	1、划定分类：根据我们已有的向量数据库设置好分类，规范好分类种类。</p>
+<p>​	2、大模型判断：输入用户问题，和我们设置好的分类，让大模型判断出用户输入问题是分类中的哪一类，或者说与分类中哪一类相关性最高。</p>
+<p>​	3、选择向量库：根据大模型的判断结果，选择已有的向量库。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Literal</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_core.pydantic_v1 <span class="keyword">import</span> BaseModel, Field</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># Data model</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RouteQuery</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Route a user query to the most relevant datasource.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    datasource: <span class="type">Literal</span>[<span class="string">&quot;python_docs&quot;</span>, <span class="string">&quot;js_docs&quot;</span>, <span class="string">&quot;golang_docs&quot;</span>] = Field(</span><br><span class="line">        ...,</span><br><span class="line">        description=<span class="string">&quot;Given a user question choose which datasource would be most relevant for answering their question&quot;</span>,</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># LLM with function call </span></span><br><span class="line">llm = ChatOpenAI(model=<span class="string">&quot;gpt-3.5-turbo-0125&quot;</span>, temperature=<span class="number">0</span>)</span><br><span class="line">structured_llm = llm.with_structured_output(RouteQuery)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prompt </span></span><br><span class="line">system = <span class="string">&quot;&quot;&quot;You are an expert at routing a user question to the appropriate data source.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Based on the programming language the question is referring to, route it to the relevant data source.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;system&quot;</span>, system),</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Define router </span></span><br><span class="line">router = prompt | structured_llm</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="提示词模版路由"><a href="#提示词模版路由" class="headerlink" title="提示词模版路由"></a>提示词模版路由</h4><p>​	套路显然和上面的向量库的套路一样，用大模型获取到分类，在用分类去获取预设好的提示词模版。代码类同，能拿到对应的分类，找到分类对应的模版即可。</p>
+<pre class="mermaid">graph LR
+A(开始) --> B[划定分类范围]
+B --> C[大模型判断分类]
+C --> D[选择提示词模版]
+D --> E(结束)</pre>
+
+
+
+<h4 id="大模型路由"><a href="#大模型路由" class="headerlink" title="大模型路由"></a>大模型路由</h4><p>​	套路一样，用大模型的判断结果去选择相应的大模型。代码类同。</p>
+<pre class="mermaid">graph LR
+A(开始) --> B[划定分类范围]
+B --> C[大模型判断分类]
+C --> D[选择大模型]
+D --> E(结束)</pre>
+
+
+
+<h4 id="其他路由选择方法"><a href="#其他路由选择方法" class="headerlink" title="其他路由选择方法"></a>其他路由选择方法</h4><p>​	除了上述使用大模型判断分类，还有没有其他方法判断分类，肯定是有的。以向量计算相关性，判断出最相关的分类。使用embeddings计算出预设模版的向量，再计算出用户问题的向量，最后找出与问题向量最相关的预设模版。能找出模版也就知道预设模版的分类，使用分类去找向量库和大模型即可。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.utils.math <span class="keyword">import</span> cosine_similarity</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> PromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnableLambda, RunnablePassthrough</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI, OpenAIEmbeddings</span><br><span class="line"></span><br><span class="line"><span class="comment"># Two prompts</span></span><br><span class="line">physics_template = <span class="string">&quot;&quot;&quot;You are a very smart physics professor. \</span></span><br><span class="line"><span class="string">You are great at answering questions about physics in a concise and easy to understand manner. \</span></span><br><span class="line"><span class="string">When you don&#x27;t know the answer to a question you admit that you don&#x27;t know.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is a question:</span></span><br><span class="line"><span class="string">&#123;query&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">math_template = <span class="string">&quot;&quot;&quot;You are a very good mathematician. You are great at answering math questions. \</span></span><br><span class="line"><span class="string">You are so good because you are able to break down hard problems into their component parts, \</span></span><br><span class="line"><span class="string">answer the component parts, and then put them together to answer the broader question.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is a question:</span></span><br><span class="line"><span class="string">&#123;query&#125;&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Embed prompts</span></span><br><span class="line">embeddings = OpenAIEmbeddings()</span><br><span class="line">prompt_templates = [physics_template, math_template]</span><br><span class="line">prompt_embeddings = embeddings.embed_documents(prompt_templates)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Route question to prompt </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">prompt_router</span>(<span class="params"><span class="built_in">input</span></span>):</span><br><span class="line">    <span class="comment"># Embed question</span></span><br><span class="line">    query_embedding = embeddings.embed_query(<span class="built_in">input</span>[<span class="string">&quot;query&quot;</span>])</span><br><span class="line">    <span class="comment"># Compute similarity</span></span><br><span class="line">    similarity = cosine_similarity([query_embedding], prompt_embeddings)[<span class="number">0</span>]</span><br><span class="line">    most_similar = prompt_templates[similarity.argmax()]</span><br><span class="line">    <span class="comment"># Chosen prompt </span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Using MATH&quot;</span> <span class="keyword">if</span> most_similar == math_template <span class="keyword">else</span> <span class="string">&quot;Using PHYSICS&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> PromptTemplate.from_template(most_similar)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">chain = (</span><br><span class="line">    &#123;<span class="string">&quot;query&quot;</span>: RunnablePassthrough()&#125;</span><br><span class="line">    | RunnableLambda(prompt_router)</span><br><span class="line">    | ChatOpenAI()</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(chain.invoke(<span class="string">&quot;What&#x27;s a black hole&quot;</span>))</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/01/spring%E4%B8%AD%E7%9A%84%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/07/01/spring%E4%B8%AD%E7%9A%84%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" class="post-title-link" itemprop="url">Spring的自动加载配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-01 20:35:49" itemprop="dateCreated datePublished" datetime="2025-07-01T20:35:49+08:00">2025-07-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-01 20:35:49" itemprop="dateModified" datetime="2025-05-01T20:35:49+08:00">2025-05-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>​	这周遇到两个新问题，就是大文件的上传和下载。</p>
+<table>
+<thead>
+<tr>
+<th align="center">场景</th>
+<th align="center">之前</th>
+<th align="center">问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">大文件上传云存储</td>
+<td align="center">文件上传到服务器，在从服务器上传到云存储</td>
+<td align="center">1、通过nginx、nacos转发耗时太长&nbsp;<br/>2、太消耗服务器资源</td>
+</tr>
+<tr>
+<td align="center">用户下载视频</td>
+<td align="center">从其他端下载视频，再将视频转发给客户端</td>
+<td align="center">同上</td>
+</tr>
+</tbody></table>
+<p>​	这两个问题的解决，还得感谢chatgpt，这玩意还是好用的。</p>
+<h3 id="大文件上传"><a href="#大文件上传" class="headerlink" title="大文件上传"></a>大文件上传</h3><p>​	之前都是直接将文件上传到服务器，通过服务器将文件上传到云端，拿到链接后保存链接。这样刚开始使用的时候还行，上传的文件比较小，后来要上传大文件，问题就暴露出来了，耗时太长。文件要经过nginx、nacos的转发，一个200M的文件，到服务器后端代码开始处理已经过去十多分钟了。除了耗时，还太消耗资源，nginx、nacos、spring服务这每一项都要转发一下大文件，都要消耗内存流量。</p>
+<p>​	解决方案：1、改长相应时间，2、修改设计方案。第一个解决方案明显不行，没解决根本问题，耗时长，资源消耗大的问题还是存在。那就只能考虑第二个解决方案了。</p>
+<p>​	其实刚开始，我也没啥好的解决方案（见识短浅）。后来问了一下chatgpt，解决方案直接就出来了，生成预链接，让前端通过预链接上传文件。说是业界都用的这种方案，我们都不知道，还是落后呢脱节了啊。我们公司用的是AWS的S3存储，它是支持生成预链接的，除了AWS，其他的云厂商都是支持的（阿里云，腾讯云等）。为了保障链接的有效性，我在后加了一个地址校验，校验一下预链接的地址前端有没有上传文件，防止前端没有上传。代码编写随便百度一下大把。</p>
+<p><img src="/Users/xiaozhigang/blog/source/images/java-big-file/image-20250705170312520.png" alt="image-20250705170312520"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生成一个可用于 PUT 上传的预签名 URL</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> bucketName   S3桶名</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> objectKey    上传到 S3 的 key（路径+文件名）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> contentType  上传内容类型（如 &quot;image/jpeg&quot;, &quot;application/pdf&quot;）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> validMinutes URL 有效时间（分钟）</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 可用的 PUT 请求 URL</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> URL <span class="title function_">generatePresignedPutUrl</span><span class="params">(String bucketName, String objectKey, String contentType, <span class="type">int</span> validMinutes)</span> &#123;</span><br><span class="line">    <span class="comment">// 初始化 S3 PreSigner（线程安全，可复用）</span></span><br><span class="line">    <span class="keyword">try</span> (<span class="type">S3Presigner</span> <span class="variable">preSigner</span> <span class="operator">=</span> S3Presigner.builder()</span><br><span class="line">            .region(REGION)</span><br><span class="line">            .credentialsProvider(StaticCredentialsProvider.create(</span><br><span class="line">                    AwsBasicCredentials.create(ACCESS_KEY, SECRET_KEY)</span><br><span class="line">            ))</span><br><span class="line">            .build()) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">PutObjectRequest</span> <span class="variable">putObjectRequest</span> <span class="operator">=</span> PutObjectRequest.builder()</span><br><span class="line">                .bucket(bucketName)</span><br><span class="line">                .key(objectKey)</span><br><span class="line">                .acl(ObjectCannedACL.PUBLIC_READ)</span><br><span class="line">                .contentType(contentType)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">        <span class="type">PresignedPutObjectRequest</span> <span class="variable">preSignedRequest</span> <span class="operator">=</span> preSigner.presignPutObject(builder -&gt; builder</span><br><span class="line">                .putObjectRequest(putObjectRequest)</span><br><span class="line">                .signatureDuration(Duration.ofMinutes(validMinutes)) <span class="comment">// 有效期</span></span><br><span class="line">        );</span><br><span class="line">        <span class="comment">// 可用于前端 PUT 上传</span></span><br><span class="line">        <span class="keyword">return</span> preSignedRequest.url();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="视频下载"><a href="#视频下载" class="headerlink" title="视频下载"></a>视频下载</h3><p>​	背景：本来可以提供三方的视频链接直接给前端下载的，可以视频链接有反扒校验，预ip绑定，其他ip都打不开链接，所以只能后端服务器下载了传给前端。</p>
+<p>​	初次解决方案：服务器直接下载完，再转发给前端下载，但是这样要与前端保持链接的时间太长了，服务端要下载一遍，前端也要接着下载一遍。同时也消耗服务器资源，带宽流量和服务器内存。</p>
+<p>​	优化方案：通过服务器直接透传给前端，这样服务器不用保存，可以减少内存的压力，同时也减少相应的时间。不过这也有问题，前端没那么稳定，会断，导致整个视频下载不了。</p>
+<p>​	最终方案：分片返回给前端，将一个视频流切成很多片，每次请求一片，这样将一个长连接变成了许多短连接。不会因前端的一次断开，导致整个下载失败。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@PostMapping(&quot;/pronhub/url/download&quot;)</span></span><br><span class="line"><span class="keyword">public</span> ResponseEntity&lt;StreamingResponseBody&gt; <span class="title function_">downloadVideoWithRange</span><span class="params">(</span></span><br><span class="line"><span class="params">        HttpServletRequest request,</span></span><br><span class="line"><span class="params">        HttpServletResponse response,</span></span><br><span class="line"><span class="params">        <span class="meta">@RequestBody</span> PronhubUrlDownLoadRequest body)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">videoUrl</span> <span class="operator">=</span> body.getUrl();</span><br><span class="line">    <span class="type">URL</span> <span class="variable">url</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">URL</span>(videoUrl);</span><br><span class="line">    <span class="type">HttpURLConnection</span> <span class="variable">conn</span> <span class="operator">=</span> (HttpURLConnection) url.openConnection();</span><br><span class="line">    conn.setRequestProperty(<span class="string">&quot;User-Agent&quot;</span>, <span class="string">&quot;Mozilla/5.0&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">responseCode</span> <span class="operator">=</span> conn.getResponseCode();</span><br><span class="line">    <span class="keyword">if</span> (responseCode != <span class="number">200</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> ResponseEntity.status(responseCode)</span><br><span class="line">                .contentType(MediaType.TEXT_PLAIN)</span><br><span class="line">                .body(out -&gt; out.write((<span class="string">&quot;视频请求失败: &quot;</span> + responseCode).getBytes(StandardCharsets.UTF_8)));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">contentType</span> <span class="operator">=</span> conn.getContentType();</span><br><span class="line">    <span class="type">int</span> <span class="variable">fullLength</span> <span class="operator">=</span> conn.getContentLength();</span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">rangeHeader</span> <span class="operator">=</span> request.getHeader(<span class="string">&quot;Range&quot;</span>);</span><br><span class="line">    <span class="type">int</span> <span class="variable">start</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span> end;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (rangeHeader != <span class="literal">null</span> &amp;&amp; rangeHeader.startsWith(<span class="string">&quot;bytes=&quot;</span>)) &#123;</span><br><span class="line">        String[] ranges = rangeHeader.replace(<span class="string">&quot;bytes=&quot;</span>, <span class="string">&quot;&quot;</span>).split(<span class="string">&quot;-&quot;</span>);</span><br><span class="line">        start = Integer.parseInt(ranges[<span class="number">0</span>].trim());</span><br><span class="line">        <span class="keyword">if</span> (ranges.length &gt; <span class="number">1</span> &amp;&amp; !ranges[<span class="number">1</span>].isEmpty()) &#123;</span><br><span class="line">            end = Integer.parseInt(ranges[<span class="number">1</span>].trim());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// 如果客户端只给了 start，没有 end，主动限制最多 CHUNK_SIZE</span></span><br><span class="line">            end = Math.min(start + CHUNK_SIZE - <span class="number">1</span>, fullLength - <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 没有 Range 请求时，默认返回从头开始的一个 5MB 分片</span></span><br><span class="line">        end = Math.min(start + CHUNK_SIZE - <span class="number">1</span>, fullLength - <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">rangeLength</span> <span class="operator">=</span> end - start + <span class="number">1</span>;</span><br><span class="line">    conn.setRequestProperty(<span class="string">&quot;Range&quot;</span>, <span class="string">&quot;bytes=&quot;</span> + start + <span class="string">&quot;-&quot;</span> + end);</span><br><span class="line">    <span class="type">InputStream</span> <span class="variable">inputStream</span> <span class="operator">=</span> conn.getInputStream();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="type">int</span> <span class="variable">finalStart</span> <span class="operator">=</span> start;</span><br><span class="line">    <span class="keyword">final</span> <span class="type">int</span> <span class="variable">finalEnd</span> <span class="operator">=</span> end;</span><br><span class="line"></span><br><span class="line">    <span class="type">StreamingResponseBody</span> <span class="variable">stream</span> <span class="operator">=</span> outputStream -&gt; &#123;</span><br><span class="line">        <span class="keyword">try</span> (<span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> inputStream) &#123;</span><br><span class="line">            <span class="type">byte</span>[] buffer = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">8192</span>];</span><br><span class="line">            <span class="type">int</span> bytesRead;</span><br><span class="line">            <span class="type">long</span> <span class="variable">totalRead</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">            <span class="type">long</span> <span class="variable">lastFlush</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> ((bytesRead = in.read(buffer)) != -<span class="number">1</span> &amp;&amp; totalRead &lt; rangeLength) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">toWrite</span> <span class="operator">=</span> (<span class="type">int</span>) Math.min(bytesRead, rangeLength - totalRead);</span><br><span class="line">                outputStream.write(buffer, <span class="number">0</span>, toWrite);</span><br><span class="line">                totalRead += toWrite;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (System.currentTimeMillis() - lastFlush &gt; <span class="number">2000</span>) &#123;</span><br><span class="line">                    outputStream.flush();</span><br><span class="line">                    lastFlush = System.currentTimeMillis();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            outputStream.flush();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            <span class="keyword">if</span> (ex.getMessage().contains(<span class="string">&quot;Broken pipe&quot;</span>)) &#123;</span><br><span class="line">                log.warn(<span class="string">&quot;客户端连接中断: &#123;&#125;&quot;</span>, ex.getMessage());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                log.error(<span class="string">&quot;视频传输异常: &quot;</span>, ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)</span><br><span class="line">            .header(<span class="string">&quot;Accept-Ranges&quot;</span>, <span class="string">&quot;bytes&quot;</span>)</span><br><span class="line">            .header(<span class="string">&quot;Content-Type&quot;</span>, contentType != <span class="literal">null</span> ? contentType : <span class="string">&quot;video/mp4&quot;</span>)</span><br><span class="line">            .header(<span class="string">&quot;Content-Length&quot;</span>, String.valueOf(rangeLength))</span><br><span class="line">            .header(<span class="string">&quot;Content-Range&quot;</span>, String.format(<span class="string">&quot;bytes %d-%d/%d&quot;</span>, finalStart, finalEnd, fullLength))</span><br><span class="line">            .header(<span class="string">&quot;Full-Length&quot;</span>, String.valueOf(fullLength))</span><br><span class="line">            .header(<span class="string">&quot;Access-Control-Expose-Headers&quot;</span>, <span class="string">&quot;Content-Range,Full-Length&quot;</span>)</span><br><span class="line">            .header(<span class="string">&quot;Content-Disposition&quot;</span>, <span class="string">&quot;attachment; filename=video.mp4&quot;</span>)</span><br><span class="line">            .body(stream);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/21/RAG-%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/06/21/RAG-%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D/" class="post-title-link" itemprop="url">RAG-丰富提示词</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-06-21 15:28:52" itemprop="dateCreated datePublished" datetime="2025-06-21T15:28:52+08:00">2025-06-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/rag/" itemprop="url" rel="index"><span itemprop="name">rag</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>​	RAG的主流程其实比较简单，就是先将用户的提问去向量数据库查询相关文档，再将文档和用户提问组装发送给大模型生成答案，最后将答案返回给用户。其中主要的组件只有向量数据库和大模型，只是两相组合可以玩出花来。</p>
+<p><img src="/../images/rag-ext/rag_base_uml.png" alt="image-20250621160518166"></p>
+<h3 id="丰富提示词"><a href="#丰富提示词" class="headerlink" title="丰富提示词"></a>丰富提示词</h3><p>​	RAG意思是检索增强生成，大模型的生成都是根据提示词生成的，而向量库的存在就是为了丰富我们的提示词，丰富了我们的提示词，大模型才能生成出更理想更丰富合适的答案。那怎么丰富我们的提示词呢？</p>
+<h4 id="多版本查询"><a href="#多版本查询" class="headerlink" title="多版本查询"></a>多版本查询</h4><p>​	在我们用问题向量化之后向量去检索向量库得到文档的时候，我们能不能尽可能多的获取相关性的文档，比如说，我的提问是用汉语提问题的，这时候向量化之后一定会带有汉语的向量，导致检索向量库的时候检索到可能都是汉语的文档，其实有些问题的英语文档或者其他语言的文档更全面，如果检索到这些文档，去丰富我们的提示词，生成的答案就会更好。</p>
+<p>​	当然我们在提问的时候不可能每个语言或者其他角度都描述到，这时候我们可以让llm帮我们生成这些版本的问题，去检索到更多更有效的文档。</p>
+<p><img src="/../images/rag-ext/multi_query_1.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># Multi Query: Different Perspectives</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;You are an AI language model assistant. Your task is to generate five </span></span><br><span class="line"><span class="string">different versions of the given user question to retrieve relevant documents from a vector </span></span><br><span class="line"><span class="string">database. By generating multiple perspectives on the user question, your goal is to help</span></span><br><span class="line"><span class="string">the user overcome some of the limitations of the distance-based similarity search. </span></span><br><span class="line"><span class="string">Provide these alternative questions separated by newlines. Original question: &#123;question&#125;&quot;&quot;&quot;</span></span><br><span class="line">prompt_perspectives = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">generate_queries = (</span><br><span class="line">    prompt_perspectives </span><br><span class="line">    | ChatOpenAI(temperature=<span class="number">0</span>) </span><br><span class="line">    | StrOutputParser() </span><br><span class="line">    | (<span class="keyword">lambda</span> x: x.split(<span class="string">&quot;\n&quot;</span>))</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain.load <span class="keyword">import</span> dumps, loads</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_unique_union</span>(<span class="params">documents: <span class="built_in">list</span>[<span class="built_in">list</span>]</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Unique union of retrieved docs &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Flatten list of lists, and convert each Document to string</span></span><br><span class="line">    flattened_docs = [dumps(doc) <span class="keyword">for</span> sublist <span class="keyword">in</span> documents <span class="keyword">for</span> doc <span class="keyword">in</span> sublist]</span><br><span class="line">    <span class="comment"># Get unique documents</span></span><br><span class="line">    unique_docs = <span class="built_in">list</span>(<span class="built_in">set</span>(flattened_docs))</span><br><span class="line">    <span class="comment"># Return</span></span><br><span class="line">    <span class="keyword">return</span> [loads(doc) <span class="keyword">for</span> doc <span class="keyword">in</span> unique_docs]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Retrieve</span></span><br><span class="line">question = <span class="string">&quot;What is task decomposition for LLM agents?&quot;</span></span><br><span class="line">retrieval_chain = generate_queries | retriever.<span class="built_in">map</span>() | get_unique_union</span><br><span class="line">docs = retrieval_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line"><span class="built_in">len</span>(docs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnablePassthrough</span><br><span class="line"></span><br><span class="line"><span class="comment"># RAG</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Answer the following question based on this context:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Question: &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">final_rag_chain = (</span><br><span class="line">    &#123;<span class="string">&quot;context&quot;</span>: retrieval_chain, </span><br><span class="line">     <span class="string">&quot;question&quot;</span>: itemgetter(<span class="string">&quot;question&quot;</span>)&#125; </span><br><span class="line">    | prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_rag_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="结果融合"><a href="#结果融合" class="headerlink" title="结果融合"></a>结果融合</h4><p>​	上面的过程，我们将多版本检索出来的结果都提交给大模型生成答案了，多版本检索出来的多结果肯定有好有坏，坏的结果一起提交给大模型，肯定也会影响大模型生成答案，那我们要怎么做才能让减少坏结果的影响呢？</p>
+<p>​	在我们搜索的多结果中，我们可以根据文档在每个列表中的排名，通过 RRF 算法为每个文档打分，最终返回一个<strong>融合后的排序列表</strong>，最后从列表中筛选出前几个我们想要的结果即可。</p>
+<p>给定多个文档排名列表（多个检索器、多个查询），RRF 的打分公式如下：</p>
+<p>$$<br>\text{Score}(d) &#x3D; \sum_{i&#x3D;1}^{n} \frac{1}{\text{rank}_i + k}<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>( \text{rank}_i )：文档 ( d ) 在第 ( i ) 个排序列表中的排名（从 0 开始）</li>
+<li>( k )：平滑参数（通常取 60）</li>
+<li>( n )：总共融合的列表数量（例如不同查询或不同检索器）</li>
+</ul>
+<blockquote>
+<p>文档出现越多、排名越靠前，其 RRF 得分就越高。</p>
+</blockquote>
+<p><img src="/../images/rag-ext/multi_query_2.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">reciprocal_rank_fusion</span>(<span class="params">results: <span class="built_in">list</span>[<span class="built_in">list</span>], k=<span class="number">60</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Reciprocal_rank_fusion that takes multiple lists of ranked documents </span></span><br><span class="line"><span class="string">        and an optional parameter k used in the RRF formula &quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Initialize a dictionary to hold fused scores for each unique document</span></span><br><span class="line">    fused_scores = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Iterate through each list of ranked documents</span></span><br><span class="line">    <span class="keyword">for</span> docs <span class="keyword">in</span> results:</span><br><span class="line">        <span class="comment"># Iterate through each document in the list, with its rank (position in the list)</span></span><br><span class="line">        <span class="keyword">for</span> rank, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(docs):</span><br><span class="line">            <span class="comment"># Convert the document to a string format to use as a key (assumes documents can be serialized to JSON)</span></span><br><span class="line">            doc_str = dumps(doc)</span><br><span class="line">            <span class="comment"># If the document is not yet in the fused_scores dictionary, add it with an initial score of 0</span></span><br><span class="line">            <span class="keyword">if</span> doc_str <span class="keyword">not</span> <span class="keyword">in</span> fused_scores:</span><br><span class="line">                fused_scores[doc_str] = <span class="number">0</span></span><br><span class="line">            <span class="comment"># Retrieve the current score of the document, if any</span></span><br><span class="line">            previous_score = fused_scores[doc_str]</span><br><span class="line">            <span class="comment"># Update the score of the document using the RRF formula: 1 / (rank + k)</span></span><br><span class="line">            fused_scores[doc_str] += <span class="number">1</span> / (rank + k)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Sort the documents based on their fused scores in descending order to get the final reranked results</span></span><br><span class="line">    reranked_results = [</span><br><span class="line">        (loads(doc), score)</span><br><span class="line">        <span class="keyword">for</span> doc, score <span class="keyword">in</span> <span class="built_in">sorted</span>(fused_scores.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Return the reranked results as a list of tuples, each containing the document and its fused score</span></span><br><span class="line">    <span class="keyword">return</span> reranked_results</span><br></pre></td></tr></table></figure>
+
+<h4 id="提问分解"><a href="#提问分解" class="headerlink" title="提问分解"></a>提问分解</h4><p>​	从版本的角度让我们的提示词更丰富了，但是在语义描述方面，能不能提升一下我们的提示词。在一个复杂困难的问题上我们的提示词可能是不够的，毕竟问题的范围比较大，我们的描述范围有限。如果我们缩小问题的范围，变成小问题，我们的提示词是不是就比较丰富了。在我们经验中，那种复杂的问题，比较好的解决办法就是把它拆分成一个一个的小问题，然后依次去解决这些小问题。在这里我们同样可以套用这种解决方式，把复杂问题甩给大模型让他帮我们拆分成一个一个的小问题，然后我们依次去提问解决这些小问题。正对每一个小问题我们的提示词是不是就丰富了</p>
+<h5 id="递归回答"><a href="#递归回答" class="headerlink" title="递归回答"></a>递归回答</h5><p>​	怎么去解决这些小问题，如果这些小问题上下有相关性的话，我们可以使用递归递归回答，就是将上一个问题的答案带入到下一个问题中。</p>
+<p><img src="/../images/rag-ext/decomposition.png" alt="image-20250621160518166"></p>
+<p>​	如上图，我们将一个复杂问题拆分成3个小问题，然后依次查询生成解决，将每次解决的结果带入到下一次解决中，最后解决这个复杂问题生成一个完整答案输出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># Decomposition</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;You are a helpful assistant that generates multiple sub-questions related to an input question. \n</span></span><br><span class="line"><span class="string">The goal is to break down the input into a set of sub-problems / sub-questions that can be answers in isolation. \n</span></span><br><span class="line"><span class="string">Generate multiple search queries related to: &#123;question&#125; \n</span></span><br><span class="line"><span class="string">Output (3 queries):&quot;&quot;&quot;</span></span><br><span class="line">prompt_decomposition = ChatPromptTemplate.from_template(template)</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"></span><br><span class="line"><span class="comment"># LLM</span></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Chain</span></span><br><span class="line">generate_queries_decomposition = ( prompt_decomposition | llm | StrOutputParser() | (<span class="keyword">lambda</span> x: x.split(<span class="string">&quot;\n&quot;</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run</span></span><br><span class="line">question = <span class="string">&quot;What are the main components of an LLM-powered autonomous agent system?&quot;</span></span><br><span class="line">questions = generate_queries_decomposition.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line"><span class="comment"># Prompt</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Here is the question you need to answer:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">\n --- \n &#123;question&#125; \n --- \n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is any available background question + answer pairs:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">\n --- \n &#123;q_a_pairs&#125; \n --- \n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is additional context relevant to the question: </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">\n --- \n &#123;context&#125; \n --- \n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Use the above context and any background question + answer pairs to answer the question: \n &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">decomposition_prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_qa_pair</span>(<span class="params">question, answer</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Format Q and A pair&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    formatted_string = <span class="string">&quot;&quot;</span></span><br><span class="line">    formatted_string += <span class="string">f&quot;Question: <span class="subst">&#123;question&#125;</span>\nAnswer: <span class="subst">&#123;answer&#125;</span>\n\n&quot;</span></span><br><span class="line">    <span class="keyword">return</span> formatted_string.strip()</span><br><span class="line"></span><br><span class="line"><span class="comment"># llm</span></span><br><span class="line">llm = ChatOpenAI(model_name=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">q_a_pairs = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> q <span class="keyword">in</span> questions:</span><br><span class="line">    </span><br><span class="line">    rag_chain = (</span><br><span class="line">    &#123;<span class="string">&quot;context&quot;</span>: itemgetter(<span class="string">&quot;question&quot;</span>) | retriever, </span><br><span class="line">     <span class="string">&quot;question&quot;</span>: itemgetter(<span class="string">&quot;question&quot;</span>),</span><br><span class="line">     <span class="string">&quot;q_a_pairs&quot;</span>: itemgetter(<span class="string">&quot;q_a_pairs&quot;</span>)&#125; </span><br><span class="line">    | decomposition_prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser())</span><br><span class="line"></span><br><span class="line">    answer = rag_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:q,<span class="string">&quot;q_a_pairs&quot;</span>:q_a_pairs&#125;)</span><br><span class="line">    q_a_pair = format_qa_pair(q,answer)</span><br><span class="line">    q_a_pairs = q_a_pairs + <span class="string">&quot;\n---\n&quot;</span>+  q_a_pair</span><br></pre></td></tr></table></figure>
+
+<h5 id="融合回答"><a href="#融合回答" class="headerlink" title="融合回答"></a>融合回答</h5><p>​	如果这些小问题上下文没有相关性或者说没有依赖性，我们又该怎么做呢？可以将每一个小问题单独的去解决生成答案，最后将所有小问题的答案融合生成复杂问题的汇总答案就行了。</p>
+<p><img src="/../images/rag-ext/answer_individually.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Answer each sub-question individually </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> hub</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnablePassthrough, RunnableLambda</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># RAG prompt</span></span><br><span class="line">prompt_rag = hub.pull(<span class="string">&quot;rlm/rag-prompt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">retrieve_and_rag</span>(<span class="params">question,prompt_rag,sub_question_generator_chain</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;RAG on each sub-question&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Use our decomposition / </span></span><br><span class="line">    sub_questions = sub_question_generator_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Initialize a list to hold RAG chain results</span></span><br><span class="line">    rag_results = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> sub_question <span class="keyword">in</span> sub_questions:</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Retrieve documents for each sub-question</span></span><br><span class="line">        retrieved_docs = retriever.get_relevant_documents(sub_question)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Use retrieved documents and sub-question in RAG chain</span></span><br><span class="line">        answer = (prompt_rag | llm | StrOutputParser()).invoke(&#123;<span class="string">&quot;context&quot;</span>: retrieved_docs, </span><br><span class="line">                                                                <span class="string">&quot;question&quot;</span>: sub_question&#125;)</span><br><span class="line">        rag_results.append(answer)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> rag_results,sub_questions</span><br><span class="line"></span><br><span class="line"><span class="comment"># Wrap the retrieval and RAG process in a RunnableLambda for integration into a chain</span></span><br><span class="line">answers, questions = retrieve_and_rag(question, prompt_rag, generate_queries_decomposition)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_qa_pairs</span>(<span class="params">questions, answers</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Format Q and A pairs&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    formatted_string = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i, (question, answer) <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">zip</span>(questions, answers), start=<span class="number">1</span>):</span><br><span class="line">        formatted_string += <span class="string">f&quot;Question <span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;question&#125;</span>\nAnswer <span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;answer&#125;</span>\n\n&quot;</span></span><br><span class="line">    <span class="keyword">return</span> formatted_string.strip()</span><br><span class="line"></span><br><span class="line">context = format_qa_pairs(questions, answers)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prompt</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Here is a set of Q+A pairs:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Use these to synthesize an answer to the question: &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line">final_rag_chain = (</span><br><span class="line">    prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_rag_chain.invoke(&#123;<span class="string">&quot;context&quot;</span>:context,<span class="string">&quot;question&quot;</span>:question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="后退重复生成"><a href="#后退重复生成" class="headerlink" title="后退重复生成"></a>后退重复生成</h4><p>​	对于复杂问题，除了上面说的拆分成子问题有没有其他的方式让我们的提示词变得更丰富了呢？答案肯定是有的，就是后退重复生成。啥意思呢，就是说，我们第一次的提示词不丰富，那我们让第一次生成的结果加到提示词中，这时候我们的提示词是不是更丰富了，在用这个丰富的提示词再去生成，是不是结果更好了呢，如果不够，我们再将生成的结果加入提示词再生成一次呢，一直到满意为止。</p>
+<p><img src="/../images/rag-ext/step_back.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Few Shot Examples</span></span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate, FewShotChatMessagePromptTemplate</span><br><span class="line">examples = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: <span class="string">&quot;Could the members of The Police perform lawful arrests?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;output&quot;</span>: <span class="string">&quot;what can the members of The Police do?&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: <span class="string">&quot;Jan Sindel’s was born in what country?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;output&quot;</span>: <span class="string">&quot;what is Jan Sindel’s personal history?&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br><span class="line"><span class="comment"># We now transform these to example messages</span></span><br><span class="line">example_prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;input&#125;&quot;</span>),</span><br><span class="line">        (<span class="string">&quot;ai&quot;</span>, <span class="string">&quot;&#123;output&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line">few_shot_prompt = FewShotChatMessagePromptTemplate(</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    examples=examples,</span><br><span class="line">)</span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (</span><br><span class="line">            <span class="string">&quot;system&quot;</span>,</span><br><span class="line">            <span class="string">&quot;&quot;&quot;You are an expert at world knowledge. Your task is to step back and paraphrase a question to a more generic step-back question, which is easier to answer. Here are a few examples:&quot;&quot;&quot;</span>,</span><br><span class="line">        ),</span><br><span class="line">        <span class="comment"># Few shot examples</span></span><br><span class="line">        few_shot_prompt,</span><br><span class="line">        <span class="comment"># New question</span></span><br><span class="line">        (<span class="string">&quot;user&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line">generate_queries_step_back = prompt | ChatOpenAI(temperature=<span class="number">0</span>) | StrOutputParser()</span><br><span class="line">question = <span class="string">&quot;What is task decomposition for LLM agents?&quot;</span></span><br><span class="line">generate_queries_step_back.invoke(&#123;<span class="string">&quot;question&quot;</span>: question&#125;)</span><br><span class="line"><span class="comment"># Response prompt </span></span><br><span class="line">response_prompt_template = <span class="string">&quot;&quot;&quot;You are an expert of world knowledge. I am going to ask you a question. Your response should be comprehensive and not contradicted with the following context if they are relevant. Otherwise, ignore them if they are not relevant.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># &#123;normal_context&#125;</span></span><br><span class="line"><span class="string"># &#123;step_back_context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Original Question: &#123;question&#125;</span></span><br><span class="line"><span class="string"># Answer:&quot;&quot;&quot;</span></span><br><span class="line">response_prompt = ChatPromptTemplate.from_template(response_prompt_template)</span><br><span class="line"></span><br><span class="line">chain = (</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"># Retrieve context using the normal question</span></span><br><span class="line">        <span class="string">&quot;normal_context&quot;</span>: RunnableLambda(<span class="keyword">lambda</span> x: x[<span class="string">&quot;question&quot;</span>]) | retriever,</span><br><span class="line">        <span class="comment"># Retrieve context using the step-back question</span></span><br><span class="line">        <span class="string">&quot;step_back_context&quot;</span>: generate_queries_step_back | retriever,</span><br><span class="line">        <span class="comment"># Pass on the question</span></span><br><span class="line">        <span class="string">&quot;question&quot;</span>: <span class="keyword">lambda</span> x: x[<span class="string">&quot;question&quot;</span>],</span><br><span class="line">    &#125;</span><br><span class="line">    | response_prompt</span><br><span class="line">    | ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain.invoke(&#123;<span class="string">&quot;question&quot;</span>: question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="假想文档"><a href="#假想文档" class="headerlink" title="假想文档"></a>假想文档</h4><p>​	如果我们的向量数据库中，没有我们提问的所需要的文档和相关知识怎么办？这时候从向量库的检索是没办法帮我们丰富提示词的，但是我们让llm帮我们生成一个假想文档，这样我们就可以根据这个文档获得跟丰富的提示词从而生成出更丰满的答案了。</p>
+<p><img src="/../images/rag-ext/hyde.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># HyDE document genration</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Please write a scientific paper passage to answer the question</span></span><br><span class="line"><span class="string">Question: &#123;question&#125;</span></span><br><span class="line"><span class="string">Passage:&quot;&quot;&quot;</span></span><br><span class="line">prompt_hyde = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">generate_docs_for_retrieval = (</span><br><span class="line">    prompt_hyde | ChatOpenAI(temperature=<span class="number">0</span>) | StrOutputParser() </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run</span></span><br><span class="line">question = <span class="string">&quot;What is task decomposition for LLM agents?&quot;</span></span><br><span class="line">generate_docs_for_retrieval.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line"><span class="comment"># Retrieve</span></span><br><span class="line">retrieval_chain = generate_docs_for_retrieval | retriever </span><br><span class="line">retireved_docs = retrieval_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line">retireved_docs</span><br><span class="line"><span class="comment"># RAG</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Answer the following question based on this context:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Question: &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line">final_rag_chain = (</span><br><span class="line">    prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_rag_chain.invoke(&#123;<span class="string">&quot;context&quot;</span>:retireved_docs,<span class="string">&quot;question&quot;</span>:question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1080,494 +1441,8 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">注册中心分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-04-16 19:25:11" itemprop="dateCreated datePublished" datetime="2024-04-16T19:25:11+08:00">2024-04-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>之前面试问到了工作中用到的注册中心和市面上的有啥异同。</p>
-<p>公司用的注册中心：Zookeeper</p>
-<p>市面上除此之外还有其他注册中心：Eureka、Consul、Nacos</p>
-<table>
-<thead>
-<tr>
-<th>组件名称</th>
-<th>所属公司</th>
-<th>组件介绍</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Zookeeper</td>
-<td>Apache</td>
-<td>Zookeeper是一个分布式协调工具，可以实现注册功能</td>
-</tr>
-<tr>
-<td>Eureka</td>
-<td>Netflix</td>
-<td>Spring最早的注册中心，目前已经进入停更进维</td>
-</tr>
-<tr>
-<td>Consul</td>
-<td>Hashicorp</td>
-<td>Consul简化了分布式环境中的服务的注册和发现流程，通过HTTP或者DNS接口发现，支持外部Saas提供者等</td>
-</tr>
-<tr>
-<td>Nacos</td>
-<td>Alibaba</td>
-<td>Nacos致力于发现、配置和管理微服务。Nacos提供了一组简单易用的特性集，快速实现动态服务发现、服务配置、服务元数据以及流量管理</td>
-</tr>
-</tbody></table>
-<h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>遵循CP原则（一致性，分区容错性），牺牲了高可用。所以任何时候请求都能得到一致的数据结果，但是不能保证每次服务请求都是可达的。比如请求的时候leader节点宕机，或者集群中半数以上节点不可用，那么将无法处理请求。</p>
-<h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><p>遵循AP原则（可用性，分区容错性），牺牲了数据一致性。也就是能保证每次服务请求都是可达的，但是不能保证每次的请求结果都是一致的。Eureka集群没有主从之分，采用的是Peer to Peer对等通信，这是一种去中心化的架构，每个节点都需要添加一个或多个有效的serviceUrl指向其他节点，每个节点都是其他节点的副本。集群中只要还有一个节点存活，那么服务就是可用的，但是不饿能保证查到的数据是最新的或者一致的。</p>
-<p>除此之外还有一种保护机制，如果在15分钟内超过85%的节点都没有正常心跳，Eureka则认为客户端与注册中心之间出现了网络故障，此时会出现以下几种情况：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、Eureka不再从注册表中移除因长时间没有收到心跳而过期的服务</span><br><span class="line"></span><br><span class="line">2、Eureka仍然能够接受新服务注册和查询请求，但不会同步到其他节点上，只保证当前节点可用</span><br><span class="line"></span><br><span class="line">3、当网络稳定时，当前实例新注册的信息会被同步到其他节点</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Consul"><a href="#Consul" class="headerlink" title="Consul"></a>Consul</h3><p>遵循CP原则，Hashicorp公司开发，用于实现分布式系统的服务发现与配置。使用的时Raft算法，比zookeeper使用的Paxos算法更简单，虽然保证了强一致性，但是可用性方面性能有所下降，比如在服务注册方面，Raft协议要求半数以上的节点都写入才算注册成功，leader节点宕机之后，在重新选取出leader节点之前都会导致不可用。</p>
-<h3 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h3><p>遵循AP原则，也可支持CP原则，阿里开源，nacos &#x3D; 注册中心 + 配置中心，总之很强大，推荐。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
-<thead>
-<tr>
-<th></th>
-<th>Nacos</th>
-<th>Eureka</th>
-<th>Consul</th>
-<th>Zookeeper</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>一致性协议</td>
-<td>CP+AP</td>
-<td>AP</td>
-<td>AP</td>
-<td>CP</td>
-</tr>
-<tr>
-<td>健康检查</td>
-<td>TCP&#x2F;HTTP&#x2F;MySQL&#x2F;Client Beat</td>
-<td>Client Beat</td>
-<td>TCP&#x2F;HTTP&#x2F;gRPC&#x2F;Cmd</td>
-<td>keep alive</td>
-</tr>
-<tr>
-<td>负载均衡</td>
-<td>权重&#x2F;metadata&#x2F;Selector</td>
-<td>Ribbon</td>
-<td>Fabio</td>
-<td>-</td>
-</tr>
-<tr>
-<td>自动注销实例</td>
-<td>支持</td>
-<td>支持</td>
-<td>不支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>访问协议</td>
-<td>HTTP&#x2F;DNS</td>
-<td>HTTP</td>
-<td>HTTP&#x2F;DNS</td>
-<td>TCP</td>
-</tr>
-<tr>
-<td>监听支持</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>多数据中心</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td>跨注册中心同步</td>
-<td>支持</td>
-<td>不支持</td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-<tr>
-<td>SpringCloud集成</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-<td>不支持</td>
-</tr>
-</tbody></table>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/" class="post-title-link" itemprop="url">4月15面试复盘</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-04-15 21:14:54" itemprop="dateCreated datePublished" datetime="2024-04-15T21:14:54+08:00">2024-04-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。</p>
-<h3 id="面试问题"><a href="#面试问题" class="headerlink" title="面试问题"></a>面试问题</h3><p>有些问题记不上来了，将记忆清楚和答的不好的记录复盘。</p>
-<h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>问：</p>
-<p>我们使用的<strong>注册中心、配置中心</strong>和市面使用的spring或者nacos的异同。</p>
-<p>复盘：</p>
-<p>公司使用的是zookeeper，市面常见的主要有4种<strong>Eureka、Zookeeper、Consul、Nacos</strong>。</p>
-<p>具体的对比差异没有答好，简述了注册中心<strong>AP，CP</strong>的差异。</p>
-<p>在配置中心上，目前常用的有<strong>springcloud config、nacos、apollo</strong></p>
-<p>具体的差异也没答上。</p>
-<p>后续整理归纳一篇文章。</p>
-<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>问：自定义经典线程池拒绝策略</p>
-<p>复盘：</p>
-<p>相当于知识盲区了，没有答上，只知道有4种拒绝策略：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、AbortPolicy：默认拒绝策略，抛出RejectExecutionException异常</span><br><span class="line"></span><br><span class="line">2、CallerRunsPolicy：不抛异常，而是让提交任务的线程自己去执行这个任务</span><br><span class="line"></span><br><span class="line">3、DiscardOldestPolicy：策略会丢失队列中最老的以恶搞任务，然后重新尝试新提交被拒绝的任务</span><br><span class="line"></span><br><span class="line">4、DiscardPolicy：抛弃被拒绝的任务，不会做任何处理也不会抛出异常。</span><br></pre></td></tr></table></figure>
-
-<p>自定义的拒绝策略没有了解过，可以写篇文章总结了解一下。</p>
-<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>问：优化SQL方案</p>
-<p>复盘：知道一些优化方案，但是没有条理性</p>
-<p>需要整理一下，最好整理成一个全面的方法论</p>
-<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>问：redis和数据库同步一致性方案</p>
-<p>复盘：知道新跟新数据库，再更新缓存</p>
-<p>但是全面的方法论没有将出来。</p>
-<h4 id="问题5"><a href="#问题5" class="headerlink" title="问题5"></a>问题5</h4><p>问：jdk 虚拟线程，新版jdk特性</p>
-<p>复盘：jdk8之后都没有了解，这块短板等补齐，目前面试很少问到这个，但是得了解补齐.</p>
-<p>问：新版jdk的垃圾回收器</p>
-<p>复盘：同上</p>
-<h4 id="问题6"><a href="#问题6" class="headerlink" title="问题6"></a>问题6</h4><p>问：jdk调优工具</p>
-<p>复盘：知识盲点。得补齐，可能后续面试工作中用不到，但是得了解一下。</p>
-<h4 id="问题7"><a href="#问题7" class="headerlink" title="问题7"></a>问题7</h4><p>问：如何打破双亲加载机制</p>
-<p>复盘：知道双亲加载机制，但是如何打破倒是没有深入了解，自己也写篇文章总结一下。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总体来说，每个问题都有自己知道的点，但是好多没有全面的回答。<strong>回答的都是一个个的点，没有梳理成一个面</strong>，体现自己的逻辑性，条理性和全面性</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/" class="post-title-link" itemprop="url">面试复盘-03-27</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-03-27 18:39:52" itemprop="dateCreated datePublished" datetime="2024-03-27T18:39:52+08:00">2024-03-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-03-28 21:09:36" itemprop="dateModified" datetime="2024-03-28T21:09:36+08:00">2024-03-28</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>这次面试场面有点大，6个面试官，但只有3个面试官提问了。前两个面试官回答的还行，后一个面试官直接问懵了。</p>
-<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><p>19年毕业，4年多工作经验，华为这边工作。</p>
-<p>目前团队业务是以洞察、评估、规划和收益四个部分向运营商提供数字化机会点发现。</p>
-<p>项目是以全球数据沙盘项目为基础，业务向外扩展OTN to 楼宇，OTN综合承载等项目。</p>
-<p>自己近项目组以来，从构建测试网络开始了解全球数据沙盘项目，到路网算法开始参与项目，然后开始OTN to 楼宇参与业务拓展，到最后的模型收编和原子能力编排重构项目。</p>
-<h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>可以说一下自己参与<strong>开源项目dubbo</strong>，个人学习构建<strong>商城项目</strong>的框架代码，以及个人<strong>博客文章</strong>的分享。</p>
-<p>也可以说一下自己在团队内的定位。</p>
-<p>可以画个<strong>思维导图</strong>，下次按思维导图介绍。</p>
-<p><img src="/../images/black-03-27/image-20240328200205037.png"></p>
-<h2 id="第一个面试官"><a href="#第一个面试官" class="headerlink" title="第一个面试官"></a>第一个面试官</h2><h3 id="MySQL索引"><a href="#MySQL索引" class="headerlink" title="MySQL索引"></a>MySQL索引</h3><p>问：简述一下mysql的索引</p>
-<p>答：索引类似于书的目录，加快查找数据，它的存在空间换时间。空间就不用说了，索引的存在必然消耗空间，时间的话就是提高了查找效率，减少了消耗的时间。索引分为<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，以InnoDB而言，索引以B+数的形式存储，只不过聚簇和非聚簇在存储细节上有所不同。聚簇也就是主键索引，在叶子节点上是以主键和数据一起存放的，而非聚簇索引的叶子节点存储的是普通索引和主键。在查找数据的时候，如果是主键查询责直接通过B+数找到数据，非聚簇索引的话，要通过B+树先找到主键，在通过主键查到数据，这个过程叫做回表。为了提高查找的效率，所以我们一般在查询的时候尽量使用索引，且减少回表。</p>
-<h4 id="回溯-1"><a href="#回溯-1" class="headerlink" title="回溯"></a>回溯</h4><p>点应该都答到了，感觉面试官还比较满意回答，具体的细节和描述的方法可以更提高一点，显得更有条理性。</p>
-<p>总述：索引类似于书的目录，空间换时间，占用了磁盘空间，减少了查找时间。</p>
-<p>分述：分<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，二者在存储上的差异（B+树叶节点的不同），在查询上的差异（回表）。以及我们在实际使用的时候需要注意的点（减少回表，最左覆盖，索引下推，等）。</p>
-<p>追问：既然说到B+树，说一下10个节点的红黑树需要查询一个节点的时间消耗</p>
-<p>答：时间复杂度O(ln)，红黑树的第一层是一个节点，第二层是2个节点，第三层是4个，第5层是8个。查询的话上来先比较根节点，如果比根节点大往右，否则往左…（简述了一下查询流程）…查询像二分查找，先找中间值，比大小等</p>
-<h4 id="回溯-2"><a href="#回溯-2" class="headerlink" title="回溯"></a>回溯</h4><p>应该是面试官想听到的，现场感觉面试官比较满意，但是自己不是很清楚红黑树，不清楚红黑树的非叶子节点是否保存了数据，还是和B+树一样只做比较。</p>
-<p>增加实际业务中的的案例，走联合索引的案例，调换where中的条件顺序。</p>
-<h3 id="SpringMVC流程"><a href="#SpringMVC流程" class="headerlink" title="SpringMVC流程"></a>SpringMVC流程</h3><p>问：说一下MVC的查询流程</p>
-<p>答：<strong>客户端</strong> 请求到 <strong>DispatcherServlet</strong>， <strong>DispatcherServlet</strong>到<strong>HandlerMapping</strong>，然后返回结果给<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在将handler转发到适配器，适配器会有一些过滤拦截啥的，通过后到处理器，也就是controller-&gt;service-&gt;map，然后结果在原路返回到<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在拿到结果后回去调用视图解析器啥的，去将返回的结果解析渲染。</p>
-<h4 id="回溯-3"><a href="#回溯-3" class="headerlink" title="回溯"></a>回溯</h4><p>回答面试官比较满意，听其语义主要想听到<strong>DispatcherServlet</strong>，但是此流程中记得是在适配器中会有拦截过滤，不是特别确定，已经返回结果后的视图解析渲染，两个组件名称记得不是特别清楚。</p>
-<p><img src="/../images/black-03-27/2474678-20221205141025926-329048743.png" alt="img"></p>
-<h3 id="服务间通信"><a href="#服务间通信" class="headerlink" title="服务间通信"></a>服务间通信</h3><p>问：你们有多模块多服务吗，服务间的调用是用的什么。</p>
-<p>答：有，上面自我介绍中也说到了，我们所有业务基本可以分为：洞察，评估，规划，收益，四个模块。模块间的调用用的是http请求。</p>
-<p>追问：请求的结果是要转换的，你们是怎么转换的。</p>
-<p>答：我们的请求不涉及到请求结果的转换，不是那种强依赖。我们模块间的数据交互都是放在数据库的，比如洞察处理完的数据会放在数据库，然后调用评估的模块开始处理，评估模块处理的时候会调用数据库的数据处理，处理的结果会放回数据库，而不是返回给评估模块，这样更解耦。</p>
-<h4 id="回溯-4"><a href="#回溯-4" class="headerlink" title="回溯"></a>回溯</h4><p>其实对这请求调用的方式记得不是特别清楚了，需要复习回顾一下。</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Andy19891117/article/details/134981402">https://blog.csdn.net/Andy19891117/article/details/134981402</a></p>
-<p>RPC调用和http调用，RPC基于传输层TCP协议，Http基于应用层http协议，所以RPC调用的传输效率更高。Http规定了返回的格式而RPC没有。</p>
-<h2 id="第二个面试官"><a href="#第二个面试官" class="headerlink" title="第二个面试官"></a>第二个面试官</h2><h3 id="jar包加载"><a href="#jar包加载" class="headerlink" title="jar包加载"></a>jar包加载</h3><p>问：简历中说的到的原子能力编排是怎么理解的，包是spring jar还是啥，编排是怎么理解。</p>
-<p>答：jar包是fast jar，不是那种有启动类的可执行jar包，编排的话，是我们把能力抽取成一个个的jar包，再以可视化配置的方式，类似于链式调用。</p>
-<p>追问：编排的结果，jar包的顺序执行，这个是以什么数据结构存储的。</p>
-<p>答：存在数据库中，是以字符串的形式存储的，在读取到数据库中字符串，在以特定的字符将字符串分割开，然后遍历执行。</p>
-<p>追问：前端是怎么配置调用后端的jar的</p>
-<p>答：我们是按迭代内的业务需求配置上线的，前台只是提供一个可视化的界面供开发配置，其实我们更习惯直接在配置文件xml中配置，配置完的xml文件会提交到代码仓，在我们的部署阶段，会将这配置文件解析成字符串保存在数据库中，供读取。</p>
-<p>追问：这个项目里的调度和引擎服务怎么理解。</p>
-<p>答：这个网关，调度，引擎内容都比较简单，网关的话直接对外，调度只负责调用原子能力jar，引擎是加载运行jar。这么分是为了职责更单一内敛。</p>
-<p>追问：jar包是怎么加载的。</p>
-<p>答：读取到lib目录下的依赖，先将依赖通过双亲依赖加载给加载进来，然后在通过同一规范的jar包入口，开始调用jar内的方法。</p>
-<p>追问：双亲加载有三个加载器，加载器是啥。</p>
-<p>答：记得不是特别清了，只记得一个是系统加载，两个是加载外部文件依赖加载。</p>
-<h4 id="回溯-5"><a href="#回溯-5" class="headerlink" title="回溯"></a>回溯</h4><p>面试感觉一般，虽然大部分都答到了，但是还有结果点不熟。</p>
-<p>1、jar包的分类不熟</p>
-<p>fat jar</p>
-<p>2、jar包的加载，了解大概流程，不了解其具体细节。</p>
-<p>3、三个父加载器忘了，没想起来名字。</p>
-<p>4、怎么卸载jar包</p>
-<p>启动类加载器（Bootstrap Class Loader）：也称为根类加载器，它负责加载Java虚拟机的核心类库，如java.lang.Object等。启动类加载器是虚拟机实现的一部分，它通常是由本地代码实现的，不是Java类。</p>
-<p>扩展类加载器（Extension Class Loader）：它是用来加载Java扩展类库的类加载器。扩展类库包括javax和java.util等包，它们位于jre&#x2F;lib&#x2F;ext目录下。</p>
-<p>应用程序类加载器（Application Class Loader）：也称为系统类加载器，它负责加载应用程序的类。它会搜索应用程序的类路径（包括用户定义的类路径和系统类路径），并加载类文件。</p>
-<h3 id="注解加载"><a href="#注解加载" class="headerlink" title="注解加载"></a>注解加载</h3><p>问：注解是怎么加载的</p>
-<p>答：看过源码，记得不是特别清了，spring启动类上会有enable开启注解加载，后面通过一层层的调用，大概3~4层，读取到lib目录下的文件，然后再通过条件判断是否加载。</p>
-<h4 id="回溯-6"><a href="#回溯-6" class="headerlink" title="回溯"></a>回溯</h4><p>回答一般，之前确实看过，现在确实忘了</p>
-<p><strong>自动配置原理</strong>：SpringBoot 项目的核心注解 @SpringBootApplication，这个注解位于启动类上方。@SpringBootApplication 看作是 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解的集合。自动装配核心功能的实现是通过@EnableAutoConfiguration内部的AutoConfigurationImportSelector类。AutoConfigurationImportSelector 类实现了 ImportSelector 接口，也就实现了这个接口中的 selectImports 方法，<strong>该方法主要用于获取所有符合条件的类的全限定类名，需要为这些类创建对象并加载到 IoC 容器中</strong>。@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
-<p>​	@EnableAutoConfiguration：启用 SpringBoot 的自动配置机制。</p>
-<p>​	@Configuration：允许在上下文中注册额外的 bean 或导入其他配置类，作用与 applicationContext.xml 的功能相同。</p>
-<p>​	@ComponentScan： 扫描包下的类中添加了@Component (@Service，@Controller，@Repostory，@RestController)注解的类 ，并添加的到spring的容器中，可以自定义不扫描某些 bean。</p>
-<p><img src="/../images/black-03-27/image-20240329210812763.png" alt="image-20240329210812763"></p>
-<p>getAutoConfigurationEntry：</p>
-<p><strong>第 1 步：</strong>判断自动装配开关是否打开。默认 spring.boot.enableautoconfiguration &#x3D; true，可在 application.properties 或 application.yml 中设置</p>
-<p><strong>第 2 步：</strong>用于获取 EnableAutoConfiguration 注解中的 exclude 和 excludeName。</p>
-<p><strong>第 3 步：</strong>从 META-INF&#x2F;spring.factories 读取需要自动装配的所有配置类。</p>
-<p><strong>第 4 步：</strong>这一步有经历了一遍筛选过滤，@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59749089/article/details/131280769">https://blog.csdn.net/m0_59749089/article/details/131280769</a></p>
-<h2 id="第三个面试官"><a href="#第三个面试官" class="headerlink" title="第三个面试官"></a>第三个面试官</h2><h3 id="bean加载"><a href="#bean加载" class="headerlink" title="bean加载"></a>bean加载</h3><p>问：如果我想再bean初始化时候改变其变量值，或者说再方法前打印一个日志。</p>
-<p>答：使用代理，再调用方法前后打印日志。</p>
-<p>追问：不是代理，是在初始化的时候。</p>
-<p>答：在xml文件中，配置修改，在bean初始化的时候给其赋值。</p>
-<h4 id="回溯-7"><a href="#回溯-7" class="headerlink" title="回溯"></a>回溯</h4><p>貌似这也不是面试官想要的，确实不知道是啥，得查资料研究看看。</p>
-<p>bean的加载过程：</p>
-<p>加载bean信息–&gt;实例化bean–&gt;属性填充–&gt;初始化阶段–&gt;后置处理</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_46897923/article/details/129850717">https://blog.csdn.net/m0_46897923/article/details/129850717</a></p>
-<h3 id="容器化"><a href="#容器化" class="headerlink" title="容器化"></a>容器化</h3><p>问：你们容器化用的怎么样。</p>
-<p>答：我们部门目前才开始推，我们还没有开始使用容器化，但是自己也搭环境简单使用过容器化，比如部署一个redis、mysql等。</p>
-<h4 id="回溯-8"><a href="#回溯-8" class="headerlink" title="回溯"></a>回溯</h4><p>熟悉了解一下容器化，这方面得了解确实不够，只是简单得使用了一下。</p>
-<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>问：核心线程数10，最大线程数20，现有1w个并发，为什么线程数一直是10，不是队列里有1w。</p>
-<p>答：不知，尝试分析，是不是资源不够，没办法新增。</p>
-<h4 id="回溯-9"><a href="#回溯-9" class="headerlink" title="回溯"></a>回溯</h4><p>确实不知，等了解。</p>
-<p>问：synchronized的用法</p>
-<p>答：修饰代码块或者方法，注意synchronized()中括号内的内容，可以是变量，对象和class类，对应锁的颗粒不一样。</p>
-<p>追问：对象和class类有什么不一样。</p>
-<p>答：对象是可以重复new的，但是class类只有一个，跟静态变量一样，用的时候要注意，别用错导致没锁好。</p>
-<p>追问：线程的睡眠和唤醒是怎么样的。</p>
-<p>答：A、B两个线程，A运行到某个地方，停住了睡眠了，B开始运行，运行到某个地方，通过A的方法唤醒A。</p>
-<h4 id="回溯-10"><a href="#回溯-10" class="headerlink" title="回溯"></a>回溯</h4><p>1、感觉追问的对象和类有什么不一样，没回答到他想要的，复习一下。</p>
-<p>2、睡眠唤醒的模型有点忘了，再代码实操一下。</p>
-<h3 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h3><p>问：kafka里的消费者组是什么。</p>
-<p>答：消费者的集合，一堆消费者组成的一个集合。</p>
-<p>问：topic里的分区能被消费者组内的多个消费者消费吗</p>
-<p>答：不能，一个分区只能被消费者组内一个消费者消费。</p>
-<p>问：怎么保证生产者生产的消息，顺序消费。</p>
-<p>答：都放在一个分区内，kafka不保证topic内的消息是顺序的，但是保证分区内的数据是顺序消费的。</p>
-<p>问：消息是怎么划分分区的。</p>
-<p>答：根据key的计算，具体的计算方法不知道。</p>
-<p>问：如果key为null会怎么样。</p>
-<p>答：不知</p>
-<h4 id="回溯-11"><a href="#回溯-11" class="headerlink" title="回溯"></a>回溯</h4><p>1、消费者组的概念</p>
-<p>2、分区和消费者组、消费者的消费关系模型</p>
-<p>3、分区的指定逻辑。</p>
-<p>4、key为null会怎样。</p>
-<p>随机选取一个分区缓存发送，过了分区的缓存时间后在随机选取一个分区缓存发送。</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709">https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="​	在java中，我们主要用到的锁有两个：synchronized、ReentrantLock。一个是内置锁（语言级），一个是显示锁，一般如果我们不思考只图方便的化，会直接使用synchronized锁。其实ReentrantLock更灵活多变，适用跟多的场景。我们可以通过下面的表对比一下两者。    特性&#x2F;维度 synchronized ReentrantLock    所属包 Jav">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java中的常用锁">
+<meta property="og:url" content="http://example.com/2024/02/26/Java%E4%B8%AD%E7%9A%84%E9%94%81/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="​	在java中，我们主要用到的锁有两个：synchronized、ReentrantLock。一个是内置锁（语言级），一个是显示锁，一般如果我们不思考只图方便的化，会直接使用synchronized锁。其实ReentrantLock更灵活多变，适用跟多的场景。我们可以通过下面的表对比一下两者。    特性&#x2F;维度 synchronized ReentrantLock    所属包 Jav">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-02-26T12:26:53.000Z">
+<meta property="article:modified_time" content="2024-02-26T15:25:40.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="Locks">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2024/02/26/Java%E4%B8%AD%E7%9A%84%E9%94%81/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/02/26/Java%E4%B8%AD%E7%9A%84%E9%94%81/","path":"2024/02/26/Java中的锁/","title":"Java中的常用锁"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java中的常用锁 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E9%94%81%E5%8E%9F%E7%90%86%EF%BC%88%E5%BA%95%E5%B1%82%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">加锁原理（底层）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E9%94%81%E8%BF%87%E7%A8%8B%E7%AE%80%E8%A6%81%E6%B5%81%E7%A8%8B%E5%9B%BE%EF%BC%88%E9%80%BB%E8%BE%91%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">加锁过程简要流程图（逻辑）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E5%B1%82%E9%9D%A2"><span class="nav-number">3.</span> <span class="nav-text">字节码层面</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#JVM%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="nav-number">4.</span> <span class="nav-text">JVM实现细节</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReentrantLock"><span class="nav-number"></span> <span class="nav-text">ReentrantLock</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E9%94%81%E5%8E%9F%E7%90%86%EF%BC%88%E5%BA%95%E5%B1%82%EF%BC%89-1"><span class="nav-number">1.</span> <span class="nav-text">加锁原理（底层）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A0%E9%94%81%E8%BF%87%E7%A8%8B%E7%AE%80%E8%A6%81%E6%B5%81%E7%A8%8B%E5%9B%BE%EF%BC%88%E9%80%BB%E8%BE%91%EF%BC%89-1"><span class="nav-number">2.</span> <span class="nav-text">加锁过程简要流程图（逻辑）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AQS%E7%9A%84%E9%98%9F%E5%88%97%E7%BB%93%E6%9E%84"><span class="nav-number">3.</span> <span class="nav-text">AQS的队列结构</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%94%A4%E9%86%92"><span class="nav-number"></span> <span class="nav-text">如何唤醒</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-synchronized-%E7%9A%84%E9%9D%9E%E5%85%AC%E5%B9%B3%E8%A1%8C%E4%B8%BA"><span class="nav-number"></span> <span class="nav-text">1. synchronized 的非公平行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-ReentrantLock-%E7%9A%84%E9%9D%9E%E5%85%AC%E5%B9%B3%E8%A1%8C%E4%B8%BA"><span class="nav-number"></span> <span class="nav-text">2. ReentrantLock 的非公平行为</span></a></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/26/Java%E4%B8%AD%E7%9A%84%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java中的常用锁 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java中的常用锁
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-26 20:26:53 / 修改时间：23:25:40" itemprop="dateCreated datePublished" datetime="2024-02-26T20:26:53+08:00">2024-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>​	在java中，我们主要用到的锁有两个：synchronized、ReentrantLock。一个是内置锁（语言级），一个是显示锁，一般如果我们不思考只图方便的化，会直接使用synchronized锁。其实ReentrantLock更灵活多变，适用跟多的场景。我们可以通过下面的表对比一下两者。</p>
+<table>
+<thead>
+<tr>
+<th>特性&#x2F;维度</th>
+<th><code>synchronized</code></th>
+<th><code>ReentrantLock</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>所属包</td>
+<td>Java 语言层面（内置关键字）</td>
+<td><code>java.util.concurrent.locks</code></td>
+</tr>
+<tr>
+<td>可重入性</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>是否必须手动解锁</td>
+<td>❌ 自动（方法或代码块退出时）</td>
+<td>✅ 必须手动 <code>unlock()</code></td>
+</tr>
+<tr>
+<td>是否可中断获取锁</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 <code>lockInterruptibly()</code></td>
+</tr>
+<tr>
+<td>是否支持尝试获取锁</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 <code>tryLock()</code>（立即或超时）</td>
+</tr>
+<tr>
+<td>是否支持公平锁</td>
+<td>❌ 不支持</td>
+<td>✅ 支持（<code>new ReentrantLock(true)</code>）</td>
+</tr>
+<tr>
+<td>是否支持条件队列</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 <code>Condition</code>（类似 <code>wait/notify</code>）</td>
+</tr>
+<tr>
+<td>性能优化（偏向锁等）</td>
+<td>✅ JVM 自动优化</td>
+<td>❌ 无（完全由开发者控制）</td>
+</tr>
+<tr>
+<td>是否支持可见调试</td>
+<td>❌ 无法查看状态</td>
+<td>✅ 可查看是否被锁定、等待线程等</td>
+</tr>
+<tr>
+<td>死锁处理</td>
+<td>不易发现</td>
+<td>可结合 <code>tryLock()</code> 等策略避免死锁</td>
+</tr>
+</tbody></table>
+<p>​	其实在上述这些维度方面都没啥好说的，这些一般都知道。都知道synchronized是关键字而ReentrantLock是一个类，然后两者都能加锁，这锁怎么去加，有什么效果，都是知道的。</p>
+<p>​	那synchronized和ReentrantLock又分别是怎么加锁的呢？</p>
+<pre><code>#### synchronized
+</code></pre>
+<h5 id="加锁原理（底层）"><a href="#加锁原理（底层）" class="headerlink" title="加锁原理（底层）"></a>加锁原理（底层）</h5><ul>
+<li>Java 对象头中包含了 <strong>Mark Word</strong>，在没有加锁时存储哈希值、GC信息等。</li>
+<li>当线程进入 <code>synchronized</code> 块时，会尝试修改对象头的 Mark Word，以标识当前线程持有锁。</li>
+<li>JVM 使用了多种锁优化策略（偏向锁、轻量级锁、重量级锁）：<ul>
+<li><strong>偏向锁</strong>：如果只有一个线程访问，尽量不加锁，提高性能。</li>
+<li><strong>轻量级锁</strong>：使用 CAS 尝试获取锁，适用于低竞争。</li>
+<li><strong>重量级锁（互斥锁）</strong>：竞争激烈时，会挂起线程，使用 <code>Monitor</code> 来实现，依赖操作系统的互斥机制。</li>
+</ul>
+</li>
+</ul>
+<h5 id="加锁过程简要流程图（逻辑）"><a href="#加锁过程简要流程图（逻辑）" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程进入synchronized：</span><br><span class="line">    |</span><br><span class="line">    |<span class="comment">-- 检查对象头Mark Word（是否偏向、锁状态）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果空闲，则尝试通过CAS加锁（轻量级）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果失败，有竞争，则升级为重量级锁（挂起线程）</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="字节码层面"><a href="#字节码层面" class="headerlink" title="字节码层面"></a>字节码层面</h5><p>编译后使用 <code>javap -v Test.class</code> 查看，会看到如下结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">java</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CopyEdit</span><br><span class="line">public void syncBlock() &#123;</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">        System.out.println(&quot;Hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反编译字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">asm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CopyEdit</span><br><span class="line">0: aload_0</span><br><span class="line">1: dup</span><br><span class="line">2: monitorenter       // 进入同步块</span><br><span class="line">3: getstatic java/lang/System.out : Ljava/io/PrintStream;</span><br><span class="line">6: ldc &quot;Hello&quot;</span><br><span class="line">8: invokevirtual java/io/PrintStream.println(Ljava/lang/String;)V</span><br><span class="line">11: monitorexit       // 退出同步块</span><br><span class="line">12: goto 20</span><br><span class="line">15: astore_1</span><br><span class="line">16: monitorexit       // 异常时也要退出同步块</span><br><span class="line">17: aload_1</span><br><span class="line">18: athrow</span><br></pre></td></tr></table></figure>
+
+<p><code>monitorenter</code> 和 <code>monitorexit</code> 是 JVM 指令，由 JVM 解释器直接处理，底层是调用 native 方法去操作对象的 Monitor。</p>
+<h5 id="JVM实现细节"><a href="#JVM实现细节" class="headerlink" title="JVM实现细节"></a>JVM实现细节</h5><p>HotSpot 中，对象的 Monitor 实际上是 <code>ObjectMonitor</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ObjectMonitor</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">  ObjectWaiter * _EntryList;   <span class="comment">// 等待锁的线程队列</span></span><br><span class="line">  Thread * _Owner;             <span class="comment">// 当前持有锁的线程</span></span><br><span class="line">  <span class="type">int</span> _recursions;             <span class="comment">// 重入次数</span></span><br><span class="line">  ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Monitor 与每个对象的 <strong>对象头（Mark Word）</strong> 关联，当竞争严重时锁会升级：</p>
+<ul>
+<li><strong>偏向锁</strong>：只记录线程 ID，适合无竞争场景</li>
+<li><strong>轻量级锁</strong>：线程通过 CAS 抢占锁</li>
+<li><strong>重量级锁</strong>：膨胀为 <code>ObjectMonitor</code>，线程挂起和唤醒都依赖 OS 的 <code>park/unpark</code></li>
+</ul>
+<h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><h5 id="加锁原理（底层）-1"><a href="#加锁原理（底层）-1" class="headerlink" title="加锁原理（底层）"></a>加锁原理（底层）</h5><ul>
+<li><code>ReentrantLock</code> 是基于 <strong>AQS（AbstractQueuedSynchronizer）</strong> 实现的。</li>
+<li>调用 <code>lock()</code> 会尝试通过 CAS 修改一个 <strong>state 状态变量</strong>，来标识是否持有锁。</li>
+<li>若获取失败，线程会被放入 AQS 的 <strong>双向等待队列</strong>中，等待唤醒。</li>
+</ul>
+<h5 id="加锁过程简要流程图（逻辑）-1"><a href="#加锁过程简要流程图（逻辑）-1" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程调用lock()：</span><br><span class="line">    |</span><br><span class="line">    |<span class="comment">-- 尝试通过CAS将state从0改为1（加锁）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果成功，获得锁</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果失败，进入AQS等待队列</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="AQS的队列结构"><a href="#AQS的队列结构" class="headerlink" title="AQS的队列结构"></a>AQS的队列结构</h5><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">head -&gt; [Node1] -&gt; [Node2] -&gt; ...</span><br><span class="line">         <span class="built_in">^</span>          <span class="built_in">^</span></span><br><span class="line">      线程1     线程2（阻塞）</span><br></pre></td></tr></table></figure>
+
+<p>每个 Node 包含：</p>
+<ul>
+<li>等待线程 <code>Thread thread</code></li>
+<li>等待状态 <code>waitStatus</code></li>
+<li>前驱&#x2F;后继节点 <code>prev</code> &#x2F; <code>next</code></li>
+</ul>
+<p>底层通过 <code>LockSupport.park()</code> 和 <code>unpark()</code> 来实现线程的阻塞与唤醒。</p>
+<h4 id="如何唤醒"><a href="#如何唤醒" class="headerlink" title="如何唤醒"></a>如何唤醒</h4><p>​	两者都是有阻塞队列，队列都是有序的，为什么会出现非公平唤醒呢？</p>
+<p>​	**因为”排队” ≠ “唤醒一定按顺序”**。</p>
+<p>Java 的锁（尤其是默认的 <code>synchronized</code> 和非公平 <code>ReentrantLock</code>）使用的阻塞队列只是<strong>阻塞等待顺序的组织方式</strong>，但<strong>唤醒后是否真正获得锁，还要竞争</strong>（CAS），所以就可能出现：</p>
+<blockquote>
+<p><strong>先排队的线程被唤醒了，但还没抢到锁；此时一个新线程进来，直接CAS成功拿到了锁。</strong></p>
+</blockquote>
+<h3 id="1-synchronized-的非公平行为"><a href="#1-synchronized-的非公平行为" class="headerlink" title="1. synchronized 的非公平行为"></a>1. <code>synchronized</code> 的非公平行为</h3><p><code>synchronized</code> 底层用的是 <code>ObjectMonitor</code>，当有多个线程竞争时，JVM 不保证 <strong>先唤醒的一定先拿到锁</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CopyEdit</span><br><span class="line"><span class="comment">// ObjectMonitor.cpp</span></span><br><span class="line"><span class="keyword">void</span> ObjectMonitor::exit(...) &#123;</span><br><span class="line">    <span class="comment">// 调用 _EntryList 中的某个线程 unpark（但可能不是严格FIFO）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>唤醒后还要重新尝试获取锁（CAS）</strong>，不是直接转移锁的拥有权，所以：</p>
+<ul>
+<li><p>后来的线程进来，如果没有阻塞，仍然可能直接成功拿到锁。</p>
+</li>
+<li><p>被唤醒的线程，反而还得和新线程竞争，可能继续失败。</p>
+</li>
+</ul>
+<h3 id="2-ReentrantLock-的非公平行为"><a href="#2-ReentrantLock-的非公平行为" class="headerlink" title="2. ReentrantLock 的非公平行为"></a>2. <code>ReentrantLock</code> 的非公平行为</h3><p>默认构造的 <code>ReentrantLock()</code> 是<strong>非公平锁</strong>，非公平策略体现在 <code>lock()</code> 方法中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CopyEdit</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>)) &#123;     <span class="comment">// 直接抢锁，不管队列中有没有人</span></span><br><span class="line">        setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        acquire(<span class="number">1</span>);                     <span class="comment">// 抢不到才排队</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说：</p>
+<ul>
+<li><strong>没有优先检查 AQS 队列中是否有等待的线程</strong></li>
+<li>只要锁是空闲的，谁来谁抢，先到的不一定先拿到</li>
+</ul>
+<p>即使队列中有等待线程，新线程仍然可以“插队”成功。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Locks/" rel="tag"># Locks</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/02/26/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="prev" title="深度学习">
+                  <i class="fa fa-angle-left"></i> 深度学习
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/03/26/%E6%B7%BB%E5%8A%A0%E8%81%8A%E5%A4%A9%E5%8A%9E%E5%85%AC%E6%9C%BA%E5%99%A8%E4%BA%BA/" rel="next" title="添加聊天办公机器人">
+                  添加聊天办公机器人 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="简述​	RAG的主流程其实比较简单，就是先将用户的提问去向量数据库查询相关文档，再将文档和用户提问组装发送给大模型生成答案，最后将答案返回给用户。其中主要的组件只有向量数据库和大模型，只是两相组合可以玩出花来。  丰富提示词​	RAG意思是检索增强生成，大模型的生成都是根据提示词生成的，而向量库的存在就是为了丰富我们的提示词，丰富了我们的提示词，大模型才能生成出更理想更丰富合适的答案。那怎么丰富我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RAG-丰富提示词">
+<meta property="og:url" content="http://example.com/2025/06/21/RAG-%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="简述​	RAG的主流程其实比较简单，就是先将用户的提问去向量数据库查询相关文档，再将文档和用户提问组装发送给大模型生成答案，最后将答案返回给用户。其中主要的组件只有向量数据库和大模型，只是两相组合可以玩出花来。  丰富提示词​	RAG意思是检索增强生成，大模型的生成都是根据提示词生成的，而向量库的存在就是为了丰富我们的提示词，丰富了我们的提示词，大模型才能生成出更理想更丰富合适的答案。那怎么丰富我">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/images/rag-ext/rag_base_uml.png">
+<meta property="og:image" content="http://example.com/images/rag-ext/multi_query_1.png">
+<meta property="og:image" content="http://example.com/images/rag-ext/multi_query_2.png">
+<meta property="og:image" content="http://example.com/images/rag-ext/decomposition.png">
+<meta property="og:image" content="http://example.com/images/rag-ext/answer_individually.png">
+<meta property="og:image" content="http://example.com/images/rag-ext/step_back.png">
+<meta property="og:image" content="http://example.com/images/rag-ext/hyde.png">
+<meta property="article:published_time" content="2025-06-21T07:28:52.000Z">
+<meta property="article:modified_time" content="2025-06-21T07:28:52.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="AI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/rag-ext/rag_base_uml.png">
+
+
+<link rel="canonical" href="http://example.com/2025/06/21/RAG-%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2025/06/21/RAG-%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D/","path":"2025/06/21/RAG-丰富提示词/","title":"RAG-丰富提示词"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>RAG-丰富提示词 | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%80%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-number">2.</span> <span class="nav-text">丰富提示词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E7%89%88%E6%9C%AC%E6%9F%A5%E8%AF%A2"><span class="nav-number">2.1.</span> <span class="nav-text">多版本查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E8%9E%8D%E5%90%88"><span class="nav-number">2.2.</span> <span class="nav-text">结果融合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E9%97%AE%E5%88%86%E8%A7%A3"><span class="nav-number">2.3.</span> <span class="nav-text">提问分解</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E5%9B%9E%E7%AD%94"><span class="nav-number">2.3.1.</span> <span class="nav-text">递归回答</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%9E%8D%E5%90%88%E5%9B%9E%E7%AD%94"><span class="nav-number">2.3.2.</span> <span class="nav-text">融合回答</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E9%80%80%E9%87%8D%E5%A4%8D%E7%94%9F%E6%88%90"><span class="nav-number">2.4.</span> <span class="nav-text">后退重复生成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%87%E6%83%B3%E6%96%87%E6%A1%A3"><span class="nav-number">2.5.</span> <span class="nav-text">假想文档</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/06/21/RAG-%E4%B8%B0%E5%AF%8C%E6%8F%90%E7%A4%BA%E8%AF%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="RAG-丰富提示词 | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RAG-丰富提示词
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-06-21 15:28:52" itemprop="dateCreated datePublished" datetime="2025-06-21T15:28:52+08:00">2025-06-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/rag/" itemprop="url" rel="index"><span itemprop="name">rag</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>​	RAG的主流程其实比较简单，就是先将用户的提问去向量数据库查询相关文档，再将文档和用户提问组装发送给大模型生成答案，最后将答案返回给用户。其中主要的组件只有向量数据库和大模型，只是两相组合可以玩出花来。</p>
+<p><img src="/../images/rag-ext/rag_base_uml.png" alt="image-20250621160518166"></p>
+<h3 id="丰富提示词"><a href="#丰富提示词" class="headerlink" title="丰富提示词"></a>丰富提示词</h3><p>​	RAG意思是检索增强生成，大模型的生成都是根据提示词生成的，而向量库的存在就是为了丰富我们的提示词，丰富了我们的提示词，大模型才能生成出更理想更丰富合适的答案。那怎么丰富我们的提示词呢？</p>
+<h4 id="多版本查询"><a href="#多版本查询" class="headerlink" title="多版本查询"></a>多版本查询</h4><p>​	在我们用问题向量化之后向量去检索向量库得到文档的时候，我们能不能尽可能多的获取相关性的文档，比如说，我的提问是用汉语提问题的，这时候向量化之后一定会带有汉语的向量，导致检索向量库的时候检索到可能都是汉语的文档，其实有些问题的英语文档或者其他语言的文档更全面，如果检索到这些文档，去丰富我们的提示词，生成的答案就会更好。</p>
+<p>​	当然我们在提问的时候不可能每个语言或者其他角度都描述到，这时候我们可以让llm帮我们生成这些版本的问题，去检索到更多更有效的文档。</p>
+<p><img src="/../images/rag-ext/multi_query_1.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># Multi Query: Different Perspectives</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;You are an AI language model assistant. Your task is to generate five </span></span><br><span class="line"><span class="string">different versions of the given user question to retrieve relevant documents from a vector </span></span><br><span class="line"><span class="string">database. By generating multiple perspectives on the user question, your goal is to help</span></span><br><span class="line"><span class="string">the user overcome some of the limitations of the distance-based similarity search. </span></span><br><span class="line"><span class="string">Provide these alternative questions separated by newlines. Original question: &#123;question&#125;&quot;&quot;&quot;</span></span><br><span class="line">prompt_perspectives = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">generate_queries = (</span><br><span class="line">    prompt_perspectives </span><br><span class="line">    | ChatOpenAI(temperature=<span class="number">0</span>) </span><br><span class="line">    | StrOutputParser() </span><br><span class="line">    | (<span class="keyword">lambda</span> x: x.split(<span class="string">&quot;\n&quot;</span>))</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain.load <span class="keyword">import</span> dumps, loads</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_unique_union</span>(<span class="params">documents: <span class="built_in">list</span>[<span class="built_in">list</span>]</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Unique union of retrieved docs &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># Flatten list of lists, and convert each Document to string</span></span><br><span class="line">    flattened_docs = [dumps(doc) <span class="keyword">for</span> sublist <span class="keyword">in</span> documents <span class="keyword">for</span> doc <span class="keyword">in</span> sublist]</span><br><span class="line">    <span class="comment"># Get unique documents</span></span><br><span class="line">    unique_docs = <span class="built_in">list</span>(<span class="built_in">set</span>(flattened_docs))</span><br><span class="line">    <span class="comment"># Return</span></span><br><span class="line">    <span class="keyword">return</span> [loads(doc) <span class="keyword">for</span> doc <span class="keyword">in</span> unique_docs]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Retrieve</span></span><br><span class="line">question = <span class="string">&quot;What is task decomposition for LLM agents?&quot;</span></span><br><span class="line">retrieval_chain = generate_queries | retriever.<span class="built_in">map</span>() | get_unique_union</span><br><span class="line">docs = retrieval_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line"><span class="built_in">len</span>(docs)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnablePassthrough</span><br><span class="line"></span><br><span class="line"><span class="comment"># RAG</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Answer the following question based on this context:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Question: &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">final_rag_chain = (</span><br><span class="line">    &#123;<span class="string">&quot;context&quot;</span>: retrieval_chain, </span><br><span class="line">     <span class="string">&quot;question&quot;</span>: itemgetter(<span class="string">&quot;question&quot;</span>)&#125; </span><br><span class="line">    | prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_rag_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="结果融合"><a href="#结果融合" class="headerlink" title="结果融合"></a>结果融合</h4><p>​	上面的过程，我们将多版本检索出来的结果都提交给大模型生成答案了，多版本检索出来的多结果肯定有好有坏，坏的结果一起提交给大模型，肯定也会影响大模型生成答案，那我们要怎么做才能让减少坏结果的影响呢？</p>
+<p>​	在我们搜索的多结果中，我们可以根据文档在每个列表中的排名，通过 RRF 算法为每个文档打分，最终返回一个<strong>融合后的排序列表</strong>，最后从列表中筛选出前几个我们想要的结果即可。</p>
+<p>给定多个文档排名列表（多个检索器、多个查询），RRF 的打分公式如下：</p>
+<p>$$<br>\text{Score}(d) &#x3D; \sum_{i&#x3D;1}^{n} \frac{1}{\text{rank}_i + k}<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>( \text{rank}_i )：文档 ( d ) 在第 ( i ) 个排序列表中的排名（从 0 开始）</li>
+<li>( k )：平滑参数（通常取 60）</li>
+<li>( n )：总共融合的列表数量（例如不同查询或不同检索器）</li>
+</ul>
+<blockquote>
+<p>文档出现越多、排名越靠前，其 RRF 得分就越高。</p>
+</blockquote>
+<p><img src="/../images/rag-ext/multi_query_2.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">reciprocal_rank_fusion</span>(<span class="params">results: <span class="built_in">list</span>[<span class="built_in">list</span>], k=<span class="number">60</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot; Reciprocal_rank_fusion that takes multiple lists of ranked documents </span></span><br><span class="line"><span class="string">        and an optional parameter k used in the RRF formula &quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Initialize a dictionary to hold fused scores for each unique document</span></span><br><span class="line">    fused_scores = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Iterate through each list of ranked documents</span></span><br><span class="line">    <span class="keyword">for</span> docs <span class="keyword">in</span> results:</span><br><span class="line">        <span class="comment"># Iterate through each document in the list, with its rank (position in the list)</span></span><br><span class="line">        <span class="keyword">for</span> rank, doc <span class="keyword">in</span> <span class="built_in">enumerate</span>(docs):</span><br><span class="line">            <span class="comment"># Convert the document to a string format to use as a key (assumes documents can be serialized to JSON)</span></span><br><span class="line">            doc_str = dumps(doc)</span><br><span class="line">            <span class="comment"># If the document is not yet in the fused_scores dictionary, add it with an initial score of 0</span></span><br><span class="line">            <span class="keyword">if</span> doc_str <span class="keyword">not</span> <span class="keyword">in</span> fused_scores:</span><br><span class="line">                fused_scores[doc_str] = <span class="number">0</span></span><br><span class="line">            <span class="comment"># Retrieve the current score of the document, if any</span></span><br><span class="line">            previous_score = fused_scores[doc_str]</span><br><span class="line">            <span class="comment"># Update the score of the document using the RRF formula: 1 / (rank + k)</span></span><br><span class="line">            fused_scores[doc_str] += <span class="number">1</span> / (rank + k)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Sort the documents based on their fused scores in descending order to get the final reranked results</span></span><br><span class="line">    reranked_results = [</span><br><span class="line">        (loads(doc), score)</span><br><span class="line">        <span class="keyword">for</span> doc, score <span class="keyword">in</span> <span class="built_in">sorted</span>(fused_scores.items(), key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>], reverse=<span class="literal">True</span>)</span><br><span class="line">    ]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Return the reranked results as a list of tuples, each containing the document and its fused score</span></span><br><span class="line">    <span class="keyword">return</span> reranked_results</span><br></pre></td></tr></table></figure>
+
+<h4 id="提问分解"><a href="#提问分解" class="headerlink" title="提问分解"></a>提问分解</h4><p>​	从版本的角度让我们的提示词更丰富了，但是在语义描述方面，能不能提升一下我们的提示词。在一个复杂困难的问题上我们的提示词可能是不够的，毕竟问题的范围比较大，我们的描述范围有限。如果我们缩小问题的范围，变成小问题，我们的提示词是不是就比较丰富了。在我们经验中，那种复杂的问题，比较好的解决办法就是把它拆分成一个一个的小问题，然后依次去解决这些小问题。在这里我们同样可以套用这种解决方式，把复杂问题甩给大模型让他帮我们拆分成一个一个的小问题，然后我们依次去提问解决这些小问题。正对每一个小问题我们的提示词是不是就丰富了</p>
+<h5 id="递归回答"><a href="#递归回答" class="headerlink" title="递归回答"></a>递归回答</h5><p>​	怎么去解决这些小问题，如果这些小问题上下有相关性的话，我们可以使用递归递归回答，就是将上一个问题的答案带入到下一个问题中。</p>
+<p><img src="/../images/rag-ext/decomposition.png" alt="image-20250621160518166"></p>
+<p>​	如上图，我们将一个复杂问题拆分成3个小问题，然后依次查询生成解决，将每次解决的结果带入到下一次解决中，最后解决这个复杂问题生成一个完整答案输出。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># Decomposition</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;You are a helpful assistant that generates multiple sub-questions related to an input question. \n</span></span><br><span class="line"><span class="string">The goal is to break down the input into a set of sub-problems / sub-questions that can be answers in isolation. \n</span></span><br><span class="line"><span class="string">Generate multiple search queries related to: &#123;question&#125; \n</span></span><br><span class="line"><span class="string">Output (3 queries):&quot;&quot;&quot;</span></span><br><span class="line">prompt_decomposition = ChatPromptTemplate.from_template(template)</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"></span><br><span class="line"><span class="comment"># LLM</span></span><br><span class="line">llm = ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Chain</span></span><br><span class="line">generate_queries_decomposition = ( prompt_decomposition | llm | StrOutputParser() | (<span class="keyword">lambda</span> x: x.split(<span class="string">&quot;\n&quot;</span>)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run</span></span><br><span class="line">question = <span class="string">&quot;What are the main components of an LLM-powered autonomous agent system?&quot;</span></span><br><span class="line">questions = generate_queries_decomposition.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line"><span class="comment"># Prompt</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Here is the question you need to answer:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">\n --- \n &#123;question&#125; \n --- \n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is any available background question + answer pairs:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">\n --- \n &#123;q_a_pairs&#125; \n --- \n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Here is additional context relevant to the question: </span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">\n --- \n &#123;context&#125; \n --- \n</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Use the above context and any background question + answer pairs to answer the question: \n &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">decomposition_prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_qa_pair</span>(<span class="params">question, answer</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Format Q and A pair&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    formatted_string = <span class="string">&quot;&quot;</span></span><br><span class="line">    formatted_string += <span class="string">f&quot;Question: <span class="subst">&#123;question&#125;</span>\nAnswer: <span class="subst">&#123;answer&#125;</span>\n\n&quot;</span></span><br><span class="line">    <span class="keyword">return</span> formatted_string.strip()</span><br><span class="line"></span><br><span class="line"><span class="comment"># llm</span></span><br><span class="line">llm = ChatOpenAI(model_name=<span class="string">&quot;gpt-3.5-turbo&quot;</span>, temperature=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">q_a_pairs = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> q <span class="keyword">in</span> questions:</span><br><span class="line">    </span><br><span class="line">    rag_chain = (</span><br><span class="line">    &#123;<span class="string">&quot;context&quot;</span>: itemgetter(<span class="string">&quot;question&quot;</span>) | retriever, </span><br><span class="line">     <span class="string">&quot;question&quot;</span>: itemgetter(<span class="string">&quot;question&quot;</span>),</span><br><span class="line">     <span class="string">&quot;q_a_pairs&quot;</span>: itemgetter(<span class="string">&quot;q_a_pairs&quot;</span>)&#125; </span><br><span class="line">    | decomposition_prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser())</span><br><span class="line"></span><br><span class="line">    answer = rag_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:q,<span class="string">&quot;q_a_pairs&quot;</span>:q_a_pairs&#125;)</span><br><span class="line">    q_a_pair = format_qa_pair(q,answer)</span><br><span class="line">    q_a_pairs = q_a_pairs + <span class="string">&quot;\n---\n&quot;</span>+  q_a_pair</span><br></pre></td></tr></table></figure>
+
+<h5 id="融合回答"><a href="#融合回答" class="headerlink" title="融合回答"></a>融合回答</h5><p>​	如果这些小问题上下文没有相关性或者说没有依赖性，我们又该怎么做呢？可以将每一个小问题单独的去解决生成答案，最后将所有小问题的答案融合生成复杂问题的汇总答案就行了。</p>
+<p><img src="/../images/rag-ext/answer_individually.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Answer each sub-question individually </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain <span class="keyword">import</span> hub</span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"><span class="keyword">from</span> langchain_core.runnables <span class="keyword">import</span> RunnablePassthrough, RunnableLambda</span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line"><span class="comment"># RAG prompt</span></span><br><span class="line">prompt_rag = hub.pull(<span class="string">&quot;rlm/rag-prompt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">retrieve_and_rag</span>(<span class="params">question,prompt_rag,sub_question_generator_chain</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;RAG on each sub-question&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Use our decomposition / </span></span><br><span class="line">    sub_questions = sub_question_generator_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Initialize a list to hold RAG chain results</span></span><br><span class="line">    rag_results = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> sub_question <span class="keyword">in</span> sub_questions:</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Retrieve documents for each sub-question</span></span><br><span class="line">        retrieved_docs = retriever.get_relevant_documents(sub_question)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># Use retrieved documents and sub-question in RAG chain</span></span><br><span class="line">        answer = (prompt_rag | llm | StrOutputParser()).invoke(&#123;<span class="string">&quot;context&quot;</span>: retrieved_docs, </span><br><span class="line">                                                                <span class="string">&quot;question&quot;</span>: sub_question&#125;)</span><br><span class="line">        rag_results.append(answer)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> rag_results,sub_questions</span><br><span class="line"></span><br><span class="line"><span class="comment"># Wrap the retrieval and RAG process in a RunnableLambda for integration into a chain</span></span><br><span class="line">answers, questions = retrieve_and_rag(question, prompt_rag, generate_queries_decomposition)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">format_qa_pairs</span>(<span class="params">questions, answers</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Format Q and A pairs&quot;&quot;&quot;</span></span><br><span class="line">    </span><br><span class="line">    formatted_string = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> i, (question, answer) <span class="keyword">in</span> <span class="built_in">enumerate</span>(<span class="built_in">zip</span>(questions, answers), start=<span class="number">1</span>):</span><br><span class="line">        formatted_string += <span class="string">f&quot;Question <span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;question&#125;</span>\nAnswer <span class="subst">&#123;i&#125;</span>: <span class="subst">&#123;answer&#125;</span>\n\n&quot;</span></span><br><span class="line">    <span class="keyword">return</span> formatted_string.strip()</span><br><span class="line"></span><br><span class="line">context = format_qa_pairs(questions, answers)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prompt</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Here is a set of Q+A pairs:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Use these to synthesize an answer to the question: &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line">final_rag_chain = (</span><br><span class="line">    prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_rag_chain.invoke(&#123;<span class="string">&quot;context&quot;</span>:context,<span class="string">&quot;question&quot;</span>:question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="后退重复生成"><a href="#后退重复生成" class="headerlink" title="后退重复生成"></a>后退重复生成</h4><p>​	对于复杂问题，除了上面说的拆分成子问题有没有其他的方式让我们的提示词变得更丰富了呢？答案肯定是有的，就是后退重复生成。啥意思呢，就是说，我们第一次的提示词不丰富，那我们让第一次生成的结果加到提示词中，这时候我们的提示词是不是更丰富了，在用这个丰富的提示词再去生成，是不是结果更好了呢，如果不够，我们再将生成的结果加入提示词再生成一次呢，一直到满意为止。</p>
+<p><img src="/../images/rag-ext/step_back.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Few Shot Examples</span></span><br><span class="line"><span class="keyword">from</span> langchain_core.prompts <span class="keyword">import</span> ChatPromptTemplate, FewShotChatMessagePromptTemplate</span><br><span class="line">examples = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: <span class="string">&quot;Could the members of The Police perform lawful arrests?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;output&quot;</span>: <span class="string">&quot;what can the members of The Police do?&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;input&quot;</span>: <span class="string">&quot;Jan Sindel’s was born in what country?&quot;</span>,</span><br><span class="line">        <span class="string">&quot;output&quot;</span>: <span class="string">&quot;what is Jan Sindel’s personal history?&quot;</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">]</span><br><span class="line"><span class="comment"># We now transform these to example messages</span></span><br><span class="line">example_prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (<span class="string">&quot;human&quot;</span>, <span class="string">&quot;&#123;input&#125;&quot;</span>),</span><br><span class="line">        (<span class="string">&quot;ai&quot;</span>, <span class="string">&quot;&#123;output&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line">few_shot_prompt = FewShotChatMessagePromptTemplate(</span><br><span class="line">    example_prompt=example_prompt,</span><br><span class="line">    examples=examples,</span><br><span class="line">)</span><br><span class="line">prompt = ChatPromptTemplate.from_messages(</span><br><span class="line">    [</span><br><span class="line">        (</span><br><span class="line">            <span class="string">&quot;system&quot;</span>,</span><br><span class="line">            <span class="string">&quot;&quot;&quot;You are an expert at world knowledge. Your task is to step back and paraphrase a question to a more generic step-back question, which is easier to answer. Here are a few examples:&quot;&quot;&quot;</span>,</span><br><span class="line">        ),</span><br><span class="line">        <span class="comment"># Few shot examples</span></span><br><span class="line">        few_shot_prompt,</span><br><span class="line">        <span class="comment"># New question</span></span><br><span class="line">        (<span class="string">&quot;user&quot;</span>, <span class="string">&quot;&#123;question&#125;&quot;</span>),</span><br><span class="line">    ]</span><br><span class="line">)</span><br><span class="line">generate_queries_step_back = prompt | ChatOpenAI(temperature=<span class="number">0</span>) | StrOutputParser()</span><br><span class="line">question = <span class="string">&quot;What is task decomposition for LLM agents?&quot;</span></span><br><span class="line">generate_queries_step_back.invoke(&#123;<span class="string">&quot;question&quot;</span>: question&#125;)</span><br><span class="line"><span class="comment"># Response prompt </span></span><br><span class="line">response_prompt_template = <span class="string">&quot;&quot;&quot;You are an expert of world knowledge. I am going to ask you a question. Your response should be comprehensive and not contradicted with the following context if they are relevant. Otherwise, ignore them if they are not relevant.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># &#123;normal_context&#125;</span></span><br><span class="line"><span class="string"># &#123;step_back_context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"># Original Question: &#123;question&#125;</span></span><br><span class="line"><span class="string"># Answer:&quot;&quot;&quot;</span></span><br><span class="line">response_prompt = ChatPromptTemplate.from_template(response_prompt_template)</span><br><span class="line"></span><br><span class="line">chain = (</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment"># Retrieve context using the normal question</span></span><br><span class="line">        <span class="string">&quot;normal_context&quot;</span>: RunnableLambda(<span class="keyword">lambda</span> x: x[<span class="string">&quot;question&quot;</span>]) | retriever,</span><br><span class="line">        <span class="comment"># Retrieve context using the step-back question</span></span><br><span class="line">        <span class="string">&quot;step_back_context&quot;</span>: generate_queries_step_back | retriever,</span><br><span class="line">        <span class="comment"># Pass on the question</span></span><br><span class="line">        <span class="string">&quot;question&quot;</span>: <span class="keyword">lambda</span> x: x[<span class="string">&quot;question&quot;</span>],</span><br><span class="line">    &#125;</span><br><span class="line">    | response_prompt</span><br><span class="line">    | ChatOpenAI(temperature=<span class="number">0</span>)</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">chain.invoke(&#123;<span class="string">&quot;question&quot;</span>: question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="假想文档"><a href="#假想文档" class="headerlink" title="假想文档"></a>假想文档</h4><p>​	如果我们的向量数据库中，没有我们提问的所需要的文档和相关知识怎么办？这时候从向量库的检索是没办法帮我们丰富提示词的，但是我们让llm帮我们生成一个假想文档，这样我们就可以根据这个文档获得跟丰富的提示词从而生成出更丰满的答案了。</p>
+<p><img src="/../images/rag-ext/hyde.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langchain.prompts <span class="keyword">import</span> ChatPromptTemplate</span><br><span class="line"></span><br><span class="line"><span class="comment"># HyDE document genration</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Please write a scientific paper passage to answer the question</span></span><br><span class="line"><span class="string">Question: &#123;question&#125;</span></span><br><span class="line"><span class="string">Passage:&quot;&quot;&quot;</span></span><br><span class="line">prompt_hyde = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> langchain_core.output_parsers <span class="keyword">import</span> StrOutputParser</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI</span><br><span class="line"></span><br><span class="line">generate_docs_for_retrieval = (</span><br><span class="line">    prompt_hyde | ChatOpenAI(temperature=<span class="number">0</span>) | StrOutputParser() </span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Run</span></span><br><span class="line">question = <span class="string">&quot;What is task decomposition for LLM agents?&quot;</span></span><br><span class="line">generate_docs_for_retrieval.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line"><span class="comment"># Retrieve</span></span><br><span class="line">retrieval_chain = generate_docs_for_retrieval | retriever </span><br><span class="line">retireved_docs = retrieval_chain.invoke(&#123;<span class="string">&quot;question&quot;</span>:question&#125;)</span><br><span class="line">retireved_docs</span><br><span class="line"><span class="comment"># RAG</span></span><br><span class="line">template = <span class="string">&quot;&quot;&quot;Answer the following question based on this context:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&#123;context&#125;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Question: &#123;question&#125;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">prompt = ChatPromptTemplate.from_template(template)</span><br><span class="line"></span><br><span class="line">final_rag_chain = (</span><br><span class="line">    prompt</span><br><span class="line">    | llm</span><br><span class="line">    | StrOutputParser()</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">final_rag_chain.invoke(&#123;<span class="string">&quot;context&quot;</span>:retireved_docs,<span class="string">&quot;question&quot;</span>:question&#125;)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/AI/" rel="tag"># AI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/02/18/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-25-02-17/" rel="prev" title="面试复盘-25-02-17">
+                  <i class="fa fa-angle-left"></i> 面试复盘-25-02-17
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/07/01/spring%E4%B8%AD%E7%9A%84%E5%A4%A7%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" rel="next" title="Spring的自动加载配置">
+                  Spring的自动加载配置 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

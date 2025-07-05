@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha256-wiz7ZSCn/btzhjKDQBms9Hx4sSeUYsDrTLg7roPstac=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.19.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="技术面试复习清单（Java 后端 + AI 应用方向） ✅ 第一部分：Java 后端面试重点复习🍃 Java 核心 Java基础：  集合类实现原理（HashMap 的哈希冲突解决、负载因子、扩容机制）  示例：HashMap源码剖析     属性 说明    哈希冲突解决 链表法 + 红黑树   默认负载因子 0.75   扩容阈值 当前容量 × 负载因子   扩容倍数 每次扩容为原来的 2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git分支模型(参考阿里Aone Flow)">
+<meta property="og:url" content="http://example.com/2022/07/16/Java%20Ai%20Interview%20Guide/index.html">
+<meta property="og:site_name" content="xiaozhigang">
+<meta property="og:description" content="技术面试复习清单（Java 后端 + AI 应用方向） ✅ 第一部分：Java 后端面试重点复习🍃 Java 核心 Java基础：  集合类实现原理（HashMap 的哈希冲突解决、负载因子、扩容机制）  示例：HashMap源码剖析     属性 说明    哈希冲突解决 链表法 + 红黑树   默认负载因子 0.75   扩容阈值 当前容量 × 负载因子   扩容倍数 每次扩容为原来的 2">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-16T07:28:52.000Z">
+<meta property="article:modified_time" content="2022-07-16T07:28:52.000Z">
+<meta property="article:author" content="xiaozhigang">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/2022/07/16/Java%20Ai%20Interview%20Guide/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2022/07/16/Java%20Ai%20Interview%20Guide/","path":"2022/07/16/Java Ai Interview Guide/","title":"Git分支模型(参考阿里Aone Flow)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Git分支模型(参考阿里Aone Flow) | xiaozhigang</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">xiaozhigang</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">长风破浪会有时，直挂云帆济沧海。</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E9%9D%A2%E8%AF%95%E5%A4%8D%E4%B9%A0%E6%B8%85%E5%8D%95%EF%BC%88Java-%E5%90%8E%E7%AB%AF-AI-%E5%BA%94%E7%94%A8%E6%96%B9%E5%90%91%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">技术面试复习清单（Java 后端 + AI 应用方向）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9AJava-%E5%90%8E%E7%AB%AF%E9%9D%A2%E8%AF%95%E9%87%8D%E7%82%B9%E5%A4%8D%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text">✅ 第一部分：Java 后端面试重点复习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%8D%83-Java-%E6%A0%B8%E5%BF%83"><span class="nav-number">1.1.1.</span> <span class="nav-text">🍃 Java 核心</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%8C%90-Spring-Spring-Boot"><span class="nav-number">1.1.2.</span> <span class="nav-text">🌐 Spring &amp; Spring Boot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%9B%A0%EF%B8%8F-%E6%95%B0%E6%8D%AE%E5%BA%93-%E7%BC%93%E5%AD%98"><span class="nav-number">1.1.3.</span> <span class="nav-text">🛠️ 数据库 &amp; 缓存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%A7%B1-%E4%B8%AD%E9%97%B4%E4%BB%B6"><span class="nav-number">1.1.4.</span> <span class="nav-text">🧱 中间件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%9A%99%EF%B8%8F-%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E5%88%86%E5%B8%83%E5%BC%8F"><span class="nav-number">1.1.5.</span> <span class="nav-text">⚙️ 系统设计 &#x2F; 分布式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9AAI-%E5%BA%94%E7%94%A8%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">✅ 第二部分：AI 应用相关知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%A4%96-LLM-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E5%9F%BA%E7%A1%80%EF%BC%88LangChain-Flowise-OpenAI-API%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">🤖 LLM 应用开发基础（LangChain &#x2F; Flowise &#x2F; OpenAI API）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%92%BE-%E5%90%91%E9%87%8F%E5%BA%93%E4%B8%8E%E6%A3%80%E7%B4%A2%E5%BA%94%E7%94%A8"><span class="nav-number">1.2.2.</span> <span class="nav-text">💾 向量库与检索应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%A7%A0-Java-%E6%8E%A5%E5%85%A5-AI-%E6%96%B9%E5%90%91"><span class="nav-number">1.2.3.</span> <span class="nav-text">🧠 Java 接入 AI 方向</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%8B-Bonus%EF%BC%9A%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%B1%BB%E9%9D%A2%E8%AF%95%E5%B8%B8%E8%A7%81%E9%A2%98%E7%9B%AE%EF%BC%88%E5%87%86%E5%A4%87%E7%AE%80%E8%A6%81%E6%96%B9%E6%A1%88%EF%BC%89"><span class="nav-number">1.3.</span> <span class="nav-text">📋 Bonus：系统设计类面试常见题目（准备简要方案）</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">xiaozhigang</p>
+  <div class="site-description" itemprop="description">最后不知天在水，满船清梦压星河。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/16/Java%20Ai%20Interview%20Guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Git分支模型(参考阿里Aone Flow) | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git分支模型(参考阿里Aone Flow)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-16 15:28:52" itemprop="dateCreated datePublished" datetime="2022-07-16T15:28:52+08:00">2022-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="技术面试复习清单（Java-后端-AI-应用方向）"><a href="#技术面试复习清单（Java-后端-AI-应用方向）" class="headerlink" title="技术面试复习清单（Java 后端 + AI 应用方向）"></a>技术面试复习清单（Java 后端 + AI 应用方向）</h2><hr>
+<h3 id="✅-第一部分：Java-后端面试重点复习"><a href="#✅-第一部分：Java-后端面试重点复习" class="headerlink" title="✅ 第一部分：Java 后端面试重点复习"></a>✅ 第一部分：Java 后端面试重点复习</h3><h4 id="🍃-Java-核心"><a href="#🍃-Java-核心" class="headerlink" title="🍃 Java 核心"></a>🍃 Java 核心</h4><ul>
+<li><p>Java基础：</p>
+<ul>
+<li><p>集合类实现原理（HashMap 的哈希冲突解决、负载因子、扩容机制）</p>
+<ul>
+<li><p>示例：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/skywang12345/p/3312722.html">HashMap源码剖析</a></p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>哈希冲突解决</td>
+<td>链表法 + 红黑树</td>
+</tr>
+<tr>
+<td>默认负载因子</td>
+<td>0.75</td>
+</tr>
+<tr>
+<td>扩容阈值</td>
+<td>当前容量 × 负载因子</td>
+</tr>
+<tr>
+<td>扩容倍数</td>
+<td>每次扩容为原来的 2 倍</td>
+</tr>
+<tr>
+<td>红黑树转化阈值</td>
+<td>链表长度 &gt; 8，且桶数组长度 &gt; 64</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>List 与 Set 的区别，线程安全集合使用（CopyOnWriteArrayList、ConcurrentHashMap）</p>
+<ul>
+<li><p>说明：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904046436849672">集合类对比总结</a></p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>List</th>
+<th>Set</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否允许重复元素</td>
+<td>✅ 允许</td>
+<td>❌ 不允许</td>
+</tr>
+<tr>
+<td>是否有顺序</td>
+<td>✅ 有插入顺序</td>
+<td>❌ 无顺序（<code>HashSet</code>），但<code>TreeSet</code>有排序</td>
+</tr>
+<tr>
+<td>常见实现类</td>
+<td><code>ArrayList</code>, <code>LinkedList</code>, <code>Vector</code></td>
+<td><code>HashSet</code>, <code>LinkedHashSet</code>, <code>TreeSet</code></td>
+</tr>
+<tr>
+<td>底层结构</td>
+<td><code>ArrayList</code>: 数组<code>LinkedList</code>: 双向链表</td>
+<td><code>HashSet</code>: HashMap 实现<code>TreeSet</code>: 红黑树</td>
+</tr>
+<tr>
+<td>查找效率</td>
+<td><code>ArrayList</code> 是 O(1)（索引查找）</td>
+<td><code>HashSet</code> 是 O(1)，<code>TreeSet</code> 是 O(logN)</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>需要按顺序存储、可重复数据</td>
+<td>要求元素唯一性、不关注顺序</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>多线程与并发：</p>
+<ul>
+<li>线程创建方式（Thread、Runnable、Callable）及线程池（Executors）</li>
+<li>synchronized 与 ReentrantLock 区别</li>
+<li>volatile 原理、内存可见性、指令重排序<ul>
+<li>案例：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903857554018318">并发可见性例子</a></li>
+</ul>
+</li>
+<li>原子类（AtomicInteger、LongAdder）与 CAS 实现</li>
+<li>并发工具类：CountDownLatch、CyclicBarrier、Semaphore<ul>
+<li>示例：<a target="_blank" rel="noopener" href="https://www.baeldung.com/java-concurrent-utilities">并发工具类实战</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>JVM：</p>
+<ul>
+<li>JVM 内存区域（堆、栈、方法区、直接内存）</li>
+<li>类加载机制（双亲委派）、类卸载机制<ul>
+<li>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/aspirant/p/12222246.html">JVM类加载机制详解</a></li>
+</ul>
+</li>
+<li>GC 垃圾回收算法（标记-清除、复制、CMS、G1）<ul>
+<li>可视化演示：<a target="_blank" rel="noopener" href="https://gceasy.io/">JVM GC动画讲解</a></li>
+</ul>
+</li>
+<li>性能调优工具（jstack、jmap、jvisualvm）</li>
+</ul>
+</li>
+</ul>
+<h4 id="🌐-Spring-Spring-Boot"><a href="#🌐-Spring-Spring-Boot" class="headerlink" title="🌐 Spring &amp; Spring Boot"></a>🌐 Spring &amp; Spring Boot</h4><ul>
+<li>IOC &#x2F; AOP原理：BeanFactory 与 ApplicationContext，动态代理、切面编程</li>
+<li>Bean 生命周期：构造 -&gt; set 属性 -&gt; 初始化 -&gt; 销毁</li>
+<li>常用注解原理（@Transactional 的事务传播行为与回滚机制）</li>
+<li>自动配置原理：SpringFactoriesLoader、条件注解（@ConditionalOnMissingBean）<ul>
+<li>案例：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/135354270">Spring Boot 自动配置原理</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="🛠️-数据库-缓存"><a href="#🛠️-数据库-缓存" class="headerlink" title="🛠️ 数据库 &amp; 缓存"></a>🛠️ 数据库 &amp; 缓存</h4><ul>
+<li>MySQL：<ul>
+<li>索引类型（B+树）、覆盖索引、联合索引与最左匹配原则</li>
+<li>SQL 调优（explain 分析、慢查询日志）</li>
+<li>事务隔离级别（Read Uncommitted、Repeatable Read 等）与幻读、MVCC 实现<ul>
+<li>MVCC讲解：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/117601718">图解MVCC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Redis：<ul>
+<li>数据结构（String、List、Set、Hash、ZSet）典型应用场景</li>
+<li>持久化机制（RDB vs AOF）、主从复制、哨兵机制</li>
+<li>缓存击穿（互斥锁）、穿透（布隆过滤器）、雪崩（过期时间错开）处理<ul>
+<li>案例：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904127748911117">Redis缓存问题解决方案</a></li>
+</ul>
+</li>
+<li>分布式锁（SET NX PX 实现原理、Redlock 分布式算法）<ul>
+<li>源码分析：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903985725276167">Redlock 机制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="🧱-中间件"><a href="#🧱-中间件" class="headerlink" title="🧱 中间件"></a>🧱 中间件</h4><ul>
+<li>Kafka：<ul>
+<li>Producer&#x2F;Consumer 原理、分区机制、消费位移管理</li>
+<li>消费模式（at most once、at least once）、幂等性保证</li>
+</ul>
+</li>
+<li>RabbitMQ：<ul>
+<li>交换机类型（Direct、Fanout、Topic）、消息确认与重试</li>
+</ul>
+</li>
+<li>Netty：事件驱动模型、零拷贝、Reactor 模式</li>
+<li>Nginx：反向代理、负载均衡、location 匹配规则、缓存设置<ul>
+<li>配置案例：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903871032328205">Nginx使用详解</a></li>
+</ul>
+</li>
+<li>分布式ID：UUID 特点、雪花算法结构（时间戳+机器ID+序列号）</li>
+</ul>
+<h4 id="⚙️-系统设计-分布式"><a href="#⚙️-系统设计-分布式" class="headerlink" title="⚙️ 系统设计 &#x2F; 分布式"></a>⚙️ 系统设计 &#x2F; 分布式</h4><ul>
+<li>微服务架构：服务注册发现（Eureka&#x2F;Nacos）、配置中心（Spring Cloud Config）</li>
+<li>分布式事务：<ul>
+<li>TCC（Try-Confirm-Cancel）原理与应用</li>
+<li>可靠消息最终一致性（RocketMQ事务消息）</li>
+<li>SAGA 状态机模式（流程编排）</li>
+</ul>
+</li>
+<li>限流熔断降级：<ul>
+<li>Hystrix：断路器、舱壁、降级策略</li>
+<li>Sentinel：滑动窗口限流、预热、熔断规则设置<ul>
+<li>官方示例：<a target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/wiki">Sentinel 使用文档</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="✅-第二部分：AI-应用相关知识点"><a href="#✅-第二部分：AI-应用相关知识点" class="headerlink" title="✅ 第二部分：AI 应用相关知识点"></a>✅ 第二部分：AI 应用相关知识点</h3><h4 id="🤖-LLM-应用开发基础（LangChain-Flowise-OpenAI-API）"><a href="#🤖-LLM-应用开发基础（LangChain-Flowise-OpenAI-API）" class="headerlink" title="🤖 LLM 应用开发基础（LangChain &#x2F; Flowise &#x2F; OpenAI API）"></a>🤖 LLM 应用开发基础（LangChain &#x2F; Flowise &#x2F; OpenAI API）</h4><ul>
+<li>Prompt Engineering：角色设定、上下文拼接、few-shot 提示设计<ul>
+<li>指南：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/gpt-best-practices">OpenAI Prompt Best Practices</a></li>
+</ul>
+</li>
+<li>LangChain 模块：<ul>
+<li>LLMChain：单轮调用链</li>
+<li>RetrievalQA：向量搜索增强问答</li>
+<li>Agent：动态任务调度</li>
+<li>Memory：对话历史上下文管理（BufferMemory、SummaryMemory）<ul>
+<li>文档：<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/memory/">LangChain Memory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>向量数据库：<ul>
+<li>Faiss：本地索引（Flat、IVF、HNSW）、Index 保存&#x2F;加载方式</li>
+<li>Chroma &#x2F; Weaviate：文档分片、元数据存储与过滤检索<ul>
+<li>参考：<a target="_blank" rel="noopener" href="https://weaviate.io/">Weaviate 向量数据库</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Embedding：<ul>
+<li>OpenAI text-embedding-ada-002 使用方式、维度、成本</li>
+<li>HuggingFace Sentence Transformers 示例（all-MiniLM）<ul>
+<li>示例项目：<a target="_blank" rel="noopener" href="https://www.sbert.net/docs/quickstart.html">Sentence Transformers 快速上手</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>RAG：文档分片 ➝ embedding ➝ 存入向量库 ➝ 查询补全 context ➝ LLM 回答</li>
+<li>OpenAI 接口：API Key、temperature、top_p、stream 流式输出、速率限制处理<ul>
+<li>官方文档：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/chat/create">OpenAI API</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="💾-向量库与检索应用"><a href="#💾-向量库与检索应用" class="headerlink" title="💾 向量库与检索应用"></a>💾 向量库与检索应用</h4><ul>
+<li>Faiss 操作：<ul>
+<li>构建索引：IndexFlatL2、IndexIVFFlat</li>
+<li>插入数据：add_with_ids</li>
+<li>查询相似向量：search(query, k)</li>
+<li>快速入门：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/faiss/wiki/Indexing-1M-vectors">Faiss官方示例</a></li>
+</ul>
+</li>
+<li>向量检索原理：L2距离、Cosine 相似度、内积</li>
+<li>本地 vs 云部署：FastAPI + Uvicorn 封装 Faiss API 远程调用<ul>
+<li>项目示例：<a target="_blank" rel="noopener" href="https://github.com/tiangolo/full-stack-fastapi-postgresql">本地部署Faiss + FastAPI</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="🧠-Java-接入-AI-方向"><a href="#🧠-Java-接入-AI-方向" class="headerlink" title="🧠 Java 接入 AI 方向"></a>🧠 Java 接入 AI 方向</h4><ul>
+<li>接入方式：<ul>
+<li>使用 WebClient &#x2F; OkHttp &#x2F; Feign 调用 OpenAI 接口</li>
+<li>解析 JSON 响应并集成流式 SSE 输出</li>
+</ul>
+</li>
+<li>LangChain4j：<ul>
+<li>使用 PromptTemplate + OpenAiLanguageModel 构建聊天功能</li>
+<li>与 Redis &#x2F; 向量库集成构建知识问答<ul>
+<li>项目参考：<a target="_blank" rel="noopener" href="https://github.com/langchain4j/langchain4j">LangChain4j</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Demo 项目：<ul>
+<li>Java ChatPDF 实现：上传 PDF ➝ 分词 ➝ embedding ➝ 存储 ➝ 问答接口</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="📋-Bonus：系统设计类面试常见题目（准备简要方案）"><a href="#📋-Bonus：系统设计类面试常见题目（准备简要方案）" class="headerlink" title="📋 Bonus：系统设计类面试常见题目（准备简要方案）"></a>📋 Bonus：系统设计类面试常见题目（准备简要方案）</h3><ol>
+<li>高并发电商下单系统：库存缓存、异步削峰（MQ）、分布式锁、防重提交</li>
+<li>聊天记录搜索：切分聊天文本 ➝ embedding ➝ 存 Faiss ➝ 模糊匹配</li>
+<li>智能问答机器人系统：文档预处理 ➝ 向量库 ➝ RAG 模式 ➝ LLM 调用</li>
+<li>Java 服务接 GPT-4 生成摘要：接口设计、鉴权、token 管控、缓存存储</li>
+<li>简易 LangChain Chat Bot：Java 封装接口 + LangChain4j agent + memory 实现</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/06/21/MySQL%E4%B8%A4%E6%AE%B5%E5%BC%8F%E6%8F%90%E4%BA%A4/" rel="prev" title="MySQL两段式提交">
+                  <i class="fa fa-angle-left"></i> MySQL两段式提交
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/" rel="next" title="Git分支模型(参考阿里Aone Flow)">
+                  Git分支模型(参考阿里Aone Flow) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2022 – 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">xiaozhigang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.7.0/mermaid.min.js","integrity":"sha256-TtLOdUA8mstPoO6sGvHIGx2ceXrrX4KgIItO06XOn8A="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

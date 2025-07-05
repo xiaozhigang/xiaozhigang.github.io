@@ -150,18 +150,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,6 +178,821 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/10/10/Spring-IoC-%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/10/Spring-IoC-%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0/" class="post-title-link" itemprop="url">Spring IoC 的简单实现</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-10 18:44:13" itemprop="dateCreated datePublished" datetime="2022-10-10T18:44:13+08:00">2022-10-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>IoC是指控制反转，是指有容器来控制对象的生命周期和对象之间的关系。简单来说就是之前使用对象首先需要new一个对象，而现在直接从容器中取就可以了。这就像有小农经济转变到商品经济。</p>
+<p>小农经济：自给自足，什么东西都需要自己动手也就类似于对象需要自己new。</p>
+<p>商品经济：需要啥去商店买就行，这里的商店就相当于容器，商品就相当于对象，生成商品的工厂就相当于对象工厂等。</p>
+<p><img src="/../images/spring-ioc/image-20240401193113474.png"></p>
+<h3 id="Spring-IOC-的简单实现"><a href="#Spring-IOC-的简单实现" class="headerlink" title="Spring IOC 的简单实现"></a>Spring IOC 的简单实现</h3><h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>1、首先我们得有一个容器，这个容器负责保存和生成bean，这也就是对象工厂BeanFactory 。</p>
+<p>2、其次，得有一个bean注册器，这负责bean的注册和真正生成。</p>
+<p>3、然后，还得有一个资源加载器，用来加载bean的定义</p>
+<p>4、最后，得有一个bean的定义模型和配置文件。</p>
+<h4 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h4><p>分析为倒叙分析，实现就得看正序实现了，不然依赖就颠倒了。</p>
+<h5 id="1、配置文件和bean模型"><a href="#1、配置文件和bean模型" class="headerlink" title="1、配置文件和bean模型"></a>1、配置文件和bean模型</h5><p>先准备一个示例的bean</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public class BeanExample &#123;</span><br><span class="line">    public void print(String string)&#123;</span><br><span class="line">        System.out.println(&quot;test out: &quot; + string);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置文件，偷懒使用一个&lt;key,value&gt;键值对代替</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">beanExample:com.shopmall.springIoc.BeanExample</span><br></pre></td></tr></table></figure>
+
+<p>bean模型定义</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">@Getter</span><br><span class="line">@Setter</span><br><span class="line">public class BeanDefinition &#123;</span><br><span class="line">    private String beanName;</span><br><span class="line"></span><br><span class="line">    private Class beanClass;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="2、资源加载器"><a href="#2、资源加载器" class="headerlink" title="2、资源加载器"></a>2、资源加载器</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public class ResourceLoader &#123;</span><br><span class="line">    public static Map&lt;String, BeanDefinition&gt; getResource() &#123;</span><br><span class="line">        Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new HashMap&lt;&gt;();</span><br><span class="line">        Properties properties = new Properties();</span><br><span class="line">        try &#123;</span><br><span class="line">            InputStream inputStream = ResourceLoader.class.getResourceAsStream(&quot;/beans.properties&quot;);</span><br><span class="line">            properties.load(inputStream);</span><br><span class="line">            for (String key : properties.stringPropertyNames()) &#123;</span><br><span class="line">                String className = properties.getProperty(key);</span><br><span class="line">                BeanDefinition beanDefinition = new BeanDefinition();</span><br><span class="line">                beanDefinition.setBeanName(key);</span><br><span class="line">                Class clazz = Class.forName(className);</span><br><span class="line">                beanDefinition.setBeanClass(clazz);</span><br><span class="line">                beanDefinitionMap.put(key, beanDefinition);</span><br><span class="line">            &#125;</span><br><span class="line">            inputStream.close();</span><br><span class="line">        &#125; catch (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return beanDefinitionMap;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="3、对象注册器"><a href="#3、对象注册器" class="headerlink" title="3、对象注册器"></a>3、对象注册器</h5><p>简化过程，都用单例了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class BeanRegister &#123;</span><br><span class="line"></span><br><span class="line">    //单例Bean缓存</span><br><span class="line">    private final Map&lt;String, Object&gt; singletonBeanMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取单例Bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @return Object 单例Bean</span><br><span class="line">     */</span><br><span class="line">    public Object getSingletonBean(String beanName) &#123;</span><br><span class="line">        return singletonBeanMap.get(beanName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 注册单例bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @param bean 单例bean</span><br><span class="line">     */</span><br><span class="line">    public void registerSingletonBean(String beanName, Object bean) &#123;</span><br><span class="line">        if (singletonBeanMap.containsKey(beanName)) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        singletonBeanMap.put(beanName, bean);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h5 id="4、容器bean工厂"><a href="#4、容器bean工厂" class="headerlink" title="4、容器bean工厂"></a>4、容器bean工厂</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public class BeanFactory &#123;</span><br><span class="line">    private Map&lt;String, BeanDefinition&gt; beanDefinitionMap = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    private BeanRegister beanRegister;</span><br><span class="line"></span><br><span class="line">    public BeanFactory() &#123;</span><br><span class="line">        //创建bean注册器</span><br><span class="line">        beanRegister = new BeanRegister();</span><br><span class="line">        //加载资源</span><br><span class="line">        this.beanDefinitionMap = new ResourceLoader().getResource();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 获取bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanName bean名称</span><br><span class="line">     * @return Object Bean</span><br><span class="line">     */</span><br><span class="line">    public Object getBean(String beanName) &#123;</span><br><span class="line">        //从bean缓存中取</span><br><span class="line">        Object bean = beanRegister.getSingletonBean(beanName);</span><br><span class="line">        if (bean != null) &#123;</span><br><span class="line">            return bean;</span><br><span class="line">        &#125;</span><br><span class="line">        //根据bean定义，创建bean</span><br><span class="line">        return createBean(beanDefinitionMap.get(beanName));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 创建Bean</span><br><span class="line">     *</span><br><span class="line">     * @param beanDefinition bean定义</span><br><span class="line">     * @return Object Bean</span><br><span class="line">     */</span><br><span class="line">    private Object createBean(BeanDefinition beanDefinition) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Object bean = beanDefinition.getBeanClass().newInstance();</span><br><span class="line">            //缓存bean</span><br><span class="line">            beanRegister.registerSingletonBean(beanDefinition.getBeanName(), bean);</span><br><span class="line">            return bean;</span><br><span class="line">        &#125; catch (InstantiationException | IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="5、测试运行"><a href="#5、测试运行" class="headerlink" title="5、测试运行"></a>5、测试运行</h5><p><img src="/../images/spring-ioc/image-20240401201006715.png"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/09/01/Spring%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/09/01/Spring%E7%9A%84%E8%87%AA%E5%8A%A8%E5%8A%A0%E8%BD%BD%E9%85%8D%E7%BD%AE/" class="post-title-link" itemprop="url">Spring的自动加载配置</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-09-01 20:35:49" itemprop="dateCreated datePublished" datetime="2022-09-01T20:35:49+08:00">2022-09-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>都知道spring的自动加载是通过注解实现的，但是这注解又是怎么实现的呢？</p>
+<p>通过@SpringBootApplication注解开启，读取配置文件中的配置类，然后过滤掉不需要的配置类，最后将剩余的配置类加载配置。</p>
+<h3 id="具体过程"><a href="#具体过程" class="headerlink" title="具体过程"></a>具体过程</h3><p>上面说了一下大概的概念，接下来我们分析一下具体的执行过程。</p>
+<h4 id="1、开启自动加载"><a href="#1、开启自动加载" class="headerlink" title="1、开启自动加载"></a>1、开启自动加载</h4><p>都知道自动开启加载注解@SpringBootApplication，但是这个注解是个复合注解，他是由多个注解合并而成，但是主要的是三个注解：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@SpringBootConfiguration // 配置文件</span><br><span class="line">@EnableAutoConfiguration // 开启自动配置</span><br><span class="line">@ComponentScan // 扫描</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/spring/image-20240401205815186.png" alt="image-20240401205815186"></p>
+<p>@EnableAutoConfiguration注解继续下钻，主要有@AutoConfigurationPackage和@Import({AutoConfigurationImportSelector.class})两个注解，@AutoConfigurationPackage继续下钻主要有@Import({AutoConfigurationPackages.Registrar.class})这个注解。</p>
+<p><img src="/../images/spring/image-20250705155304630.png" alt="image-20250705155304630"></p>
+<p>所以基本可以理解</p>
+<p>@EnableAutoConfiguration &#x3D; @Import({AutoConfigurationImportSelector.class}) + @Import({AutoConfigurationPackages.Registrar.class})</p>
+<p>即自动加载主要是依赖AutoConfigurationImportSelector.class，AutoConfigurationPackages.Registrar.class两个类。</p>
+<h4 id="2、-EnableAutoConfiguration下的两个类"><a href="#2、-EnableAutoConfiguration下的两个类" class="headerlink" title="2、@EnableAutoConfiguration下的两个类"></a>2、@EnableAutoConfiguration下的两个类</h4><p>AutoConfigurationPackages.Registrar.class：作用就是获取要扫描的包路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">static class Registrar implements ImportBeanDefinitionRegistrar, DeterminableImports &#123;</span><br><span class="line">    Registrar() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) &#123;</span><br><span class="line">        AutoConfigurationPackages.register(registry, (String[])(new PackageImports(metadata)).getPackageNames().toArray(new String[0]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Set&lt;Object&gt; determineImports(AnnotationMetadata metadata) &#123;</span><br><span class="line">        return Collections.singleton(new PackageImports(metadata));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>AutoConfigurationImportSelector.class：可以看到AutoConfigurationImportSelector实现了3种接口</p>
+<p>1、DeferredImportSelector接口，继承了ImportSelector接口，用于bean的注入</p>
+<p>2、以Aware结尾的接口，这类接口时为了完成某类资源的设置。</p>
+<p>3、Ordered接口，用于指定bean的加载顺序。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AutoConfigurationImportSelector implements DeferredImportSelector, BeanClassLoaderAware, ResourceLoaderAware, BeanFactoryAware, EnvironmentAware, Ordered</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、AutoConfigurationImportSelector"><a href="#3、AutoConfigurationImportSelector" class="headerlink" title="3、AutoConfigurationImportSelector"></a>3、AutoConfigurationImportSelector</h4><p>AutoConfigurationImportSelector实现了DeferredImportSelector接口，我们先看一下DeferredImportSelector接口。</p>
+<p><img src="/../images/spring/image-20240401215546520.png" alt="image-20240401215546520"></p>
+<p>接口里就包含了要加载的bean信息，再回到实现类，主要方法process。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void process(AnnotationMetadata annotationMetadata, DeferredImportSelector deferredImportSelector) &#123;</span><br><span class="line">	Assert.state(deferredImportSelector instanceof AutoConfigurationImportSelector,</span><br><span class="line">			() -&gt; String.format(&quot;Only %s implementations are supported, got %s&quot;,</span><br><span class="line">					AutoConfigurationImportSelector.class.getSimpleName(),</span><br><span class="line">					deferredImportSelector.getClass().getName()));</span><br><span class="line">					</span><br><span class="line">	// 获取自动配置的类</span><br><span class="line">	AutoConfigurationEntry autoConfigurationEntry = ((AutoConfigurationImportSelector) deferredImportSelector)</span><br><span class="line">			.getAutoConfigurationEntry(annotationMetadata);</span><br><span class="line">	this.autoConfigurationEntries.add(autoConfigurationEntry);</span><br><span class="line">	// 遍历自动配置的bean</span><br><span class="line">	for (String importClassName : autoConfigurationEntry.getConfigurations()) &#123;</span><br><span class="line">		// 如果存在这个类就进行加入</span><br><span class="line">		this.entries.putIfAbsent(importClassName, annotationMetadata);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，主要的就是获取自动配置类：getAutoConfigurationEntry方法</p>
+<pre><code>protected AutoConfigurationEntry getAutoConfigurationEntry(AnnotationMetadata annotationMetadata) &#123;
+    if (!isEnabled(annotationMetadata)) &#123;
+        return EMPTY_ENTRY;
+    &#125;
+    AnnotationAttributes attributes = getAttributes(annotationMetadata);
+    List&lt;String&gt; configurations = getCandidateConfigurations(annotationMetadata, attributes); // 关键
+    configurations = removeDuplicates(configurations);
+    Set&lt;String&gt; exclusions = getExclusions(annotationMetadata, attributes);
+    checkExcludedClasses(configurations, exclusions);
+    configurations.removeAll(exclusions);
+    configurations = getConfigurationClassFilter().filter(configurations);
+    fireAutoConfigurationImportEvents(configurations, exclusions);
+    return new AutoConfigurationEntry(configurations, exclusions);
+&#125;
+</code></pre>
+<p>根据关键代码继续下钻</p>
+<pre><code>protected List&lt;String&gt; getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) &#123;
+    List&lt;String&gt; configurations = new ArrayList&lt;&gt;(
+            SpringFactoriesLoader.loadFactoryNames(getSpringFactoriesLoaderFactoryClass(), getBeanClassLoader()));
+    ImportCandidates.load(AutoConfiguration.class, getBeanClassLoader()).forEach(configurations::add);
+    Assert.notEmpty(configurations,
+            &quot;No auto configuration classes found in META-INF/spring.factories nor in META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports. If you &quot;
+                    + &quot;are using a custom packaging, make sure that file is correct.&quot;);
+    return configurations;
+&#125;
+</code></pre>
+<p>继续下钻</p>
+<p><img src="/../images/spring/image-20240401232921570.png" alt="image-20240401232921570"></p>
+<p>到这就基本清楚了，这里加载了META-INF&#x2F;spring.factories文件下的配置，然后返回到getAutoConfigurationEntry方法里进行过滤，当然过滤的方式也是按条件注解<code>@ConditionalOnxxx</code>过滤生效。</p>
+<p><img src="/../images/spring/image-20240401233308499.png" alt="image-20240401233308499"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>@SpringBootApplication下分三个注解，@EnableAutoConfiguration注解负责自动加载配置，</p>
+<p>@EnableAutoConfiguration注解又引入两个类，AutoConfigurationImportSelector.class 和 AutoConfigurationPackages.Registrar.class</p>
+<p>主要逻辑都在AutoConfigurationImportSelector.class中，此类中有个getAutoConfigurationEntry方法，</p>
+<p>这个方法调用了两个方法getCandidateConfigurations 加载  和 getConfigurationClassFilter().filter 过滤。</p>
+<p>如此加载进了配置文件中的配置，过滤了条件不满足的配置，以达到开箱即用。</p>
+<p><img src="/../images/spring/image-20240401234620520.png" alt="image-20240401234620520"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/11/Spring%E4%B8%AD%E7%94%A8%E5%88%B0%E7%9A%84%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">Spring中用到的设计模式</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-11 18:57:44" itemprop="dateCreated datePublished" datetime="2022-08-11T18:57:44+08:00">2022-08-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><p><strong>Spring AOP 就是基于代理模式</strong>，被代理对象有实现某个接口，则用<strong>JDK Proxy</strong>创建对象，没有实现接口则用<strong>Cglib</strong>创建代理对象。</p>
+<p>当然也可以使用AspectJ，AspectJ是Java生态系统中最完整的AOP框架。</p>
+<p><img src="/../images/design/image-20240414185312122.png" alt="image-20240414185312122"></p>
+<p><strong>Spring AOP属于运行时增强，AspectJ是编译时增强。</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Spring AOP</th>
+<th>AspectJ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>与spring ioc紧密集成，新项目使用</td>
+<td>维护老项目使用</td>
+</tr>
+<tr>
+<td>2</td>
+<td>运行时织入</td>
+<td>编译时生成</td>
+</tr>
+<tr>
+<td>3</td>
+<td>不支持static和final修饰方法和类</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>4</td>
+<td>简单，有注解</td>
+<td>复杂，需要.aj文件来创建切面，并且需要使用ajc来编译代码</td>
+</tr>
+</tbody></table>
+<p>两者异同：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/720402">https://developer.aliyun.com/article/720402</a></p>
+<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>父类定义算法骨架或者关键步骤，而具体实现延迟到子类中，使子类再不改变父类结构的情况下可重定义某些特定步骤的实现。</p>
+<p>Spring 中 <code>JdbcTemplate</code>、<code>HibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。一般情况下，我们都是使用继承的方式来实现模板模式，但是 Spring 并没有使用这种方式，而是使用 Callback 模式与模板方法模式配合，既达到了代码复用的效果，同时增加了灵活性。定义了资源获取、执行SQL、释放资源这些基本流程，执行sql的具体方式又以回调函数的形式开放。</p>
+<p><img src="/../images/design/image-20240414192751147.png" alt="image-20240414192751147"></p>
+<p>参考文献：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhangweiocp/article/details/115486257">https://blog.csdn.net/zhangweiocp/article/details/115486257</a></p>
+<h3 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h3><p>观察者模式是一种对象行为型模式。它表示的是一种对象与对象之间具有依赖关系，当一个对象发生改变的时候，依赖这个对象的所有对象也会做出反应。Spring 事件驱动模型就是观察者模式很经典的一个应用。Spring 事件驱动模型非常有用，在很多场景都可以解耦我们的代码。比如我们每次添加商品的时候都需要重新更新商品索引，这个时候就可以利用观察者模式来解决这个问题。</p>
+<p>事件驱动模型中的三种角色：事件角色、事件监听者角色、事件发布者角色。</p>
+<p><img src="/../images/design/image-20240414190146289.png" alt="image-20240414190146289"></p>
+<p><strong>spring的事件流程总结</strong></p>
+<p>1、定义一个事件: 实现一个继承自<code>ApplicationEvent</code>，并且写相应的构造函数</p>
+<p>2、定义一个事件监听者：实现 <code>ApplicationListener</code> 接口，重写 <code>onApplicationEvent()</code> 方法</p>
+<p>3、使用事件发布者发布消息: 可以通过 <code>ApplicationEventPublisher</code> 的 <code>publishEvent()</code> 方法发布消息</p>
+<p>example:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">// 定义一个事件,继承自ApplicationEvent并且写相应的构造函数</span><br><span class="line">public class DemoEvent extends ApplicationEvent&#123;</span><br><span class="line">    private static final long serialVersionUID = 1L;</span><br><span class="line"></span><br><span class="line">    private String message;</span><br><span class="line"></span><br><span class="line">    public DemoEvent(Object source,String message)&#123;</span><br><span class="line">        super(source);</span><br><span class="line">        this.message = message;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getMessage() &#123;</span><br><span class="line">         return message;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// 定义一个事件监听者,实现ApplicationListener接口，重写 onApplicationEvent() 方法；</span><br><span class="line">@Component</span><br><span class="line">public class DemoListener implements ApplicationListener&lt;DemoEvent&gt;&#123;</span><br><span class="line"></span><br><span class="line">    //使用onApplicationEvent接收消息</span><br><span class="line">    @Override</span><br><span class="line">    public void onApplicationEvent(DemoEvent event) &#123;</span><br><span class="line">        String msg = event.getMessage();</span><br><span class="line">        System.out.println(&quot;接收到的信息是：&quot;+msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">// 发布事件，可以通过ApplicationEventPublisher  的 publishEvent() 方法发布消息。</span><br><span class="line">@Component</span><br><span class="line">public class DemoPublisher &#123;</span><br><span class="line"></span><br><span class="line">    @Autowired</span><br><span class="line">    ApplicationContext applicationContext;</span><br><span class="line"></span><br><span class="line">    public void publish(String message)&#123;</span><br><span class="line">        //发布事件</span><br><span class="line">        applicationContext.publishEvent(new DemoEvent(this, message));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当调用 <code>DemoPublisher</code> 的 <code>publish()</code> 方法的时候，比如 <code>demoPublisher.publish(&quot;你好&quot;)</code> ，控制台就会打印出:<code>接收到的信息是：你好</code> 。</p>
+<h3 id="装饰者模式"><a href="#装饰者模式" class="headerlink" title="装饰者模式"></a>装饰者模式</h3><p>装饰者模式可以动态地给对象添加一些额外的属性或行为。相比于使用继承，装饰者模式更加灵活。简单点儿说就是当我们需要修改原有的功能，但我们又不愿直接去修改原有的代码时，设计一个 Decorator 套在原有代码外面。最典型的就是JDK中的<code>InputStream,OutputStream</code>，两个类下的所有子类都是再不修改父类代码的情况下扩展了他的功能。</p>
+<p><img src="/../images/design/Decorator.jpg" alt="装饰者模式示意图"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Spring 框架中用到了哪些设计模式？</p>
+<ul>
+<li><strong>工厂设计模式</strong> : Spring 使用工厂模式通过 <code>BeanFactory</code>、<code>ApplicationContext</code> 创建 bean 对象。</li>
+<li><strong>代理设计模式</strong> : Spring AOP 功能的实现。</li>
+<li><strong>单例设计模式</strong> : Spring 中的 Bean 默认都是单例的。</li>
+<li><strong>模板方法模式</strong> : Spring 中 <code>jdbcTemplate</code>、<code>hibernateTemplate</code> 等以 Template 结尾的对数据库操作的类，它们就使用到了模板模式。</li>
+<li><strong>包装器设计模式</strong> : 我们的项目需要连接多个数据库，而且不同的客户在每次访问中根据需要会去访问不同的数据库。这种模式让我们可以根据客户的需求能够动态切换不同的数据源。</li>
+<li><strong>观察者模式:</strong> Spring 事件驱动模型就是观察者模式很经典的一个应用。</li>
+<li><strong>适配器模式</strong> :Spring AOP 的增强或通知(Advice)使用到了适配器模式、spring MVC 中也是用到了适配器模式适配<code>Controller</code>l</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Git分支模型(参考阿里Aone Flow)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-16 15:28:52" itemprop="dateCreated datePublished" datetime="2022-07-16T15:28:52+08:00">2022-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="分支定义"><a href="#分支定义" class="headerlink" title="分支定义"></a>分支定义</h2><ol>
+<li><p>master</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">长期分支，存在与整个项目开发过程。</span><br><span class="line"></span><br><span class="line">由项目主要技术负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>release&#x2F;xxx</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">release/test 和 release/prod</span><br><span class="line">既可以为长期分支也可以为短期分支，可能存在于一个或者多个版本之间.</span><br><span class="line"></span><br><span class="line">由测试负责人负责人管理该分支。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>feature&#x2F;fixbug&#x2F;hotfix</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">临时分支</span><br><span class="line">用于开发的具体功能特性和修复bug的分支，功能完成后删除.</span><br><span class="line">格式为：feature_$date_$name_$description</span><br><span class="line">       fixbug_$date_$name_$description</span><br><span class="line">       hotfix_$date_$name_$description</span><br></pre></td></tr></table></figure></li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/07/16/Git%E5%88%86%E6%94%AF%E6%A8%A1%E5%9E%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/07/16/Java%20Ai%20Interview%20Guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/07/16/Java%20Ai%20Interview%20Guide/" class="post-title-link" itemprop="url">Git分支模型(参考阿里Aone Flow)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-16 15:28:52" itemprop="dateCreated datePublished" datetime="2022-07-16T15:28:52+08:00">2022-07-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="技术面试复习清单（Java-后端-AI-应用方向）"><a href="#技术面试复习清单（Java-后端-AI-应用方向）" class="headerlink" title="技术面试复习清单（Java 后端 + AI 应用方向）"></a>技术面试复习清单（Java 后端 + AI 应用方向）</h2><hr>
+<h3 id="✅-第一部分：Java-后端面试重点复习"><a href="#✅-第一部分：Java-后端面试重点复习" class="headerlink" title="✅ 第一部分：Java 后端面试重点复习"></a>✅ 第一部分：Java 后端面试重点复习</h3><h4 id="🍃-Java-核心"><a href="#🍃-Java-核心" class="headerlink" title="🍃 Java 核心"></a>🍃 Java 核心</h4><ul>
+<li><p>Java基础：</p>
+<ul>
+<li><p>集合类实现原理（HashMap 的哈希冲突解决、负载因子、扩容机制）</p>
+<ul>
+<li><p>示例：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/skywang12345/p/3312722.html">HashMap源码剖析</a></p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>哈希冲突解决</td>
+<td>链表法 + 红黑树</td>
+</tr>
+<tr>
+<td>默认负载因子</td>
+<td>0.75</td>
+</tr>
+<tr>
+<td>扩容阈值</td>
+<td>当前容量 × 负载因子</td>
+</tr>
+<tr>
+<td>扩容倍数</td>
+<td>每次扩容为原来的 2 倍</td>
+</tr>
+<tr>
+<td>红黑树转化阈值</td>
+<td>链表长度 &gt; 8，且桶数组长度 &gt; 64</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p>List 与 Set 的区别，线程安全集合使用（CopyOnWriteArrayList、ConcurrentHashMap）</p>
+<ul>
+<li><p>说明：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904046436849672">集合类对比总结</a></p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>List</th>
+<th>Set</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>是否允许重复元素</td>
+<td>✅ 允许</td>
+<td>❌ 不允许</td>
+</tr>
+<tr>
+<td>是否有顺序</td>
+<td>✅ 有插入顺序</td>
+<td>❌ 无顺序（<code>HashSet</code>），但<code>TreeSet</code>有排序</td>
+</tr>
+<tr>
+<td>常见实现类</td>
+<td><code>ArrayList</code>, <code>LinkedList</code>, <code>Vector</code></td>
+<td><code>HashSet</code>, <code>LinkedHashSet</code>, <code>TreeSet</code></td>
+</tr>
+<tr>
+<td>底层结构</td>
+<td><code>ArrayList</code>: 数组<code>LinkedList</code>: 双向链表</td>
+<td><code>HashSet</code>: HashMap 实现<code>TreeSet</code>: 红黑树</td>
+</tr>
+<tr>
+<td>查找效率</td>
+<td><code>ArrayList</code> 是 O(1)（索引查找）</td>
+<td><code>HashSet</code> 是 O(1)，<code>TreeSet</code> 是 O(logN)</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>需要按顺序存储、可重复数据</td>
+<td>要求元素唯一性、不关注顺序</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>多线程与并发：</p>
+<ul>
+<li>线程创建方式（Thread、Runnable、Callable）及线程池（Executors）</li>
+<li>synchronized 与 ReentrantLock 区别</li>
+<li>volatile 原理、内存可见性、指令重排序<ul>
+<li>案例：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903857554018318">并发可见性例子</a></li>
+</ul>
+</li>
+<li>原子类（AtomicInteger、LongAdder）与 CAS 实现</li>
+<li>并发工具类：CountDownLatch、CyclicBarrier、Semaphore<ul>
+<li>示例：<a target="_blank" rel="noopener" href="https://www.baeldung.com/java-concurrent-utilities">并发工具类实战</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>JVM：</p>
+<ul>
+<li>JVM 内存区域（堆、栈、方法区、直接内存）</li>
+<li>类加载机制（双亲委派）、类卸载机制<ul>
+<li>参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/aspirant/p/12222246.html">JVM类加载机制详解</a></li>
+</ul>
+</li>
+<li>GC 垃圾回收算法（标记-清除、复制、CMS、G1）<ul>
+<li>可视化演示：<a target="_blank" rel="noopener" href="https://gceasy.io/">JVM GC动画讲解</a></li>
+</ul>
+</li>
+<li>性能调优工具（jstack、jmap、jvisualvm）</li>
+</ul>
+</li>
+</ul>
+<h4 id="🌐-Spring-Spring-Boot"><a href="#🌐-Spring-Spring-Boot" class="headerlink" title="🌐 Spring &amp; Spring Boot"></a>🌐 Spring &amp; Spring Boot</h4><ul>
+<li>IOC &#x2F; AOP原理：BeanFactory 与 ApplicationContext，动态代理、切面编程</li>
+<li>Bean 生命周期：构造 -&gt; set 属性 -&gt; 初始化 -&gt; 销毁</li>
+<li>常用注解原理（@Transactional 的事务传播行为与回滚机制）</li>
+<li>自动配置原理：SpringFactoriesLoader、条件注解（@ConditionalOnMissingBean）<ul>
+<li>案例：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/135354270">Spring Boot 自动配置原理</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="🛠️-数据库-缓存"><a href="#🛠️-数据库-缓存" class="headerlink" title="🛠️ 数据库 &amp; 缓存"></a>🛠️ 数据库 &amp; 缓存</h4><ul>
+<li>MySQL：<ul>
+<li>索引类型（B+树）、覆盖索引、联合索引与最左匹配原则</li>
+<li>SQL 调优（explain 分析、慢查询日志）</li>
+<li>事务隔离级别（Read Uncommitted、Repeatable Read 等）与幻读、MVCC 实现<ul>
+<li>MVCC讲解：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/117601718">图解MVCC</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Redis：<ul>
+<li>数据结构（String、List、Set、Hash、ZSet）典型应用场景</li>
+<li>持久化机制（RDB vs AOF）、主从复制、哨兵机制</li>
+<li>缓存击穿（互斥锁）、穿透（布隆过滤器）、雪崩（过期时间错开）处理<ul>
+<li>案例：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844904127748911117">Redis缓存问题解决方案</a></li>
+</ul>
+</li>
+<li>分布式锁（SET NX PX 实现原理、Redlock 分布式算法）<ul>
+<li>源码分析：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903985725276167">Redlock 机制</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="🧱-中间件"><a href="#🧱-中间件" class="headerlink" title="🧱 中间件"></a>🧱 中间件</h4><ul>
+<li>Kafka：<ul>
+<li>Producer&#x2F;Consumer 原理、分区机制、消费位移管理</li>
+<li>消费模式（at most once、at least once）、幂等性保证</li>
+</ul>
+</li>
+<li>RabbitMQ：<ul>
+<li>交换机类型（Direct、Fanout、Topic）、消息确认与重试</li>
+</ul>
+</li>
+<li>Netty：事件驱动模型、零拷贝、Reactor 模式</li>
+<li>Nginx：反向代理、负载均衡、location 匹配规则、缓存设置<ul>
+<li>配置案例：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903871032328205">Nginx使用详解</a></li>
+</ul>
+</li>
+<li>分布式ID：UUID 特点、雪花算法结构（时间戳+机器ID+序列号）</li>
+</ul>
+<h4 id="⚙️-系统设计-分布式"><a href="#⚙️-系统设计-分布式" class="headerlink" title="⚙️ 系统设计 &#x2F; 分布式"></a>⚙️ 系统设计 &#x2F; 分布式</h4><ul>
+<li>微服务架构：服务注册发现（Eureka&#x2F;Nacos）、配置中心（Spring Cloud Config）</li>
+<li>分布式事务：<ul>
+<li>TCC（Try-Confirm-Cancel）原理与应用</li>
+<li>可靠消息最终一致性（RocketMQ事务消息）</li>
+<li>SAGA 状态机模式（流程编排）</li>
+</ul>
+</li>
+<li>限流熔断降级：<ul>
+<li>Hystrix：断路器、舱壁、降级策略</li>
+<li>Sentinel：滑动窗口限流、预热、熔断规则设置<ul>
+<li>官方示例：<a target="_blank" rel="noopener" href="https://github.com/alibaba/Sentinel/wiki">Sentinel 使用文档</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="✅-第二部分：AI-应用相关知识点"><a href="#✅-第二部分：AI-应用相关知识点" class="headerlink" title="✅ 第二部分：AI 应用相关知识点"></a>✅ 第二部分：AI 应用相关知识点</h3><h4 id="🤖-LLM-应用开发基础（LangChain-Flowise-OpenAI-API）"><a href="#🤖-LLM-应用开发基础（LangChain-Flowise-OpenAI-API）" class="headerlink" title="🤖 LLM 应用开发基础（LangChain &#x2F; Flowise &#x2F; OpenAI API）"></a>🤖 LLM 应用开发基础（LangChain &#x2F; Flowise &#x2F; OpenAI API）</h4><ul>
+<li>Prompt Engineering：角色设定、上下文拼接、few-shot 提示设计<ul>
+<li>指南：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/guides/gpt-best-practices">OpenAI Prompt Best Practices</a></li>
+</ul>
+</li>
+<li>LangChain 模块：<ul>
+<li>LLMChain：单轮调用链</li>
+<li>RetrievalQA：向量搜索增强问答</li>
+<li>Agent：动态任务调度</li>
+<li>Memory：对话历史上下文管理（BufferMemory、SummaryMemory）<ul>
+<li>文档：<a target="_blank" rel="noopener" href="https://python.langchain.com/docs/modules/memory/">LangChain Memory</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>向量数据库：<ul>
+<li>Faiss：本地索引（Flat、IVF、HNSW）、Index 保存&#x2F;加载方式</li>
+<li>Chroma &#x2F; Weaviate：文档分片、元数据存储与过滤检索<ul>
+<li>参考：<a target="_blank" rel="noopener" href="https://weaviate.io/">Weaviate 向量数据库</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Embedding：<ul>
+<li>OpenAI text-embedding-ada-002 使用方式、维度、成本</li>
+<li>HuggingFace Sentence Transformers 示例（all-MiniLM）<ul>
+<li>示例项目：<a target="_blank" rel="noopener" href="https://www.sbert.net/docs/quickstart.html">Sentence Transformers 快速上手</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>RAG：文档分片 ➝ embedding ➝ 存入向量库 ➝ 查询补全 context ➝ LLM 回答</li>
+<li>OpenAI 接口：API Key、temperature、top_p、stream 流式输出、速率限制处理<ul>
+<li>官方文档：<a target="_blank" rel="noopener" href="https://platform.openai.com/docs/api-reference/chat/create">OpenAI API</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="💾-向量库与检索应用"><a href="#💾-向量库与检索应用" class="headerlink" title="💾 向量库与检索应用"></a>💾 向量库与检索应用</h4><ul>
+<li>Faiss 操作：<ul>
+<li>构建索引：IndexFlatL2、IndexIVFFlat</li>
+<li>插入数据：add_with_ids</li>
+<li>查询相似向量：search(query, k)</li>
+<li>快速入门：<a target="_blank" rel="noopener" href="https://github.com/facebookresearch/faiss/wiki/Indexing-1M-vectors">Faiss官方示例</a></li>
+</ul>
+</li>
+<li>向量检索原理：L2距离、Cosine 相似度、内积</li>
+<li>本地 vs 云部署：FastAPI + Uvicorn 封装 Faiss API 远程调用<ul>
+<li>项目示例：<a target="_blank" rel="noopener" href="https://github.com/tiangolo/full-stack-fastapi-postgresql">本地部署Faiss + FastAPI</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="🧠-Java-接入-AI-方向"><a href="#🧠-Java-接入-AI-方向" class="headerlink" title="🧠 Java 接入 AI 方向"></a>🧠 Java 接入 AI 方向</h4><ul>
+<li>接入方式：<ul>
+<li>使用 WebClient &#x2F; OkHttp &#x2F; Feign 调用 OpenAI 接口</li>
+<li>解析 JSON 响应并集成流式 SSE 输出</li>
+</ul>
+</li>
+<li>LangChain4j：<ul>
+<li>使用 PromptTemplate + OpenAiLanguageModel 构建聊天功能</li>
+<li>与 Redis &#x2F; 向量库集成构建知识问答<ul>
+<li>项目参考：<a target="_blank" rel="noopener" href="https://github.com/langchain4j/langchain4j">LangChain4j</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Demo 项目：<ul>
+<li>Java ChatPDF 实现：上传 PDF ➝ 分词 ➝ embedding ➝ 存储 ➝ 问答接口</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="📋-Bonus：系统设计类面试常见题目（准备简要方案）"><a href="#📋-Bonus：系统设计类面试常见题目（准备简要方案）" class="headerlink" title="📋 Bonus：系统设计类面试常见题目（准备简要方案）"></a>📋 Bonus：系统设计类面试常见题目（准备简要方案）</h3><ol>
+<li>高并发电商下单系统：库存缓存、异步削峰（MQ）、分布式锁、防重提交</li>
+<li>聊天记录搜索：切分聊天文本 ➝ embedding ➝ 存 Faiss ➝ 模糊匹配</li>
+<li>智能问答机器人系统：文档预处理 ➝ 向量库 ➝ RAG 模式 ➝ LLM 调用</li>
+<li>Java 服务接 GPT-4 生成摘要：接口设计、鉴权、token 管控、缓存存储</li>
+<li>简易 LangChain Chat Bot：Java 封装接口 + LangChain4j agent + memory 实现</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -690,258 +1505,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/30/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/30/%E7%AE%80%E5%8D%95%E6%97%B6%E9%97%B4%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">简单时间管理</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-03-30 07:59:42" itemprop="dateCreated datePublished" datetime="2022-03-30T07:59:42+08:00">2022-03-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AE%A1%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">管理</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="时间管理"><a href="#时间管理" class="headerlink" title="时间管理"></a>时间管理</h1><h2 id="目标感"><a href="#目标感" class="headerlink" title="目标感"></a>目标感</h2><ol>
-<li>给每件事情设定deadline</li>
-<li>给长期的事情设置周期循环事项</li>
-</ol>
-<h2 id="时间块"><a href="#时间块" class="headerlink" title="时间块"></a>时间块</h2><ul>
-<li>30分钟刻度划分<br>一般管理人员的时间快划分可以到30分钟或者1小时</li>
-<li>半天刻度划分<br>研发人员会按照半天来划分时间，涉及到写代码、用例、测试计划、编译、部署等具体工作，需要时间来思考及实现，所以有效的时间块划分是半天或者一天。</li>
-</ul>
-<h2 id="固化日程"><a href="#固化日程" class="headerlink" title="固化日程"></a>固化日程</h2><p>固化日程即养成好的习惯，使得时间利用率高，事情处理效率高。<br>有些固定模板可套用，如：</p>
-<ul>
-<li><strong>上班后&#x2F;下班前处理今日事项和明日规划</strong></li>
-<li><strong>早会及总结</strong></li>
-<li><strong>上午做需求评审，下午写代码，晚上做分享</strong></li>
-</ul>
-<p>个人日程示例：</p>
-<p>​	9.30-10.00：整理项目的进度和风险<br>​	10.00-11.00： 思考编码方案<br>​	11.00-11.50： XX技术方案&#x2F;监视团队代码<br>​	———————————————————<br>​	2.30-3.00：接口设计<br>​	3.15-6.00： 编码<br>​	7.00-8.00：  小组分享&#x2F;学习<br>​	8.00-8.30： 今日事项总结，明日事项规划<br>​	</p>
-<h2 id="工具和方法论"><a href="#工具和方法论" class="headerlink" title="工具和方法论"></a>工具和方法论</h2><p>工具：microsoft todo、滴答清单、calendar<br>方法论：GTD(Get things done)</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/29/GitHub%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/03/29/GitHub%E4%B8%AA%E4%BA%BA%E7%BD%91%E7%AB%99%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">GitHub个人网站搭建</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-03-29 21:28:50" itemprop="dateCreated datePublished" datetime="2022-03-29T21:28:50+08:00">2022-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>整个流程分3个步骤：新建个人仓库，本地hexo搭建，GitHub连接，本地博客搭建，GitHub设置。</p>
-<h2 id="新建个人仓库"><a href="#新建个人仓库" class="headerlink" title="新建个人仓库"></a>新建个人仓库</h2><p>1、登录GitHub，如果没有的话申请一下登录 。</p>
-<p>2、在GitHub上新建一个代码仓。</p>
-<p>3、代码仓命名，一般代码仓名字都是 用户名.github.io，比如我的用户是 xiaozhigang，则代码仓名 xiaozhigang.github.io</p>
-<p><img src="/../images/hexo/image-20240329213705691.png"></p>
-<p><img src="/../images/hexo/image-20240329213943872.png" alt="image-20240329213943872"></p>
-<h2 id="本地hexo搭建"><a href="#本地hexo搭建" class="headerlink" title="本地hexo搭建"></a>本地hexo搭建</h2><p>代码上传下载需要Git，而hexo是通过node.js搭建的，所以在搭建hexo之前，需要先安装好Git和node.js。如果某个步骤已经安装好了，可以跳过。然后安装hexo以及安装hexo依赖。</p>
-<h3 id="1、Git安装"><a href="#1、Git安装" class="headerlink" title="1、Git安装"></a>1、Git安装</h3><p>1、访问git官方地址，下载对应的安装包，进行安装（简单的点击下一步）。官方地址：<a target="_blank" rel="noopener" href="https://git-scm.com/">https://git-scm.com/</a></p>
-<p>2、安装好之后，鼠标右键可以看到：Git Bash Here，点击后打开了。</p>
-<p>3、输入：git –version</p>
-<p><img src="/../images/hexo/image-20240329215453993.png" alt="image-20240329215453993"></p>
-<h3 id="2、node-js安装"><a href="#2、node-js安装" class="headerlink" title="2、node.js安装"></a>2、node.js安装</h3><p>1、访问nodejs官方地址，下载对应的安装包，进行安装（简单的点击下一步）。官方地址：<a target="_blank" rel="noopener" href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a></p>
-<p>2、安装好之后，配置环境变量，并在终端里面输入：node -v</p>
-<p><img src="/../images/hexo/image-20240329215558404.png" alt="image-20240329215558404"></p>
-<h3 id="3、安装Hexo"><a href="#3、安装Hexo" class="headerlink" title="3、安装Hexo"></a>3、安装Hexo</h3><p> 1、安装命令：npm install hexo -g</p>
-<p>2、测试是否安装成功，命令：hexo -v</p>
-<p>我这已经安装过了，就从网上抄了两个图</p>
-<p><img src="/../images/hexo/ac4d0721eb5f49b2e6d6084dbb502dee.png" alt="img"></p>
-<p><img src="/../images/hexo/a8c8fb1b395c8019c0e6355cdc9e6d11.png" alt="img"></p>
-<h3 id="4、安装hexo依赖"><a href="#4、安装hexo依赖" class="headerlink" title="4、安装hexo依赖"></a>4、安装hexo依赖</h3><p>命令：npm install <code>--</code>save hexo-deployer-git</p>
-<p><img src="/../images/hexo/193527383975cc963ed51eaac05df714.png" alt="img"></p>
-<h2 id="GitHub连接"><a href="#GitHub连接" class="headerlink" title="GitHub连接"></a>GitHub连接</h2><h3 id="git配置SSH-key"><a href="#git配置SSH-key" class="headerlink" title="git配置SSH key"></a>git配置SSH key</h3><p>先看本地是否配置好SSH key（命令：cd ~&#x2F;.ssh），我这已经是配置过的。</p>
-<p><img src="/../images/hexo/image-20240329220712861.png" alt="image-20240329220712861"></p>
-<p>输入生成命令：ssh-keygen -t rsa -C “邮件地址”后。连续回车三次即可：</p>
-<p><img src="/../images/hexo/823872b236f421f409a771fc7fae6ff7.png" alt="img"></p>
-<p>可以看到在用户文件夹下生成了一个ssh文件夹：</p>
-<p><img src="/../images/hexo/d6518c53b9c548ffa675835beb2b9041.png" alt="img"></p>
-<p>进入到ssh文件夹，复制id_rsa.pub文件里全部内容：</p>
-<p><img src="/../images/hexo/b6a185592c02e95a624e368ae6501079.png" alt="img"></p>
-<p>接着打开github主页，点击个人设置，点击左侧的SSH and GPG keys，点击New SSH key ：</p>
-<p><img src="/../images/hexo/1818d201e6ccc700d59677c47fbd3cac.png" alt="img"></p>
-<p>将id_rsa.pub复制的内容粘贴到key中，title随便起一个就行。</p>
-<p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
-<p>点击 Add SSH key。</p>
-<blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#103;&#x69;&#x74;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#46;&#99;&#x6f;&#109;">&#103;&#x69;&#x74;&#x40;&#x67;&#x69;&#116;&#104;&#x75;&#x62;&#46;&#99;&#x6f;&#109;</a></p>
-</blockquote>
-<p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
-<p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>
-<p>配置账号和密码：</p>
-<h2 id=""><a href="#" class="headerlink" title="- "></a>- </h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config --<span class="variable language_">global</span> user.<span class="property">name</span> <span class="string">&quot;liyunchen&quot;</span> #你的github用户名$ git config --<span class="variable language_">global</span> user.<span class="property">email</span> <span class="string">&quot;xxx@163.com&quot;</span> #填写你的github注册邮箱</span><br></pre></td></tr></table></figure>
-
-<p>复制</p>
-<blockquote>
-<p>备注：用户名和邮箱记得改为自己的</p>
-</blockquote>
-<h2 id="本地博客搭建"><a href="#本地博客搭建" class="headerlink" title="本地博客搭建"></a>本地博客搭建</h2><h3 id="新建博客"><a href="#新建博客" class="headerlink" title="新建博客"></a>新建博客</h3><p>开始之前先介绍一下heox的基本命令：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo <span class="keyword">new</span> <span class="string">&quot;postName&quot;</span> #新建文章hexo <span class="keyword">new</span> page <span class="string">&quot;pageName&quot;</span> #新建页面hexo generate #生成静态页面至public目录hexo server #开启预览访问端口（默认端口<span class="number">4000</span>，<span class="string">&#x27;ctrl + c&#x27;</span>关闭server）hexo deploy #部署到<span class="title class_">GitHubhexo</span> help  # 查看帮助hexo version  #查看<span class="title class_">Hexo</span>的版本</span><br></pre></td></tr></table></figure>
-
-<p>复制</p>
-<p>对应的缩写，比如： hexo n &#x3D;&#x3D; hexo new hexo g &#x3D;&#x3D; hexo generate</p>
-<p>新建一个保存博客的存放目录，比如：D:\公众号\0722。</p>
-<p>进入到本地博客存放目录 初始化 个人博客 命令：hexo init</p>
-<p><img src="/../images/hexo/fd4787de8bfade7161a274c3b6c9bc39.png" alt="img"></p>
-<p>可以看到博客存放目录出现了如下内容：</p>
-<p><img src="/../images/hexo/706890a1483d20a9a9ef82494d885f46.png" alt="img"></p>
-<p>#生成静态网页 命令：hexo g #预览 命令：hexo s</p>
-<p><img src="/../images/hexo/2b81faeb9138d1873206dc3526f28e81.png" alt="img"></p>
-<p>在浏览器这访问： <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000/</a></p>
-<p><img src="/../images/hexo/efc4c675bfe22a838770ebd35e85c199.png" alt="img"></p>
-<p>可以看到访问没问题。</p>
-<p>但这个只是在本地预览，接着将这个博客部署到github。</p>
-<h2 id="GitHub设置"><a href="#GitHub设置" class="headerlink" title="GitHub设置"></a>GitHub设置</h2><h3 id="上传到GitHub"><a href="#上传到GitHub" class="headerlink" title="上传到GitHub"></a>上传到GitHub</h3><p>编辑_config.yml，_config.yml在博客存放目录下：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">deploy</span>:  <span class="attr">type</span>: git  <span class="attr">repository</span>: git@github.<span class="property">com</span>:liyunchen/liyunchen.<span class="property">github</span>.<span class="property">io</span>.<span class="property">git</span>  <span class="attr">branch</span>: main</span><br></pre></td></tr></table></figure>
-
-<p>发布到github 命令：hexo d</p>
-<p><img src="/../images/hexo/56a0b4aaf112d3ea44b5e233b9f6309d.png" alt="img"></p>
-<p>在浏览器访问 <a target="_blank" rel="noopener" href="https://xiaozhigang.github.io/">https://xiaozhigang.github.io/</a></p>
-<p>我这配置了域名，不做展示</p>
-<p>可以看到成功访问。</p>
-<blockquote>
-<p>这个博客地址已经是部署到了公网，感兴趣的读者也可以访问</p>
-</blockquote>
-<h3 id="编写博客"><a href="#编写博客" class="headerlink" title="编写博客"></a>编写博客</h3><p>1、git命令：hexo n “文章名称”</p>
-<p>2、\source\_posts目录下会生成md文件，编写md文件就行。</p>
-<p>3、发布到github </p>
-<p>​	命令：hexo clean ，hexo g ，hexo d</p>
-<p>配置个人域名</p>
-<p><img src="/../images/hexo/image-20240329231225707.png" alt="image-20240329231225707"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

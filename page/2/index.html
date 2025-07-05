@@ -150,18 +150,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-count">42</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,6 +178,492 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/16/%E6%B3%A8%E5%86%8C%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">注册中心分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-16 19:25:11" itemprop="dateCreated datePublished" datetime="2024-04-16T19:25:11+08:00">2024-04-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>之前面试问到了工作中用到的注册中心和市面上的有啥异同。</p>
+<p>公司用的注册中心：Zookeeper</p>
+<p>市面上除此之外还有其他注册中心：Eureka、Consul、Nacos</p>
+<table>
+<thead>
+<tr>
+<th>组件名称</th>
+<th>所属公司</th>
+<th>组件介绍</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Zookeeper</td>
+<td>Apache</td>
+<td>Zookeeper是一个分布式协调工具，可以实现注册功能</td>
+</tr>
+<tr>
+<td>Eureka</td>
+<td>Netflix</td>
+<td>Spring最早的注册中心，目前已经进入停更进维</td>
+</tr>
+<tr>
+<td>Consul</td>
+<td>Hashicorp</td>
+<td>Consul简化了分布式环境中的服务的注册和发现流程，通过HTTP或者DNS接口发现，支持外部Saas提供者等</td>
+</tr>
+<tr>
+<td>Nacos</td>
+<td>Alibaba</td>
+<td>Nacos致力于发现、配置和管理微服务。Nacos提供了一组简单易用的特性集，快速实现动态服务发现、服务配置、服务元数据以及流量管理</td>
+</tr>
+</tbody></table>
+<h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>遵循CP原则（一致性，分区容错性），牺牲了高可用。所以任何时候请求都能得到一致的数据结果，但是不能保证每次服务请求都是可达的。比如请求的时候leader节点宕机，或者集群中半数以上节点不可用，那么将无法处理请求。</p>
+<h3 id="Eureka"><a href="#Eureka" class="headerlink" title="Eureka"></a>Eureka</h3><p>遵循AP原则（可用性，分区容错性），牺牲了数据一致性。也就是能保证每次服务请求都是可达的，但是不能保证每次的请求结果都是一致的。Eureka集群没有主从之分，采用的是Peer to Peer对等通信，这是一种去中心化的架构，每个节点都需要添加一个或多个有效的serviceUrl指向其他节点，每个节点都是其他节点的副本。集群中只要还有一个节点存活，那么服务就是可用的，但是不饿能保证查到的数据是最新的或者一致的。</p>
+<p>除此之外还有一种保护机制，如果在15分钟内超过85%的节点都没有正常心跳，Eureka则认为客户端与注册中心之间出现了网络故障，此时会出现以下几种情况：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1、Eureka不再从注册表中移除因长时间没有收到心跳而过期的服务</span><br><span class="line"></span><br><span class="line">2、Eureka仍然能够接受新服务注册和查询请求，但不会同步到其他节点上，只保证当前节点可用</span><br><span class="line"></span><br><span class="line">3、当网络稳定时，当前实例新注册的信息会被同步到其他节点</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="Consul"><a href="#Consul" class="headerlink" title="Consul"></a>Consul</h3><p>遵循CP原则，Hashicorp公司开发，用于实现分布式系统的服务发现与配置。使用的时Raft算法，比zookeeper使用的Paxos算法更简单，虽然保证了强一致性，但是可用性方面性能有所下降，比如在服务注册方面，Raft协议要求半数以上的节点都写入才算注册成功，leader节点宕机之后，在重新选取出leader节点之前都会导致不可用。</p>
+<h3 id="Nacos"><a href="#Nacos" class="headerlink" title="Nacos"></a>Nacos</h3><p>遵循AP原则，也可支持CP原则，阿里开源，nacos &#x3D; 注册中心 + 配置中心，总之很强大，推荐。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>Nacos</th>
+<th>Eureka</th>
+<th>Consul</th>
+<th>Zookeeper</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性协议</td>
+<td>CP+AP</td>
+<td>AP</td>
+<td>AP</td>
+<td>CP</td>
+</tr>
+<tr>
+<td>健康检查</td>
+<td>TCP&#x2F;HTTP&#x2F;MySQL&#x2F;Client Beat</td>
+<td>Client Beat</td>
+<td>TCP&#x2F;HTTP&#x2F;gRPC&#x2F;Cmd</td>
+<td>keep alive</td>
+</tr>
+<tr>
+<td>负载均衡</td>
+<td>权重&#x2F;metadata&#x2F;Selector</td>
+<td>Ribbon</td>
+<td>Fabio</td>
+<td>-</td>
+</tr>
+<tr>
+<td>自动注销实例</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>访问协议</td>
+<td>HTTP&#x2F;DNS</td>
+<td>HTTP</td>
+<td>HTTP&#x2F;DNS</td>
+<td>TCP</td>
+</tr>
+<tr>
+<td>监听支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多数据中心</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>跨注册中心同步</td>
+<td>支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>SpringCloud集成</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/15/4%E6%9C%8815%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98/" class="post-title-link" itemprop="url">4月15面试复盘</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-15 21:14:54" itemprop="dateCreated datePublished" datetime="2024-04-15T21:14:54+08:00">2024-04-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>今天面试了两个，一个下午，一个晚上，下午面试没有聊的很深，貌似很着急招人的样子，晚上聊了很久，更类似于聊天探讨形式。</p>
+<h3 id="面试问题"><a href="#面试问题" class="headerlink" title="面试问题"></a>面试问题</h3><p>有些问题记不上来了，将记忆清楚和答的不好的记录复盘。</p>
+<h4 id="问题1"><a href="#问题1" class="headerlink" title="问题1"></a>问题1</h4><p>问：</p>
+<p>我们使用的<strong>注册中心、配置中心</strong>和市面使用的spring或者nacos的异同。</p>
+<p>复盘：</p>
+<p>公司使用的是zookeeper，市面常见的主要有4种<strong>Eureka、Zookeeper、Consul、Nacos</strong>。</p>
+<p>具体的对比差异没有答好，简述了注册中心<strong>AP，CP</strong>的差异。</p>
+<p>在配置中心上，目前常用的有<strong>springcloud config、nacos、apollo</strong></p>
+<p>具体的差异也没答上。</p>
+<p>后续整理归纳一篇文章。</p>
+<h4 id="问题2"><a href="#问题2" class="headerlink" title="问题2"></a>问题2</h4><p>问：自定义经典线程池拒绝策略</p>
+<p>复盘：</p>
+<p>相当于知识盲区了，没有答上，只知道有4种拒绝策略：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1、AbortPolicy：默认拒绝策略，抛出RejectExecutionException异常</span><br><span class="line"></span><br><span class="line">2、CallerRunsPolicy：不抛异常，而是让提交任务的线程自己去执行这个任务</span><br><span class="line"></span><br><span class="line">3、DiscardOldestPolicy：策略会丢失队列中最老的以恶搞任务，然后重新尝试新提交被拒绝的任务</span><br><span class="line"></span><br><span class="line">4、DiscardPolicy：抛弃被拒绝的任务，不会做任何处理也不会抛出异常。</span><br></pre></td></tr></table></figure>
+
+<p>自定义的拒绝策略没有了解过，可以写篇文章总结了解一下。</p>
+<h4 id="问题3"><a href="#问题3" class="headerlink" title="问题3"></a>问题3</h4><p>问：优化SQL方案</p>
+<p>复盘：知道一些优化方案，但是没有条理性</p>
+<p>需要整理一下，最好整理成一个全面的方法论</p>
+<h4 id="问题4"><a href="#问题4" class="headerlink" title="问题4"></a>问题4</h4><p>问：redis和数据库同步一致性方案</p>
+<p>复盘：知道新跟新数据库，再更新缓存</p>
+<p>但是全面的方法论没有将出来。</p>
+<h4 id="问题5"><a href="#问题5" class="headerlink" title="问题5"></a>问题5</h4><p>问：jdk 虚拟线程，新版jdk特性</p>
+<p>复盘：jdk8之后都没有了解，这块短板等补齐，目前面试很少问到这个，但是得了解补齐.</p>
+<p>问：新版jdk的垃圾回收器</p>
+<p>复盘：同上</p>
+<h4 id="问题6"><a href="#问题6" class="headerlink" title="问题6"></a>问题6</h4><p>问：jdk调优工具</p>
+<p>复盘：知识盲点。得补齐，可能后续面试工作中用不到，但是得了解一下。</p>
+<h4 id="问题7"><a href="#问题7" class="headerlink" title="问题7"></a>问题7</h4><p>问：如何打破双亲加载机制</p>
+<p>复盘：知道双亲加载机制，但是如何打破倒是没有深入了解，自己也写篇文章总结一下。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>总体来说，每个问题都有自己知道的点，但是好多没有全面的回答。<strong>回答的都是一个个的点，没有梳理成一个面</strong>，体现自己的逻辑性，条理性和全面性</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/03/27/%E9%9D%A2%E8%AF%95%E5%A4%8D%E7%9B%98-03-27/" class="post-title-link" itemprop="url">面试复盘-03-27</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-03-27 18:39:52" itemprop="dateCreated datePublished" datetime="2024-03-27T18:39:52+08:00">2024-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-28 21:09:36" itemprop="dateModified" datetime="2024-03-28T21:09:36+08:00">2024-03-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E9%9D%A2%E8%AF%95/" itemprop="url" rel="index"><span itemprop="name">面试</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>这次面试场面有点大，6个面试官，但只有3个面试官提问了。前两个面试官回答的还行，后一个面试官直接问懵了。</p>
+<h2 id="自我介绍"><a href="#自我介绍" class="headerlink" title="自我介绍"></a>自我介绍</h2><p>19年毕业，4年多工作经验，华为这边工作。</p>
+<p>目前团队业务是以洞察、评估、规划和收益四个部分向运营商提供数字化机会点发现。</p>
+<p>项目是以全球数据沙盘项目为基础，业务向外扩展OTN to 楼宇，OTN综合承载等项目。</p>
+<p>自己近项目组以来，从构建测试网络开始了解全球数据沙盘项目，到路网算法开始参与项目，然后开始OTN to 楼宇参与业务拓展，到最后的模型收编和原子能力编排重构项目。</p>
+<h4 id="回溯"><a href="#回溯" class="headerlink" title="回溯"></a>回溯</h4><p>可以说一下自己参与<strong>开源项目dubbo</strong>，个人学习构建<strong>商城项目</strong>的框架代码，以及个人<strong>博客文章</strong>的分享。</p>
+<p>也可以说一下自己在团队内的定位。</p>
+<p>可以画个<strong>思维导图</strong>，下次按思维导图介绍。</p>
+<p><img src="/../images/black-03-27/image-20240328200205037.png"></p>
+<h2 id="第一个面试官"><a href="#第一个面试官" class="headerlink" title="第一个面试官"></a>第一个面试官</h2><h3 id="MySQL索引"><a href="#MySQL索引" class="headerlink" title="MySQL索引"></a>MySQL索引</h3><p>问：简述一下mysql的索引</p>
+<p>答：索引类似于书的目录，加快查找数据，它的存在空间换时间。空间就不用说了，索引的存在必然消耗空间，时间的话就是提高了查找效率，减少了消耗的时间。索引分为<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，以InnoDB而言，索引以B+数的形式存储，只不过聚簇和非聚簇在存储细节上有所不同。聚簇也就是主键索引，在叶子节点上是以主键和数据一起存放的，而非聚簇索引的叶子节点存储的是普通索引和主键。在查找数据的时候，如果是主键查询责直接通过B+数找到数据，非聚簇索引的话，要通过B+树先找到主键，在通过主键查到数据，这个过程叫做回表。为了提高查找的效率，所以我们一般在查询的时候尽量使用索引，且减少回表。</p>
+<h4 id="回溯-1"><a href="#回溯-1" class="headerlink" title="回溯"></a>回溯</h4><p>点应该都答到了，感觉面试官还比较满意回答，具体的细节和描述的方法可以更提高一点，显得更有条理性。</p>
+<p>总述：索引类似于书的目录，空间换时间，占用了磁盘空间，减少了查找时间。</p>
+<p>分述：分<strong>聚簇索引</strong>和<strong>非聚簇索引</strong>，二者在存储上的差异（B+树叶节点的不同），在查询上的差异（回表）。以及我们在实际使用的时候需要注意的点（减少回表，最左覆盖，索引下推，等）。</p>
+<p>追问：既然说到B+树，说一下10个节点的红黑树需要查询一个节点的时间消耗</p>
+<p>答：时间复杂度O(ln)，红黑树的第一层是一个节点，第二层是2个节点，第三层是4个，第5层是8个。查询的话上来先比较根节点，如果比根节点大往右，否则往左…（简述了一下查询流程）…查询像二分查找，先找中间值，比大小等</p>
+<h4 id="回溯-2"><a href="#回溯-2" class="headerlink" title="回溯"></a>回溯</h4><p>应该是面试官想听到的，现场感觉面试官比较满意，但是自己不是很清楚红黑树，不清楚红黑树的非叶子节点是否保存了数据，还是和B+树一样只做比较。</p>
+<p>增加实际业务中的的案例，走联合索引的案例，调换where中的条件顺序。</p>
+<h3 id="SpringMVC流程"><a href="#SpringMVC流程" class="headerlink" title="SpringMVC流程"></a>SpringMVC流程</h3><p>问：说一下MVC的查询流程</p>
+<p>答：<strong>客户端</strong> 请求到 <strong>DispatcherServlet</strong>， <strong>DispatcherServlet</strong>到<strong>HandlerMapping</strong>，然后返回结果给<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在将handler转发到适配器，适配器会有一些过滤拦截啥的，通过后到处理器，也就是controller-&gt;service-&gt;map，然后结果在原路返回到<strong>DispatcherServlet</strong>，<strong>DispatcherServlet</strong>在拿到结果后回去调用视图解析器啥的，去将返回的结果解析渲染。</p>
+<h4 id="回溯-3"><a href="#回溯-3" class="headerlink" title="回溯"></a>回溯</h4><p>回答面试官比较满意，听其语义主要想听到<strong>DispatcherServlet</strong>，但是此流程中记得是在适配器中会有拦截过滤，不是特别确定，已经返回结果后的视图解析渲染，两个组件名称记得不是特别清楚。</p>
+<p><img src="/../images/black-03-27/2474678-20221205141025926-329048743.png" alt="img"></p>
+<h3 id="服务间通信"><a href="#服务间通信" class="headerlink" title="服务间通信"></a>服务间通信</h3><p>问：你们有多模块多服务吗，服务间的调用是用的什么。</p>
+<p>答：有，上面自我介绍中也说到了，我们所有业务基本可以分为：洞察，评估，规划，收益，四个模块。模块间的调用用的是http请求。</p>
+<p>追问：请求的结果是要转换的，你们是怎么转换的。</p>
+<p>答：我们的请求不涉及到请求结果的转换，不是那种强依赖。我们模块间的数据交互都是放在数据库的，比如洞察处理完的数据会放在数据库，然后调用评估的模块开始处理，评估模块处理的时候会调用数据库的数据处理，处理的结果会放回数据库，而不是返回给评估模块，这样更解耦。</p>
+<h4 id="回溯-4"><a href="#回溯-4" class="headerlink" title="回溯"></a>回溯</h4><p>其实对这请求调用的方式记得不是特别清楚了，需要复习回顾一下。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Andy19891117/article/details/134981402">https://blog.csdn.net/Andy19891117/article/details/134981402</a></p>
+<p>RPC调用和http调用，RPC基于传输层TCP协议，Http基于应用层http协议，所以RPC调用的传输效率更高。Http规定了返回的格式而RPC没有。</p>
+<h2 id="第二个面试官"><a href="#第二个面试官" class="headerlink" title="第二个面试官"></a>第二个面试官</h2><h3 id="jar包加载"><a href="#jar包加载" class="headerlink" title="jar包加载"></a>jar包加载</h3><p>问：简历中说的到的原子能力编排是怎么理解的，包是spring jar还是啥，编排是怎么理解。</p>
+<p>答：jar包是fast jar，不是那种有启动类的可执行jar包，编排的话，是我们把能力抽取成一个个的jar包，再以可视化配置的方式，类似于链式调用。</p>
+<p>追问：编排的结果，jar包的顺序执行，这个是以什么数据结构存储的。</p>
+<p>答：存在数据库中，是以字符串的形式存储的，在读取到数据库中字符串，在以特定的字符将字符串分割开，然后遍历执行。</p>
+<p>追问：前端是怎么配置调用后端的jar的</p>
+<p>答：我们是按迭代内的业务需求配置上线的，前台只是提供一个可视化的界面供开发配置，其实我们更习惯直接在配置文件xml中配置，配置完的xml文件会提交到代码仓，在我们的部署阶段，会将这配置文件解析成字符串保存在数据库中，供读取。</p>
+<p>追问：这个项目里的调度和引擎服务怎么理解。</p>
+<p>答：这个网关，调度，引擎内容都比较简单，网关的话直接对外，调度只负责调用原子能力jar，引擎是加载运行jar。这么分是为了职责更单一内敛。</p>
+<p>追问：jar包是怎么加载的。</p>
+<p>答：读取到lib目录下的依赖，先将依赖通过双亲依赖加载给加载进来，然后在通过同一规范的jar包入口，开始调用jar内的方法。</p>
+<p>追问：双亲加载有三个加载器，加载器是啥。</p>
+<p>答：记得不是特别清了，只记得一个是系统加载，两个是加载外部文件依赖加载。</p>
+<h4 id="回溯-5"><a href="#回溯-5" class="headerlink" title="回溯"></a>回溯</h4><p>面试感觉一般，虽然大部分都答到了，但是还有结果点不熟。</p>
+<p>1、jar包的分类不熟</p>
+<p>fat jar</p>
+<p>2、jar包的加载，了解大概流程，不了解其具体细节。</p>
+<p>3、三个父加载器忘了，没想起来名字。</p>
+<p>4、怎么卸载jar包</p>
+<p>启动类加载器（Bootstrap Class Loader）：也称为根类加载器，它负责加载Java虚拟机的核心类库，如java.lang.Object等。启动类加载器是虚拟机实现的一部分，它通常是由本地代码实现的，不是Java类。</p>
+<p>扩展类加载器（Extension Class Loader）：它是用来加载Java扩展类库的类加载器。扩展类库包括javax和java.util等包，它们位于jre&#x2F;lib&#x2F;ext目录下。</p>
+<p>应用程序类加载器（Application Class Loader）：也称为系统类加载器，它负责加载应用程序的类。它会搜索应用程序的类路径（包括用户定义的类路径和系统类路径），并加载类文件。</p>
+<h3 id="注解加载"><a href="#注解加载" class="headerlink" title="注解加载"></a>注解加载</h3><p>问：注解是怎么加载的</p>
+<p>答：看过源码，记得不是特别清了，spring启动类上会有enable开启注解加载，后面通过一层层的调用，大概3~4层，读取到lib目录下的文件，然后再通过条件判断是否加载。</p>
+<h4 id="回溯-6"><a href="#回溯-6" class="headerlink" title="回溯"></a>回溯</h4><p>回答一般，之前确实看过，现在确实忘了</p>
+<p><strong>自动配置原理</strong>：SpringBoot 项目的核心注解 @SpringBootApplication，这个注解位于启动类上方。@SpringBootApplication 看作是 @Configuration、@EnableAutoConfiguration、@ComponentScan 注解的集合。自动装配核心功能的实现是通过@EnableAutoConfiguration内部的AutoConfigurationImportSelector类。AutoConfigurationImportSelector 类实现了 ImportSelector 接口，也就实现了这个接口中的 selectImports 方法，<strong>该方法主要用于获取所有符合条件的类的全限定类名，需要为这些类创建对象并加载到 IoC 容器中</strong>。@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
+<p>​	@EnableAutoConfiguration：启用 SpringBoot 的自动配置机制。</p>
+<p>​	@Configuration：允许在上下文中注册额外的 bean 或导入其他配置类，作用与 applicationContext.xml 的功能相同。</p>
+<p>​	@ComponentScan： 扫描包下的类中添加了@Component (@Service，@Controller，@Repostory，@RestController)注解的类 ，并添加的到spring的容器中，可以自定义不扫描某些 bean。</p>
+<p><img src="/../images/black-03-27/image-20240329210812763.png" alt="image-20240329210812763"></p>
+<p>getAutoConfigurationEntry：</p>
+<p><strong>第 1 步：</strong>判断自动装配开关是否打开。默认 spring.boot.enableautoconfiguration &#x3D; true，可在 application.properties 或 application.yml 中设置</p>
+<p><strong>第 2 步：</strong>用于获取 EnableAutoConfiguration 注解中的 exclude 和 excludeName。</p>
+<p><strong>第 3 步：</strong>从 META-INF&#x2F;spring.factories 读取需要自动装配的所有配置类。</p>
+<p><strong>第 4 步：</strong>这一步有经历了一遍筛选过滤，@ConditionOnXXX 中的所有条件都满足，该类才会生效</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_59749089/article/details/131280769">https://blog.csdn.net/m0_59749089/article/details/131280769</a></p>
+<h2 id="第三个面试官"><a href="#第三个面试官" class="headerlink" title="第三个面试官"></a>第三个面试官</h2><h3 id="bean加载"><a href="#bean加载" class="headerlink" title="bean加载"></a>bean加载</h3><p>问：如果我想再bean初始化时候改变其变量值，或者说再方法前打印一个日志。</p>
+<p>答：使用代理，再调用方法前后打印日志。</p>
+<p>追问：不是代理，是在初始化的时候。</p>
+<p>答：在xml文件中，配置修改，在bean初始化的时候给其赋值。</p>
+<h4 id="回溯-7"><a href="#回溯-7" class="headerlink" title="回溯"></a>回溯</h4><p>貌似这也不是面试官想要的，确实不知道是啥，得查资料研究看看。</p>
+<p>bean的加载过程：</p>
+<p>加载bean信息–&gt;实例化bean–&gt;属性填充–&gt;初始化阶段–&gt;后置处理</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_46897923/article/details/129850717">https://blog.csdn.net/m0_46897923/article/details/129850717</a></p>
+<h3 id="容器化"><a href="#容器化" class="headerlink" title="容器化"></a>容器化</h3><p>问：你们容器化用的怎么样。</p>
+<p>答：我们部门目前才开始推，我们还没有开始使用容器化，但是自己也搭环境简单使用过容器化，比如部署一个redis、mysql等。</p>
+<h4 id="回溯-8"><a href="#回溯-8" class="headerlink" title="回溯"></a>回溯</h4><p>熟悉了解一下容器化，这方面得了解确实不够，只是简单得使用了一下。</p>
+<h3 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h3><p>问：核心线程数10，最大线程数20，现有1w个并发，为什么线程数一直是10，不是队列里有1w。</p>
+<p>答：不知，尝试分析，是不是资源不够，没办法新增。</p>
+<h4 id="回溯-9"><a href="#回溯-9" class="headerlink" title="回溯"></a>回溯</h4><p>确实不知，等了解。</p>
+<p>问：synchronized的用法</p>
+<p>答：修饰代码块或者方法，注意synchronized()中括号内的内容，可以是变量，对象和class类，对应锁的颗粒不一样。</p>
+<p>追问：对象和class类有什么不一样。</p>
+<p>答：对象是可以重复new的，但是class类只有一个，跟静态变量一样，用的时候要注意，别用错导致没锁好。</p>
+<p>追问：线程的睡眠和唤醒是怎么样的。</p>
+<p>答：A、B两个线程，A运行到某个地方，停住了睡眠了，B开始运行，运行到某个地方，通过A的方法唤醒A。</p>
+<h4 id="回溯-10"><a href="#回溯-10" class="headerlink" title="回溯"></a>回溯</h4><p>1、感觉追问的对象和类有什么不一样，没回答到他想要的，复习一下。</p>
+<p>2、睡眠唤醒的模型有点忘了，再代码实操一下。</p>
+<h3 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h3><p>问：kafka里的消费者组是什么。</p>
+<p>答：消费者的集合，一堆消费者组成的一个集合。</p>
+<p>问：topic里的分区能被消费者组内的多个消费者消费吗</p>
+<p>答：不能，一个分区只能被消费者组内一个消费者消费。</p>
+<p>问：怎么保证生产者生产的消息，顺序消费。</p>
+<p>答：都放在一个分区内，kafka不保证topic内的消息是顺序的，但是保证分区内的数据是顺序消费的。</p>
+<p>问：消息是怎么划分分区的。</p>
+<p>答：根据key的计算，具体的计算方法不知道。</p>
+<p>问：如果key为null会怎么样。</p>
+<p>答：不知</p>
+<h4 id="回溯-11"><a href="#回溯-11" class="headerlink" title="回溯"></a>回溯</h4><p>1、消费者组的概念</p>
+<p>2、分区和消费者组、消费者的消费关系模型</p>
+<p>3、分区的指定逻辑。</p>
+<p>4、key为null会怎样。</p>
+<p>随机选取一个分区缓存发送，过了分区的缓存时间后在随机选取一个分区缓存发送。</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709">https://blog.csdn.net/yizhiniu_xuyw/article/details/109206709</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -251,6 +737,221 @@
 <p>3、降低工作量的重复，不知道大家有没有遇到过这样的情况，有时候，想请同事帮忙处理一下什么问题或这任务，同事由于有之前处理的经验或者记录，一两分钟可能就处理好了，而自己从头开始处理的话可能需要一两个小时。如果我们把这种任务程序化之后，交由机器人触发，我们需要的时候只需要以聊天的形式，通知机器人触发任务，那得多爽，这样就可以提高工作效率。</p>
 <p>4、提升人工智能的准确性，从而提高员工的效率，员工在和人工智能交互的过程也是一种训练，而且还是一种监督训练，可以提供人工智能的回答准确性，从而可以提高下次和人交互的准确性。</p>
 <h3 id="机会点"><a href="#机会点" class="headerlink" title="机会点"></a>机会点</h3><p>当此人工智能在单个领域训练的准确性很高的，可以考虑将此接口暴露出去，商业化，从而盈利。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/26/Java%E4%B8%AD%E7%9A%84%E9%94%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/02/26/Java%E4%B8%AD%E7%9A%84%E9%94%81/" class="post-title-link" itemprop="url">Java中的常用锁</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-02-26 20:26:53 / 修改时间：23:25:40" itemprop="dateCreated datePublished" datetime="2024-02-26T20:26:53+08:00">2024-02-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>​	在java中，我们主要用到的锁有两个：synchronized、ReentrantLock。一个是内置锁（语言级），一个是显示锁，一般如果我们不思考只图方便的化，会直接使用synchronized锁。其实ReentrantLock更灵活多变，适用跟多的场景。我们可以通过下面的表对比一下两者。</p>
+<table>
+<thead>
+<tr>
+<th>特性&#x2F;维度</th>
+<th><code>synchronized</code></th>
+<th><code>ReentrantLock</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>所属包</td>
+<td>Java 语言层面（内置关键字）</td>
+<td><code>java.util.concurrent.locks</code></td>
+</tr>
+<tr>
+<td>可重入性</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>是否必须手动解锁</td>
+<td>❌ 自动（方法或代码块退出时）</td>
+<td>✅ 必须手动 <code>unlock()</code></td>
+</tr>
+<tr>
+<td>是否可中断获取锁</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 <code>lockInterruptibly()</code></td>
+</tr>
+<tr>
+<td>是否支持尝试获取锁</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 <code>tryLock()</code>（立即或超时）</td>
+</tr>
+<tr>
+<td>是否支持公平锁</td>
+<td>❌ 不支持</td>
+<td>✅ 支持（<code>new ReentrantLock(true)</code>）</td>
+</tr>
+<tr>
+<td>是否支持条件队列</td>
+<td>❌ 不支持</td>
+<td>✅ 支持 <code>Condition</code>（类似 <code>wait/notify</code>）</td>
+</tr>
+<tr>
+<td>性能优化（偏向锁等）</td>
+<td>✅ JVM 自动优化</td>
+<td>❌ 无（完全由开发者控制）</td>
+</tr>
+<tr>
+<td>是否支持可见调试</td>
+<td>❌ 无法查看状态</td>
+<td>✅ 可查看是否被锁定、等待线程等</td>
+</tr>
+<tr>
+<td>死锁处理</td>
+<td>不易发现</td>
+<td>可结合 <code>tryLock()</code> 等策略避免死锁</td>
+</tr>
+</tbody></table>
+<p>​	其实在上述这些维度方面都没啥好说的，这些一般都知道。都知道synchronized是关键字而ReentrantLock是一个类，然后两者都能加锁，这锁怎么去加，有什么效果，都是知道的。</p>
+<p>​	那synchronized和ReentrantLock又分别是怎么加锁的呢？</p>
+<pre><code>#### synchronized
+</code></pre>
+<h5 id="加锁原理（底层）"><a href="#加锁原理（底层）" class="headerlink" title="加锁原理（底层）"></a>加锁原理（底层）</h5><ul>
+<li>Java 对象头中包含了 <strong>Mark Word</strong>，在没有加锁时存储哈希值、GC信息等。</li>
+<li>当线程进入 <code>synchronized</code> 块时，会尝试修改对象头的 Mark Word，以标识当前线程持有锁。</li>
+<li>JVM 使用了多种锁优化策略（偏向锁、轻量级锁、重量级锁）：<ul>
+<li><strong>偏向锁</strong>：如果只有一个线程访问，尽量不加锁，提高性能。</li>
+<li><strong>轻量级锁</strong>：使用 CAS 尝试获取锁，适用于低竞争。</li>
+<li><strong>重量级锁（互斥锁）</strong>：竞争激烈时，会挂起线程，使用 <code>Monitor</code> 来实现，依赖操作系统的互斥机制。</li>
+</ul>
+</li>
+</ul>
+<h5 id="加锁过程简要流程图（逻辑）"><a href="#加锁过程简要流程图（逻辑）" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程进入synchronized：</span><br><span class="line">    |</span><br><span class="line">    |<span class="comment">-- 检查对象头Mark Word（是否偏向、锁状态）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果空闲，则尝试通过CAS加锁（轻量级）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果失败，有竞争，则升级为重量级锁（挂起线程）</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="字节码层面"><a href="#字节码层面" class="headerlink" title="字节码层面"></a>字节码层面</h5><p>编译后使用 <code>javap -v Test.class</code> 查看，会看到如下结构：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">java</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CopyEdit</span><br><span class="line">public void syncBlock() &#123;</span><br><span class="line">    synchronized (this) &#123;</span><br><span class="line">        System.out.println(&quot;Hello&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反编译字节码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">asm</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CopyEdit</span><br><span class="line">0: aload_0</span><br><span class="line">1: dup</span><br><span class="line">2: monitorenter       // 进入同步块</span><br><span class="line">3: getstatic java/lang/System.out : Ljava/io/PrintStream;</span><br><span class="line">6: ldc &quot;Hello&quot;</span><br><span class="line">8: invokevirtual java/io/PrintStream.println(Ljava/lang/String;)V</span><br><span class="line">11: monitorexit       // 退出同步块</span><br><span class="line">12: goto 20</span><br><span class="line">15: astore_1</span><br><span class="line">16: monitorexit       // 异常时也要退出同步块</span><br><span class="line">17: aload_1</span><br><span class="line">18: athrow</span><br></pre></td></tr></table></figure>
+
+<p><code>monitorenter</code> 和 <code>monitorexit</code> 是 JVM 指令，由 JVM 解释器直接处理，底层是调用 native 方法去操作对象的 Monitor。</p>
+<h5 id="JVM实现细节"><a href="#JVM实现细节" class="headerlink" title="JVM实现细节"></a>JVM实现细节</h5><p>HotSpot 中，对象的 Monitor 实际上是 <code>ObjectMonitor</code>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ObjectMonitor</span> &#123;</span><br><span class="line">  ...</span><br><span class="line">  ObjectWaiter * _EntryList;   <span class="comment">// 等待锁的线程队列</span></span><br><span class="line">  Thread * _Owner;             <span class="comment">// 当前持有锁的线程</span></span><br><span class="line">  <span class="type">int</span> _recursions;             <span class="comment">// 重入次数</span></span><br><span class="line">  ...</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>Monitor 与每个对象的 <strong>对象头（Mark Word）</strong> 关联，当竞争严重时锁会升级：</p>
+<ul>
+<li><strong>偏向锁</strong>：只记录线程 ID，适合无竞争场景</li>
+<li><strong>轻量级锁</strong>：线程通过 CAS 抢占锁</li>
+<li><strong>重量级锁</strong>：膨胀为 <code>ObjectMonitor</code>，线程挂起和唤醒都依赖 OS 的 <code>park/unpark</code></li>
+</ul>
+<h4 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h4><h5 id="加锁原理（底层）-1"><a href="#加锁原理（底层）-1" class="headerlink" title="加锁原理（底层）"></a>加锁原理（底层）</h5><ul>
+<li><code>ReentrantLock</code> 是基于 <strong>AQS（AbstractQueuedSynchronizer）</strong> 实现的。</li>
+<li>调用 <code>lock()</code> 会尝试通过 CAS 修改一个 <strong>state 状态变量</strong>，来标识是否持有锁。</li>
+<li>若获取失败，线程会被放入 AQS 的 <strong>双向等待队列</strong>中，等待唤醒。</li>
+</ul>
+<h5 id="加锁过程简要流程图（逻辑）-1"><a href="#加锁过程简要流程图（逻辑）-1" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程调用lock()：</span><br><span class="line">    |</span><br><span class="line">    |<span class="comment">-- 尝试通过CAS将state从0改为1（加锁）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果成功，获得锁</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果失败，进入AQS等待队列</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="AQS的队列结构"><a href="#AQS的队列结构" class="headerlink" title="AQS的队列结构"></a>AQS的队列结构</h5><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">head -&gt; [Node1] -&gt; [Node2] -&gt; ...</span><br><span class="line">         <span class="built_in">^</span>          <span class="built_in">^</span></span><br><span class="line">      线程1     线程2（阻塞）</span><br></pre></td></tr></table></figure>
+
+<p>每个 Node 包含：</p>
+<ul>
+<li>等待线程 <code>Thread thread</code></li>
+<li>等待状态 <code>waitStatus</code></li>
+<li>前驱&#x2F;后继节点 <code>prev</code> &#x2F; <code>next</code></li>
+</ul>
+<p>底层通过 <code>LockSupport.park()</code> 和 <code>unpark()</code> 来实现线程的阻塞与唤醒。</p>
+<h4 id="如何唤醒"><a href="#如何唤醒" class="headerlink" title="如何唤醒"></a>如何唤醒</h4><p>​	两者都是有阻塞队列，队列都是有序的，为什么会出现非公平唤醒呢？</p>
+<p>​	**因为”排队” ≠ “唤醒一定按顺序”**。</p>
+<p>Java 的锁（尤其是默认的 <code>synchronized</code> 和非公平 <code>ReentrantLock</code>）使用的阻塞队列只是<strong>阻塞等待顺序的组织方式</strong>，但<strong>唤醒后是否真正获得锁，还要竞争</strong>（CAS），所以就可能出现：</p>
+<blockquote>
+<p><strong>先排队的线程被唤醒了，但还没抢到锁；此时一个新线程进来，直接CAS成功拿到了锁。</strong></p>
+</blockquote>
+<h3 id="1-synchronized-的非公平行为"><a href="#1-synchronized-的非公平行为" class="headerlink" title="1. synchronized 的非公平行为"></a>1. <code>synchronized</code> 的非公平行为</h3><p><code>synchronized</code> 底层用的是 <code>ObjectMonitor</code>，当有多个线程竞争时，JVM 不保证 <strong>先唤醒的一定先拿到锁</strong>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CopyEdit</span><br><span class="line"><span class="comment">// ObjectMonitor.cpp</span></span><br><span class="line"><span class="keyword">void</span> ObjectMonitor::exit(...) &#123;</span><br><span class="line">    <span class="comment">// 调用 _EntryList 中的某个线程 unpark（但可能不是严格FIFO）</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>唤醒后还要重新尝试获取锁（CAS）</strong>，不是直接转移锁的拥有权，所以：</p>
+<ul>
+<li><p>后来的线程进来，如果没有阻塞，仍然可能直接成功拿到锁。</p>
+</li>
+<li><p>被唤醒的线程，反而还得和新线程竞争，可能继续失败。</p>
+</li>
+</ul>
+<h3 id="2-ReentrantLock-的非公平行为"><a href="#2-ReentrantLock-的非公平行为" class="headerlink" title="2. ReentrantLock 的非公平行为"></a>2. <code>ReentrantLock</code> 的非公平行为</h3><p>默认构造的 <code>ReentrantLock()</code> 是<strong>非公平锁</strong>，非公平策略体现在 <code>lock()</code> 方法中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">CopyEdit</span><br><span class="line"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>)) &#123;     <span class="comment">// 直接抢锁，不管队列中有没有人</span></span><br><span class="line">        setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        acquire(<span class="number">1</span>);                     <span class="comment">// 抢不到才排队</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说：</p>
+<ul>
+<li><strong>没有优先检查 AQS 队列中是否有等待的线程</strong></li>
+<li>只要锁是空闲的，谁来谁抢，先到的不一定先拿到</li>
+</ul>
+<p>即使队列中有等待线程，新线程仍然可以“插队”成功。</p>
 
       
     </div>
@@ -832,523 +1533,8 @@ cd /home/elk/elasticsearch-7.9.3/bin/
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/31/Redis%E6%8C%81%E4%B9%85%E5%8C%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/07/31/Redis%E6%8C%81%E4%B9%85%E5%8C%96/" class="post-title-link" itemprop="url">Redis持久化</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-31 16:21:45" itemprop="dateCreated datePublished" datetime="2023-07-31T16:21:45+08:00">2023-07-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>redis有两种持久化方式：RDB（Redis DataBase）持久化和 AOF（Append Only File）。</p>
-<p>RDB：通过创建数据的快照，在指定时间间隔内将redis某个时刻的数据状态保存到磁盘RDB文件中。</p>
-<p>AOF：通过记录每个操作命令并将其追加到AOF文件中，恢复时通过执行这些命令来重建数据。</p>
-<p><img src="/../images/redis/image-20240331163759309.png" alt="image-20240331163759309"></p>
-<h3 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h3><p>RBD以快照的方式保存全量的数据，可通过save和bgsave两个命令来触发持久化。</p>
-<p>1、save命令：会同步地将 Redis 的所有数据保存到磁盘上的一个 RDB 文件中。这个操作会阻塞所有客户端请求直到 RDB 文件被完全写入磁盘。</p>
-<p>2、bgsave命令：会在后台异步地创建 Redis 的数据快照，并将快照保存到磁盘上的 RDB 文件中。这个命令会立即返回，Redis 服务器可以继续处理客户端请求。</p>
-<p><img src="/../images/redis/image-20240331165755573.png" alt="image-20240331165755573"></p>
-<h3 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h3><p>AOF以追加的方式保存增量的数据，AOF 的主要作用是解决了数据持久化的实时性，目前已经是 Redis 持久化的主流方式。</p>
-<p>AOF 的工作流程操作：命令写入 （append）、文件同步（sync）、文件重写（rewrite）、重启加载 （load）。</p>
-<p><img src="/../images/redis/image-20240331171433901.png" alt="image-20240331171433901"></p>
-<p>流程如下：</p>
-<p>1）当 AOF 持久化功能被启用时，Redis 服务器会将接收到的所有写命令（比如 SET, LPUSH, SADD 等修改数据的命令）追加到 AOF 缓冲区（buffer）的末尾。</p>
-<p>2）为了将缓冲区中的命令持久化到磁盘中的 AOF 文件，Redis 提供了几种不同的同步策略：</p>
-<ul>
-<li>always：每次写命令都会同步到 AOF 文件，这提供了最高的数据安全性，但可能因为磁盘 I&#x2F;O 的延迟而影响性能。</li>
-<li>everysec（默认）：每秒同步一次，这是一种折衷方案，提供了较好的性能和数据安全性。</li>
-<li>no：不主动进行同步，交由操作系统决定何时将缓冲区数据写入磁盘，这种方式性能最好，但在系统崩溃时可能会丢失最近一秒的数据。</li>
-</ul>
-<p>3）随着操作的不断执行，AOF 文件会不断增长，为了减小 AOF 文件大小，Redis 可以重写 AOF 文件：</p>
-<ul>
-<li>重写过程不会解析原始的 AOF 文件，而是将当前内存中的数据库状态转换为一系列写命令，然后保存到一个新的 AOF 文件中。</li>
-<li>AOF 重写操作由 BGREWRITEAOF 命令触发，它会创建一个子进程来执行重写操作，因此不会阻塞主进程。</li>
-<li>重写过程中，新的写命令会继续追加到旧的 AOF 文件中，同时也会被记录到一个缓冲区中。一旦重写完成，Redis 会将这个缓冲区中的命令追加到新的 AOF 文件中，然后切换到新的 AOF 文件上，以确保数据的完整性。</li>
-</ul>
-<p>4）当 Redis 服务器启动时，如果配置为使用 AOF 持久化方式，它会读取 AOF 文件中的所有命令并重新执行它们，以恢复数据库的状态。</p>
-<h3 id="两者优缺点"><a href="#两者优缺点" class="headerlink" title="两者优缺点"></a>两者优缺点</h3><p>RDB-优点</p>
-<ol>
-<li>集中备份，则文件紧凑， <code>dump.rdb</code>，非常适合备份、全量复制的场景。</li>
-<li><strong>容灾性好</strong>，RDB 文件可以直接拷贝使用，用于容灾恢复。</li>
-<li><strong>恢复速度快</strong>，RDB文件集中紧凑， 则速度快</li>
-</ol>
-<p>RDB-缺点</p>
-<ol>
-<li><strong>实时性低</strong>，RDB 是间隔一段时间进行持久化，无法实时持久化。如果在这时间段发生故障，则数据会丢失。</li>
-<li><strong>存在兼容问题</strong>，Redis 演进过程存在多个格式的 RDB 版本，存在老版本 Redis 无法兼容新版本 RDB 的问题。</li>
-</ol>
-<p>AOF-优点</p>
-<ol>
-<li><strong>实时性好</strong>，aof 持久化可以配置 <code>appendfsync</code> 属性，有 <code>always</code>，每进行一次命令操作就记录到 aof 文件中一次。</li>
-<li>通过 append 模式写文件，即使中途服务器宕机，可以通过 redis-check-aof 工具解决数据一致性问题。</li>
-</ol>
-<p>AOF-缺点</p>
-<ol>
-<li>AOF 文件比 RDB <strong>文件大</strong>，且 <strong>恢复速度慢</strong>。</li>
-<li><strong>数据集大</strong> 的时候，比 RDB <strong>启动效率低</strong>。</li>
-</ol>
-<h3 id="两者如何选择"><a href="#两者如何选择" class="headerlink" title="两者如何选择"></a>两者如何选择</h3><p>1、只选RDB，可能会有数分钟的数据丢失。</p>
-<p>2、只选AOF，不利于备份，恢复速度也慢。</p>
-<p>3、两者配合，两种持久化方式都选，这种情况下Redis重启时会优先载入AOF文件来恢复数据，因为AOF文件的数据集比RDB全。</p>
-<p>4、都不选，不持久化。</p>
-<h3 id="故障数据恢复"><a href="#故障数据恢复" class="headerlink" title="故障数据恢复"></a>故障数据恢复</h3><p><strong>Redis</strong> 启动时加载数据的流程：</p>
-<p>1、判断AOF开启且AOF文件是否存在，存在则优先加载</p>
-<p>2、如果AOF关闭或者不存在，则加载RDB文件</p>
-<p>3、文件加载成功后则Redis启动成功</p>
-<p>4、加载失败，则启动失败</p>
-<p><img src="/../images/redis/image-20240331174017060.png" alt="image-20240331174017060"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/" class="post-title-link" itemprop="url">带新员工</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-07-26 19:27:38" itemprop="dateCreated datePublished" datetime="2023-07-26T19:27:38+08:00">2023-07-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%AE%A1%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">管理</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="导图"><a href="#导图" class="headerlink" title="导图"></a>导图</h2><p><img src="/../../../../images/new_bird_train.png"></p>
-<p><img src="/../images/new_bird/new_bird_train.png"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/07/26/%E5%B8%A6%E6%96%B0%E5%91%98%E5%B7%A5/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/25/RESTful-API%E8%A7%84%E8%8C%83/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/06/25/RESTful-API%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="url">RESTful-API规范</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-06-25 22:25:37" itemprop="dateCreated datePublished" datetime="2023-06-25T22:25:37+08:00">2023-06-25</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h2><hr>
-<p><em>RESTful本身是一种风格而不是规范，本文为该风格的规范实现的最佳实践，本文档详细说明了HTTP RESTful API的定义和使用规范，作为接口调用者和实现者的重要参考。</em></p>
-<h2 id="接口风格"><a href="#接口风格" class="headerlink" title="接口风格"></a>接口风格</h2><p>遵循RESTful设计风格，同时控制复杂度及易于使用，仅遵循大部分原则。 遵循原则：</p>
-<ul>
-<li>使用https协议</li>
-<li>版本号放入URL或Header</li>
-<li>只提供json返回格式</li>
-<li>post,put上使用json作为输入</li>
-<li>使用http状态码作为错误提示</li>
-<li>Path（路径）尽量使用名词，不使用动词，把每个URL看成一个资源</li>
-<li>使用HTTP动词（GET,POST,PUT,DELETE）作为action操作URL资源</li>
-<li>过滤信息<ul>
-<li>limit：指定返回记录数量</li>
-<li>offset：记录开始位置</li>
-<li>direction：请求数据的方向，取值prev-上一页数据；next-下一页数据</li>
-<li>page：第几页</li>
-<li>per_page：每页条数</li>
-<li>total_count：总记录数</li>
-<li>total_pages：总页数，等于page时，表示当前是最后一页</li>
-<li>sort：column1,column2排序字段</li>
-<li>orderby：排序规则，desc或asc</li>
-<li>q：搜索关键字（uri encode之后的）</li>
-</ul>
-</li>
-<li>返回结果<ul>
-<li>GET：返回资源对象</li>
-<li>POST：返回新生成的资源对象</li>
-<li>PUT：返回完整的资源对象</li>
-<li>DELETE：返回一个空文档</li>
-</ul>
-</li>
-<li>速率限制<ul>
-<li>X-RateLimit-Limit: 每个IP每个时间窗口最大请求数</li>
-<li>X-RateLimit-Remaining: 当前时间窗口剩余请求数</li>
-<li>X-RateLimit-Reset: 下次更新时间窗口的时间（UNIX时间戳），达到下个时间窗口时，Remaining恢复为Limit</li>
-</ul>
-</li>
-</ul>
-<p>未遵循原则：</p>
-<ul>
-<li>Hypermedia API（HATEOAS），通过接口URL获取接口地址及帮助文档地址信息</li>
-<li>限制返回值的域，fields&#x3D;id,subject,customer_name</li>
-<li>缓存，使用ETag和Last-Modified</li>
-</ul>
-<p>参考：</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://developer.github.com/v3/">GitHub api </a></li>
-<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html">ruanyifeng blog</a></li>
-<li><a target="_blank" rel="noopener" href="http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api">best-practices-for-a-pragmatic-restful-api</a></li>
-</ul>
-<h2 id="模块和版本说明"><a href="#模块和版本说明" class="headerlink" title="模块和版本说明"></a>模块和版本说明</h2><p>接口模块相互对立且有版本管理，模块名作为APP配置项进行存储，每个模块的版本号version和endpoint在应用初始化时调用api模块信息接口（通过传递客户端应用名称和版本号获取各个API模块的endpoint和version）获取并存储。</p>
-<ul>
-<li>示例模块及最新版本号：</li>
-</ul>
-<p>模块模块用途最新版本号account帐户v1sms短信v1open一些开放接口，不需要公共参数v1</p>
-<h2 id="公共参数"><a href="#公共参数" class="headerlink" title="公共参数"></a>公共参数</h2><h4 id="Headers"><a href="#Headers" class="headerlink" title="Headers"></a>Headers</h4><p>公共请求参数是指每个接口都可能需要传递的参数，公共参数通过header传递。</p>
-<p>参数是否必须说明及header格式app所有接口必须请求客户端应用标识，取值<code>*-ios、*-android、*-pc、*-h5</code><br>header格式：<br><code>X-Co-App: $app</code>user_idApp登录后所有接口都传，<br>Web通过session机制获取用户标识<br>header格式：<br><code>Authorization: CoAPI base64(user_id:token)</code>tokenApp登录后所有接口都传，<br>Web通过session机制获取授权访问令牌<br>header格式：<br><code>Authorization: CoAPI base64(user_id:token)</code></p>
-<ul>
-<li>Web应用通过cookies传递session id，user_id和token无需传递，接口会从session自动获取；</li>
-<li>同一token值在App和Web各应用间通用（token即为session id）；</li>
-<li>APP修改user-agent，在原有user-agent的尾部添加<code>$app/$version</code>和<code>NetType/$value</code>。如：<ul>
-<li><code>Dalvik/2.1.0 (Linux; U; Android 6.0.1; MI 4LTE MIUI/V7.5.3.0.MXGCNDE) $app-android/3.0.0 NetType/4G</code></li>
-<li><code>Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_2 like Mac OS X) AppleWebKit/603.2.4 (KHTML, like Gecko) $app-ios/3.0.0 NetType/WIFI</code></li>
-</ul>
-</li>
-<li>app取值及释义示例</li>
-</ul>
-<p>app取值客户端名称【域名】admin-pc管理中心PC网页版【admin.url.com】admin-h5管理中心手机网页版【admin.url.com】admin-ios管理中心iOS版admin-android管理中心Android版</p>
-<h4 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h4><ul>
-<li>用于告知服务端是否支持Webp的Cookie：cookie name是<code>supportWebp</code>，取值是1（支持）和0（不支持），未传递时服务端默认取值为0。</li>
-<li>Webview植入Session的Cookie：</li>
-</ul>
-<h4 id="JWT-OAuth2"><a href="#JWT-OAuth2" class="headerlink" title="JWT &amp; OAuth2"></a>JWT &amp; OAuth2</h4><ul>
-<li><a target="_blank" rel="noopener" href="https://jwt.io/">Json Web Token</a>可用于替代session-cookie机制。但会存在一些问题，比如为过期token强制失效问题（用户修改了密码后，无法强制其他的终端token全部失效）。</li>
-<li><a target="_blank" rel="noopener" href="https://oauth.net/2/">OAuth2</a>是授权其他开发者访问自己应用有限权限的授权机制。</li>
-</ul>
-<h2 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h2><ul>
-<li>权限分为<ul>
-<li><code>none</code>：无需任何授权；</li>
-<li><code>token</code>：需要用户登录授权，可通过<code>header Authorization</code>和<code>Cookie CoSID</code>传递；</li>
-<li><code>admintoken</code>：需要管理员登录授权，可通过<code>header Authorization</code>和<code>Cookie CoCPSID</code>传递；</li>
-<li><code>token || admintoken</code>：用户登录授权或管理员登录授权都可以；<img src="/../images/RESTful-API/token.png"></li>
-<li><code>sign</code>：需要签名，一般用于服务端内部相互调用。</li>
-</ul>
-</li>
-</ul>
-<h2 id="状态码说明"><a href="#状态码说明" class="headerlink" title="状态码说明"></a>状态码说明</h2><p>正确<br>接口正常访问情况下，服务器返回2××的HTTP状态码。</p>
-<p>HTTP状态码200 OK - 表示已在响应中发出、资源更改成功（GET、PUT）201 Created - 新资源被创建（POST）204 No Content - 资源被删除（DELETE）</p>
-<p>错误<br>当用户访问接口出错时，服务器会返回给一个合适的4××或者5××的HTTP状态码；以及一个application&#x2F;json格式的消息体，消息体中包含错误码code和错误说明message。</p>
-<ul>
-<li>5××错误(<code>500=&lt;status code</code>)为服务器或程序出错，客户端只需要提示“服务异常，请稍后重试”即可，该类错误不在每个接口中列出。</li>
-<li>4××错误(<code>400=&lt;status code&lt;500</code>)为客户端的请求错误，需要根据具体的code做相应的提示和逻辑处理，message仅供开发时参考，不建议作为用户提示。</li>
-<li>部分错误示例：</li>
-</ul>
-<p>codemessageHTTP状态码InvalidToken未登录或授权过期，请登录401 UnauthorizedValidationError输入字段验证出错，缺少字段或字段格式有误422 Unprocessable EntityAccountNotExist账户名不存在404 Not FoundInvalidPassword密码错误401 UnauthorizedNotFound请求的资源不存在404 Not FoundAccountHasExist账户名已经存在409 ConflictMobileHasBinded手机号已经绑定其他账户409 ConflictInvalidSign参数签名验证未通过403 ForbiddenInvalidSMSCode短信验证码错误403 ForbiddenExpiredSMSCode过期的短信验证码403 ForbiddenFrequencyLimit发送过于频繁，请稍后再试403 ForbiddenTimesExceeded达到最大发送次数限制，请明天再试403 ForbiddenVerifyTimesExceeded达到最大校验次数，请明天再试403 ForbiddenRateLimitExceeded接口调用次数超过限制，请稍后再试429 Too Many Requests   InternalError服务异常，请稍后再试500 Internal Server Error</p>
-<ul>
-<li><a target="_blank" rel="noopener" href="http://baike.baidu.com/item/HTTP%E7%8A%B6%E6%80%81%E7%A0%81">HTTP状态码参考</a><img src="/../images/RESTful-API/http-status.png"></li>
-</ul>
-<h2 id="参数传递"><a href="#参数传递" class="headerlink" title="参数传递"></a>参数传递</h2><p>遵循RESTful规范，使用了GET, POST, PUT, DELETE共4种请求方法。</p>
-<ol>
-<li>GET：请求资源，返回资源对象</li>
-<li>POST：新建资源，返回新生成的资源对象</li>
-<li>PUT：新建&#x2F;更新资源，返回完整的资源对象</li>
-<li>DELETE：删除资源，返回body为空</li>
-</ol>
-<ul>
-<li>GET请求不允许有body， 所有参数通过拼接在URL之后传递，所有的请求参数都要进行遵循<a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc3986">RFC 3986</a>的URL Encode。</li>
-<li>DELETE删除单个资源时，资源标识通过path传递，批量删除时，通过在body中传递JSON。</li>
-<li>POST, PUT请求，所有参数通过JSON传递，<em>可选的请求参数，只传有值的，无值的不要传递</em>，contentType为application&#x2F;json。</li>
-</ul>
-<p><em>4种请求动作中，GET、PUT、DELETE是幂等的；只有POST是非幂等的。幂等操作的特点是其任意多次执行所产生的影响均与一次执行的影响相同。</em> 是非幂等是判断接口使用POST还是PUT的决定条件</p>
-<p>注意： APP端获取json数据时，对于数值类型字段必须以数值类型转换，无论传递过来的值是否带引号。<img src="/../images/RESTful-API/success.png"><img src="/../images/RESTful-API/success-channel.png"></p>
-<h2 id="速率限制Rate-Limiting"><a href="#速率限制Rate-Limiting" class="headerlink" title="速率限制Rate Limiting"></a>速率限制Rate Limiting</h2><ul>
-<li>为了防止API被恶意调用，对API调用进行速率限制。</li>
-<li>速率限制为每IP每15分钟5000次（dev&#x2F;qa为10W）调用（15分钟是一个时间窗口）。</li>
-<li>限制是针对所有接口模块一起计算的（Redis key为<code>APIRL:&#123;IP&#125;</code>），暂时没有特殊的模块或单个接口（未来可能有）。</li>
-<li>你可以通过每个接口返回的HTTP headers了解当前速率限制的情况:<ul>
-<li>X-RateLimit-Limit: 每个IP每个时间窗口最大请求数</li>
-<li>X-RateLimit-Remaining: 当前时间窗口剩余请求数</li>
-<li>X-RateLimit-Reset: 下次更新时间窗口的时间（UNIX时间戳），达到下个时间窗口时，Remaining恢复为Limit</li>
-</ul>
-</li>
-<li>超出速率限制，返回以下错误<img src="/../images/RESTful-API/rate-limit.png"></li>
-</ul>
-<h2 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h2><ul>
-<li>用户登录后用户的token；aliyun OSS的bucket、AccessKey ID与AccessKey secret；微视频的appid、sign、bucket；这些关键数据通过调用接口获得，需要在客户端以安全的方式存储。</li>
-<li>音频视频在APP内的存储，不允许被拷贝（即使越狱或root后拿走也无法使用）。</li>
-</ul>
-<h2 id="测试工具"><a href="#测试工具" class="headerlink" title="测试工具"></a>测试工具</h2><p>推荐Chrome浏览器插件Postman作为接口测试工具， <a target="_blank" rel="noopener" href="https://chrome.google.com/webstore/detail/postman/fhbjgbiflinjbdggehcddcbncdddomop">Postman下载地址</a><br><img src="/../images/RESTful-API/postman.png"></p>
-<h2 id="文档生成工具"><a href="#文档生成工具" class="headerlink" title="文档生成工具"></a>文档生成工具</h2><ul>
-<li>生成的工具为apidoc，详细阅读官方文档：<a target="_blank" rel="noopener" href="http://apidocjs.com/">http://apidocjs.com</a></li>
-</ul>
-<h2 id="调用示例"><a href="#调用示例" class="headerlink" title="调用示例"></a>调用示例</h2><ul>
-<li>伪代码<img src="/../images/RESTful-API/code.png"></li>
-<li>PHP<img src="/../images/RESTful-API/php.png"></li>
-</ul>
-<h2 id="API模块信息获取"><a href="#API模块信息获取" class="headerlink" title="API模块信息获取"></a>API模块信息获取</h2><ul>
-<li>App配置文件中仅存储api模块名，App初始化时请求<a target="_blank" rel="noopener" href="https://apidev.baobaobooks.net/docs/open/#api-basicGroup-get_basic_apis">获取api模块信息</a>，获取各个api模块的信息（endpoint和version）。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/" class="post-title-link" itemprop="url">Git仓库的子目录独立成新仓库</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-06-13 08:25:10" itemprop="dateCreated datePublished" datetime="2023-06-13T08:25:10+08:00">2023-06-13</time>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="需求描述"><a href="#需求描述" class="headerlink" title="需求描述"></a>需求描述</h2><p>我有一个仓库AAA，目录结构如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ tree</span><br><span class="line">├── .git</span><br><span class="line">├── common-api     </span><br><span class="line">├── commons-pojo</span><br><span class="line">├── commons-utils  </span><br><span class="line">├── account </span><br><span class="line">└── payment </span><br><span class="line">└── product</span><br></pre></td></tr></table></figure>
-
-<p>现在我需要把common-api、commons-pojo、commons-utils独立为一个新仓库xxx-common<br>从网上找到可以用”git filter-branch”和”git subtree split”两种方式独立目录为仓库，但是”git subtree split”只能独立一个目录为仓库，如果需要独立多个目录为仓库需要使用”git filter-branch”。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/06/13/Git%E4%BB%93%E5%BA%93%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E7%8B%AC%E7%AB%8B%E6%88%90%E6%96%B0%E4%BB%93%E5%BA%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
