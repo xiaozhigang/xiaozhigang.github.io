@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,6 +178,191 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">配置中心分析</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-18 20:33:29" itemprop="dateCreated datePublished" datetime="2024-04-18T20:33:29+08:00">2024-04-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>配置中心可以兼顾<strong>配置实时性、配置的流程管理、以及分布式场景</strong>的应用。</p>
+<p>配置实时性：传统的静态配置方式想要修改某个配置，则需要修改后重启，如果想要实现动态修改，可以使用数据库，采用轮询的方式，访问数据库获得配置数据。轮询频率低的话对配置数据变更的感知就慢，频率高的话，就会消耗过多的性能。</p>
+<p>配置管理流程：权限管理、灰度管理、版本管理、格式检验和安全配置</p>
+<p>分布式场景：随着采用分布式开发模式，项目之间的相互引用不断增多，相互之间的调用复杂度也指数上升，需要配置中心治理。</p>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p><strong>灰度发布</strong>：当配置修改影响较大时，需要先在部分实例中生效，验证配置变更符合预期之后再推送到所有实例。</p>
+<p><strong>权限管理</strong>：对配置变更的权限管控，以及对审计权限的管控</p>
+<p><strong>版本管理&amp;回滚</strong>：当配置变更不符合预期时，需要根据配置发布版本回滚</p>
+<p><strong>配置格式校验</strong>：配置数据一般会以一种配置格式存储，配置中心会对配置数据的格式进行校验，防止格式错误导致的各种问题</p>
+<p><strong>监听查询</strong>：当排查问题或者进行统计的时候，需要指导一个配置被哪些实例使用到，以及一个实例使用了哪些配置</p>
+<p><strong>多环境</strong>：生产环境中，配置中心常常需要涉及到多环境或者多集群，业务在开发环境和生产环境隔离开，或者根据不同的生产线存在多个生产环境，各环境隔离之后相互影响就小。</p>
+<p><strong>多集群</strong>：当对稳定性要求比较高，不允许各个环境相互影响的时候，需要将多环境通过多集群的方式进行物理隔离</p>
+<h3 id="常用配置中心"><a href="#常用配置中心" class="headerlink" title="常用配置中心"></a>常用配置中心</h3><h4 id="Apollo"><a href="#Apollo" class="headerlink" title="Apollo"></a>Apollo</h4><p><img src="/../images/spring-config/overall-architecture.png"></p>
+<h4 id="spring-cloud-config"><a href="#spring-cloud-config" class="headerlink" title="spring cloud config"></a>spring cloud config</h4><p><img src="/../images/spring-config/a3bb80c142c74634aa8ed67e8bf1ac3d.png" alt="overall-architecture"></p>
+<h4 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h4><p><img src="/../images/spring-config/1561217892717-1418fb9b-7faa-4324-87b9-f1740329f564.jpeg" alt="nacos_arch.jpg"></p>
+<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>spring cloud config</th>
+<th>Apollo</th>
+<th>nacos</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置界面</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>配置实时推送</td>
+<td>支持（spring cloud bus）</td>
+<td>支持（http长轮询）</td>
+<td>支持（http长轮询）</td>
+</tr>
+<tr>
+<td>版本管理</td>
+<td>支持（git）</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>配置回滚</td>
+<td>支持（git）</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>灰度发布</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>权限管理</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多集群</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多环境</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>监听查询</td>
+<td>支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>多语言</td>
+<td>java</td>
+<td>多语言</td>
+<td>多语言</td>
+</tr>
+<tr>
+<td>配置格式校验</td>
+<td>不支持</td>
+<td>支持</td>
+<td>支持</td>
+</tr>
+<tr>
+<td>分布式部署</td>
+<td>复杂</td>
+<td>复杂</td>
+<td>简单</td>
+</tr>
+<tr>
+<td>数据一致性</td>
+<td>git保证数据一致性，config service从git读取数据</td>
+<td>数据量模拟消息队列，Apollo定时读取消息队列</td>
+<td>http异步通知</td>
+</tr>
+<tr>
+<td>通信协议</td>
+<td>http、amqp</td>
+<td>http</td>
+<td>http</td>
+</tr>
+</tbody></table>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1356,165 +1541,6 @@
 <p>虽然调用链是在开发中就已经配置好的，但是我们将调用链移动到MySQL中，这样可以更好的扩展。可以通过其他途径改动MySQL中的调用链，实现实时变更。</p>
 <p>由于调用链这种配置不会随便改动，可以通过预加载，将其加载到redis中，这样可以减小MySQL的压力。</p>
 <p><img src="/../images/jar/image-20240408230847003.png" alt="image-20240408230847003"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/20/ELK%E6%90%AD%E5%BB%BA/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/10/20/ELK%E6%90%AD%E5%BB%BA/" class="post-title-link" itemprop="url">ELK搭建</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-10-20 18:18:40" itemprop="dateCreated datePublished" datetime="2023-10-20T18:18:40+08:00">2023-10-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index"><span itemprop="name">环境搭建</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
-<p>ELK是elasticsearch、logstash、kibana软件的集合，对外是作为一个日志管理系统的开源方案，它可以从任何来源、任何格式进行日志搜索、分析与可视化展示。<br>基本组成软件：</p>
-</blockquote>
-<ul>
-<li><p>elasticsearch：一个开源分布式搜索引擎，提供收集、分析、存储数据三大功能。</p>
-</li>
-<li><p>kibana：一个基于web的图形界面，用于搜索、分析和可视化存储在elasticsearch中的日志数据。</p>
-</li>
-<li><p>logstash：一个服务端的数据处理管道，可以从多个源中提取数据，对其进行转换，然后将其存储到Elasticsearch中。简单来说就是日志的收集、分析、过滤工具。</p>
-</li>
-</ul>
-<h2 id="搭建步骤"><a href="#搭建步骤" class="headerlink" title="搭建步骤"></a>搭建步骤</h2><p>使用版本是7.9.3，部署前我们可以先提前从官网上下载下面4个安装包：<br>elasticsearch-7.9.3-linux-x86_64.tar.gz<br>kibana-7.9.3-linux-x86_64.tar.gz<br>logstash-7.9.3.tar.gz</p>
-<p>这4个组件可以部署在不同的机器上，只要机器之间是端口开放即可<br>本文档中elasticsearch、logstash、kibana部署在一台机器，filebeat部署在有业务服务的机器上。</p>
-<ol>
-<li><p>创建用户和解压文件<br>groupadd elk<br>useradd elk -g elk<br>解压文件：<br>tar -zxvf elasticsearch-7.9.3-linux-x86_64.tar.gz -C &#x2F;home&#x2F;elk<br>tar -zxvf kibana-7.9.3-linux-x86_64.tar.gz -C &#x2F;home&#x2F;elk<br>tar -zxvf logstash-7.9.3.tar.gz -C &#x2F;home&#x2F;elk<br><br><br>cd &#x2F;home&#x2F;elk<br>mv kibana-7.9.3-linux-x86_64 kibana-7.9.3<br><br>chown -R elk:elk &#x2F;home&#x2F;elk&#x2F;elasticsearch-7.9.3<br>chown -R elk:elk &#x2F;home&#x2F;elk&#x2F;kibana-7.9.3<br>chown -R elk:elk &#x2F;home&#x2F;elk&#x2F;logstash-7.9.3</p>
-</li>
-<li><p>部署elasticsearch</p>
-<ol>
-<li><p>切换到elk用户<br>su - elasticsearch<br>cd &#x2F;home&#x2F;elk&#x2F;</p>
-</li>
-<li><p>修改elasticsearch.yml<br>cd &#x2F;home&#x2F;elk&#x2F;elasticsearch-7.9.3&#x2F;config<br>vi elasticsearch.yml<br>在文件末尾增加以下内容<br># 集群初始主节点<br>cluster.name: “es-cluster”<br>network.host: 0.0.0.0<br>node.name: “node-1”<br><br><br># discovery type<br>discovery.type: single-node<br>#discovery.seed_hosts: [“127.0.0.1”, “[::1]”]<br><br># 设置允许所有ip可以连接该elasticsearch<br>network.host: 0.0.0.0<br><br># 开启监听的端口为9200<br>http.port: 9200<br><br># 增加新的参数，为了让elasticsearch-head插件可以访问es<br>http.cors.enabled: true<br>http.cors.allow-origin: “*”<br><br># 启用密码<br>xpack.security.enabled: true<br><br># 使用默认密码<br>xpack.security.authc.accept_default_password: true<br>xpack.security.transport.ssl.enabled: true<br>如果需要外置存储和日志，需要修改path.data和path.logs<br>path.data: &#x2F;nfsc&#x2F;cnas_csp_pase_hrx_id010797_vol1003_dev&#x2F;elasticsearch<br>path.logs: &#x2F;nfsc&#x2F;cnas_csp_pase_hrx_id010797_vol1003_dev&#x2F;elasticsearch_logs</p>
-</li>
-<li><p>修改Elasticsearch占用内存<br>cd &#x2F;home&#x2F;elk&#x2F;elasticsearch-7.9.3&#x2F;config<br>vi jvm.options<br>修改JVM参数 ：<br>-Xms16g<br>-Xmx16g</p>
-</li>
-<li><p>启动es的时候有可能会报类似的下面的错误<code>【max virtual memory areas vm.max_map_count [65530] is too low】</code>，所以我们可以通过下面的方法去处理：<br>vi &#x2F;etc&#x2F;sysctl.conf<br>文件末尾添加一行<br>vm.max_map_count&#x3D;655360<br>保存之后执行下面的命令加载参数<br>sysctl -p</p>
-</li>
-<li><p>启动Elasticsearch<br>切换用户，进入bin目录启动：<br>cd &#x2F;home&#x2F;elk&#x2F;elasticsearch-7.9.3&#x2F;bin<br>.&#x2F;elasticsearch -d</p>
-</li>
-<li><p>为内置账号添加密码</p>
-<h1 id="interactive：给用户一一设置密码"><a href="#interactive：给用户一一设置密码" class="headerlink" title="interactive：给用户一一设置密码"></a>interactive：给用户一一设置密码</h1><pre><code># auto：自动生成密码
-cd /home/elk/elasticsearch-7.9.3/bin/
-./elasticsearch-setup-passwords interactive
-</code></pre>
-</li>
-<li><p>验证是否启动成功</p>
-<h1 id="curl-XGET-u-elastic-‘localhost-9200’"><a href="#curl-XGET-u-elastic-‘localhost-9200’" class="headerlink" title="curl -XGET -u elastic ‘localhost:9200’"></a>curl -XGET -u elastic ‘localhost:9200’</h1><pre><code>&#123;
-  &quot;name&quot; : &quot;node-1&quot;,
-  &quot;cluster_name&quot; : &quot;es-cluster&quot;,
-  &quot;cluster_uuid&quot; : &quot;8eGk8_ohRbWl8ZcNSPsFDQ&quot;,
-  &quot;version&quot; : &#123;
-    &quot;number&quot; : &quot;7.9.3&quot;,
-    &quot;build_flavor&quot; : &quot;default&quot;,
-    &quot;build_type&quot; : &quot;tar&quot;,
-    &quot;build_hash&quot; : &quot;c4138e51121ef06a6404866cddc601906fe5c868&quot;,
-    &quot;build_date&quot; : &quot;2020-10-16T10:36:16.141335Z&quot;,
-    &quot;build_snapshot&quot; : false,
-    &quot;lucene_version&quot; : &quot;8.6.2&quot;,
-    &quot;minimum_wire_compatibility_version&quot; : &quot;6.8.0&quot;,
-    &quot;minimum_index_compatibility_version&quot; : &quot;6.0.0-beta1&quot;
-  &#125;,
-  &quot;tagline&quot; : &quot;You Know, for Search&quot;
-&#125;
-</code></pre>
-</li>
-</ol>
-</li>
-<li><p>部署kibana</p>
-<ol>
-<li><p>修改配置文件，文件位置在&#x2F;home&#x2F;elk&#x2F;kibana-7.9.3&#x2F;config目录下<br>su - elasticsearch<br>cd &#x2F;home&#x2F;elk&#x2F;kibana-7.9.3&#x2F;config<br>vi kibana.yml<br>添加es的配置，由于是都在同一台机器所以用localhost，如果是不同机器，就换成对应的ip即可<br># kibana端口<br>server.port: 5601<br><br><br># 允许所有ip访问<br>server.host: “0.0.0.0”<br><br># elasticsearch所在的ip及监听的地址<br>elasticsearch.hosts: [“<a target="_blank" rel="noopener" href="http://localhost:9200"]">http://localhost:9200&quot;]</a><br>elasticsearch.username: “kibana_system”<br>elasticsearch.password: “kibana_system”<br><br># kibana默认创建的索引<br>kibana.index: “.kibana”<br><br># 字符编码<br>i18n.locale: “zh-CN”<br><br># elasticsearch加密所需配置<br>xpack.reporting.encryptionKey: “a_random_string”<br>xpack.security.encryptionKey: “something_at_least_32_characters”</p>
-</li>
-<li><p>启动kibana<br>cd &#x2F;home&#x2F;elk&#x2F;kibana-7.9.3&#x2F;bin<br>.&#x2F;kibana &amp;</p>
-</li>
-<li><p>访问kibana<br><a target="_blank" rel="noopener" href="http://ip:5601/">http://IP:5601/</a></p>
-</li>
-</ol>
-</li>
-<li><p>部署Logstash</p>
-<ol>
-<li><p>修改Logstash的YML配置文件<br>cd &#x2F;home&#x2F;elk&#x2F;logstash-7.9.3&#x2F;config&#x2F;<br>vim logstash.yml<br>修改以下内容<br># 配置自动刷新<br>config.reload.automatic: true<br>config.reload.interval: 20s<br><br><br># 配置可任意地址都可访问<br>http.host: 0.0.0.0<br>http.port: 9600<br><br># 配置es的访问密码<br>xpack.monitoring.enabled: true<br>xpack.monitoring.elasticsearch.username: logstash_system<br>xpack.monitoring.elasticsearch.password: logstash_system<br>xpack.monitoring.elasticsearch.hosts: [“<a target="_blank" rel="noopener" href="http://localhsot:9200"]">http://localhsot:9200&quot;]</a></p>
-</li>
-<li><p>修改 pipelines配置文件</p>
-<ul>
-<li>pipeline.id: gmp-logs<br>queue.type: persisted<br>  path.config: “&#x2F;home&#x2F;elk&#x2F;logstash-7.9.3&#x2F;conf.d&#x2F;*.config”</li>
-</ul>
-</li>
-<li><p>创建日志的config文件<br>touch &#x2F;home&#x2F;elk&#x2F;logstash-7.9.3&#x2F;conf.d&#x2F;logstash-beats.conf<br>写入文件内容<br>input {<br>  beats {<br>    port &#x3D;&gt; 5044<br>  }<br>}<br><br><br>filter {<br>    grok {<br>        match &#x3D;&gt; [<br>            “message”, “%{TIMESTAMP_ISO8601:timestamp_string}%{SPACE}%{GREEDYDATA:line}”<br>        ]<br>    }<br>    date  {<br>        match &#x3D;&gt; [“timestamp_string”, “ISO8601”]<br>    }<br>    mutate {<br>        remove_field &#x3D;&gt; [message, timestamp_string]<br>    }<br>}<br><br>output {<br>    elasticsearch {<br>        hosts &#x3D;&gt;  [“<a target="_blank" rel="noopener" href="http://localhost:9200"]">http://localhost:9200&quot;]</a><br>        user &#x3D;&gt; elastic<br>        password &#x3D;&gt; “elastic”<br>    }<br>    stdout {<br>        codec &#x3D;&gt; rubydebug<br>    }<br>}</p>
-</li>
-<li><p>启动Logstash(root用户)<br>cd &#x2F;home&#x2F;elk&#x2F;logstash-7.9.3&#x2F;bin<br>sh logstash -f ..&#x2F;conf.d&#x2F;logstash-beats.conf &amp;</p>
-</li>
-</ol>
-</li>
-</ol>
 
       
     </div>

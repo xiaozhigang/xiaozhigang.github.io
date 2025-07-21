@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">42</span>
+          <span class="site-state-item-count">43</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,6 +178,175 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/07/19/RAG-%E5%BC%BA%E5%8C%96%E7%B4%A2%E5%BC%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/07/19/RAG-%E5%BC%BA%E5%8C%96%E7%B4%A2%E5%BC%95/" class="post-title-link" itemprop="url">RAG-路由选择</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-07-19 15:28:52" itemprop="dateCreated datePublished" datetime="2025-07-19T15:28:52+08:00">2025-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/RAG/" itemprop="url" rel="index"><span itemprop="name">RAG</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>​	RAG的主流程其实比较简单，流程前面已经说过了，简单看一下下面的图了解一下就行。</p>
+<p><img src="/../images/rag-ext/rag_base_uml.png" alt="image-20250621160518166"></p>
+<p>​	从上面的图，可以看到，RAG在回答用户问题的时候，向量数据库的交互式非常重要的一环，如果我们能提高向量库的召回质量也就能提高整个答案生成的质量。</p>
+<h3 id="强化索引"><a href="#强化索引" class="headerlink" title="强化索引"></a>强化索引</h3><p>​	现在我们知道提高向量库的召回质量能提高整个提问答案的生成质量，怎么提高向量库交互的召回质量有成了新的问题。之前我们说过向量库的查询召回是通过向量的比较实现的，与提问越相近的向量被召回的概率越高。现在我们只要提高文档的向量质量，这样才能提高查询召回的准确性和质量。</p>
+<h4 id="MRI"><a href="#MRI" class="headerlink" title="MRI"></a>MRI</h4><p>​	MRI(Multi-representation Indexing)多表示强化索引，<strong>为每个文档构建多个不同视角的向量表示</strong>。其实这个很好理解，我们一句话从不同的角度去理解包含了不同的信息，比如“我今天下午在写博客”这句话，第一个角度理解，就是字面意思，我今天下午写博客，换一个角度，我今天下午还活着，不然也不能写博客。从上面的示例，我们从两个角度获得了两个信息，推广一下，一段话、一篇文章也一样，不同的角度的理解能得到不同的信息，也就能根据这些不同的信息生成不同的向量。</p>
+<p>​	不同维度的理解更加丰富了文章的定义，不同维度的理解也催生了多向量多文章的描述，从而使文章的向量定义更加准确，也使我们查询召回的时候更加准确。</p>
+<p><img src="/../images/RAG-Index/mri.png" alt="image-20250621160518166"></p>
+<p>​	在实际应用中，我们多以父子文档的方式去处理MRI，父文档是原始文档，子文档都是对父文档的摘要、标题等多维度理解表达，我们通过将子文档存入向量库，通过提问向量匹配召回后，通过这些理解表达再找回父文档返回。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> uuid</span><br><span class="line"><span class="keyword">from</span> langchain_core.documents <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain_community.vectorstores <span class="keyword">import</span> Chroma</span><br><span class="line"><span class="keyword">from</span> langchain.storage <span class="keyword">import</span> InMemoryByteStore</span><br><span class="line"><span class="keyword">from</span> langchain.retrievers.multi_vector <span class="keyword">import</span> MultiVectorRetriever</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设我们有两个原始文档</span></span><br><span class="line">raw_docs = [</span><br><span class="line">    <span class="string">&quot;LangChain is a framework for developing applications powered by language models.&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Chroma is a vector database used for similarity search over embeddings.&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为每个原始文档生成多个摘要（手动模拟，也可以用 LLM 自动生成）</span></span><br><span class="line">summaries = [</span><br><span class="line">    [<span class="string">&quot;LangChain is a framework for LLM apps.&quot;</span>, <span class="string">&quot;It helps chain language model calls.&quot;</span>],</span><br><span class="line">    [<span class="string">&quot;Chroma is a vector store.&quot;</span>, <span class="string">&quot;It supports similarity search for embeddings.&quot;</span>]</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给每个原始文档生成唯一 ID</span></span><br><span class="line">doc_ids = [<span class="built_in">str</span>(uuid.uuid4()) <span class="keyword">for</span> _ <span class="keyword">in</span> raw_docs]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备子文档（用于嵌入、向量检索）</span></span><br><span class="line">summary_docs = []</span><br><span class="line"><span class="keyword">for</span> i, summary_list <span class="keyword">in</span> <span class="built_in">enumerate</span>(summaries):</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> summary_list:</span><br><span class="line">        summary_docs.append(Document(page_content=s, metadata=&#123;<span class="string">&quot;doc_id&quot;</span>: doc_ids[i]&#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 向量数据库用于存储子文档（summary）</span></span><br><span class="line">embedding_function = OpenAIEmbeddings()</span><br><span class="line">vectorstore = Chroma(collection_name=<span class="string">&quot;multi_index_demo&quot;</span>, embedding_function=embedding_function)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于存储父文档（原文）</span></span><br><span class="line">byte_store = InMemoryByteStore()</span><br><span class="line">id_key = <span class="string">&quot;doc_id&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建多向量检索器</span></span><br><span class="line">retriever = MultiVectorRetriever(</span><br><span class="line">    vectorstore=vectorstore,</span><br><span class="line">    byte_store=byte_store,</span><br><span class="line">    id_key=id_key,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加子文档到向量库</span></span><br><span class="line">retriever.vectorstore.add_documents(summary_docs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加原文（父文档）到字节存储中</span></span><br><span class="line">retriever.docstore.mset(<span class="built_in">list</span>(<span class="built_in">zip</span>(doc_ids, raw_docs)))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 🔍 测试查询</span></span><br><span class="line">query = <span class="string">&quot;What is a vector database?&quot;</span></span><br><span class="line">results = retriever.get_relevant_documents(query, n_results=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;🔍 用户查询:&quot;</span>, query)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;📄 匹配到的原始文档:&quot;</span>, results[<span class="number">0</span>].page_content)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="RAPTOR"><a href="#RAPTOR" class="headerlink" title="RAPTOR"></a>RAPTOR</h4><p>​	<strong>RAPTOR</strong> 是一种 <strong>高效构建多表示索引（multi-representation indexing）的新方法</strong>，上面的MRI相当于多维度广度上的处理，一般有广度处理就有深度处理。刚才是从维度上对文章做的处理，现在我们从深度上做处理。我们可以将一篇文章拆分成多个段落，然后对每个段落进行提炼总结，总结出一个个标题，再对这些标题做呢向量处理，生成出向量，这样我们查询到的是一个个段落，这样我们的查询结果会更加精准。</p>
+<p>​	<strong>RAPTOR</strong> 的核心思想是：<strong>先用结构化方法将文档拆分为多个子块（chunk），再用 LLM 为每个子块生成一个有语义的标题作为向量索引的表示</strong>。</p>
+<p><img src="/../images/RAG-Index/raptor.png" alt="image-20250621160518166"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 伪代码：chunk → title → embedding</span></span><br><span class="line"><span class="keyword">from</span> langchain_core.documents <span class="keyword">import</span> Document</span><br><span class="line"><span class="keyword">from</span> langchain_openai <span class="keyword">import</span> ChatOpenAI, OpenAIEmbeddings</span><br><span class="line"><span class="keyword">from</span> langchain_community.vectorstores <span class="keyword">import</span> FAISS</span><br><span class="line"></span><br><span class="line">llm = ChatOpenAI(model=<span class="string">&quot;gpt-4&quot;</span>)</span><br><span class="line">embed = OpenAIEmbeddings()</span><br><span class="line"></span><br><span class="line">chunks = [...]  <span class="comment"># 原始文档分块</span></span><br><span class="line">title_chunks = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> chunk <span class="keyword">in</span> chunks:</span><br><span class="line">    title = llm.invoke(<span class="string">f&quot;为以下内容生成一个主题标题:\n\n<span class="subst">&#123;chunk&#125;</span>&quot;</span>)</span><br><span class="line">    title_chunks.append(Document(page_content=title, metadata=&#123;<span class="string">&quot;chunk&quot;</span>: chunk&#125;))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 把标题作为表示加入向量库</span></span><br><span class="line">vectorstore = FAISS.from_documents(title_chunks, embed)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检索时命中标题 → 返回原 chunk（从 metadata 中获取）</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="ColBERT"><a href="#ColBERT" class="headerlink" title="ColBERT"></a>ColBERT</h4><p>​	<strong>ColBERT</strong>（<strong>Column-wise BERT</strong>）<strong>改进语义检索质量的深度表示方法</strong>，但它的思路和实现非常独特，<strong>ColBERT</strong> 是一种 <strong>细粒度（token-level）语义检索方法</strong>，它把文档和查询都表示成 <strong>多个 token 向量</strong>，然后通过 <strong>最大相似度匹配机制</strong> 来计算查询与文档的相关性，从而提升精度和效率。和上面的REAPTOR 类似单不同，REAPTOR是拆分子块，然后生成标题，这个ColBERT直接就拆分成token了，可以理解为拆分的更细更碎，且没有提炼生成标题的阶段。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ragatouille <span class="keyword">import</span> RAGPretrainedModel</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载 ColBERT 模型</span></span><br><span class="line">RAG = RAGPretrainedModel.from_pretrained(<span class="string">&quot;colbert-ir/colbertv2.0&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用 Wikipedia API 获取文章内容</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_wikipedia_page</span>(<span class="params">title: <span class="built_in">str</span></span>):</span><br><span class="line">    URL = <span class="string">&quot;https://en.wikipedia.org/w/api.php&quot;</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">&quot;action&quot;</span>: <span class="string">&quot;query&quot;</span>,</span><br><span class="line">        <span class="string">&quot;format&quot;</span>: <span class="string">&quot;json&quot;</span>,</span><br><span class="line">        <span class="string">&quot;titles&quot;</span>: title,</span><br><span class="line">        <span class="string">&quot;prop&quot;</span>: <span class="string">&quot;extracts&quot;</span>,</span><br><span class="line">        <span class="string">&quot;explaintext&quot;</span>: <span class="literal">True</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    headers = &#123;<span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;ColBERT-example/0.0.1 (your_email@example.com)&quot;</span>&#125;</span><br><span class="line">    response = requests.get(URL, params=params, headers=headers)</span><br><span class="line">    data = response.json()</span><br><span class="line">    page = <span class="built_in">next</span>(<span class="built_in">iter</span>(data[<span class="string">&quot;query&quot;</span>][<span class="string">&quot;pages&quot;</span>].values()))</span><br><span class="line">    <span class="keyword">return</span> page[<span class="string">&quot;extract&quot;</span>] <span class="keyword">if</span> <span class="string">&quot;extract&quot;</span> <span class="keyword">in</span> page <span class="keyword">else</span> <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取文章内容</span></span><br><span class="line">doc_text = get_wikipedia_page(<span class="string">&quot;Hayao Miyazaki&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用 ColBERT 构建向量索引</span></span><br><span class="line">RAG.index(</span><br><span class="line">    collection=[doc_text],</span><br><span class="line">    index_name=<span class="string">&quot;miyazaki-demo-index&quot;</span>,</span><br><span class="line">    max_document_length=<span class="number">180</span>,</span><br><span class="line">    split_documents=<span class="literal">True</span>  <span class="comment"># 会将长文分割成 chunks</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询示例</span></span><br><span class="line">query = <span class="string">&quot;Which animation studio did Miyazaki found?&quot;</span></span><br><span class="line">results = RAG.search(query=query, k=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印结果</span></span><br><span class="line"><span class="keyword">for</span> rank, hit <span class="keyword">in</span> <span class="built_in">enumerate</span>(results, <span class="number">1</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Rank <span class="subst">&#123;rank&#125;</span>:&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Score:&quot;</span>, hit[<span class="string">&#x27;score&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Passage:\n&quot;</span>, hit[<span class="string">&#x27;content&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span> * <span class="number">80</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="三者异同"><a href="#三者异同" class="headerlink" title="三者异同"></a>三者异同</h4><p>​	我们来详细对比 <strong>MRI（Multi-representation Indexing）</strong>、<strong>RAPTOR</strong> 和 <strong>ColBERT</strong> 三者的<strong>异同点</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>MRI</th>
+<th>RAPTOR</th>
+<th>ColBERT</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>📌 核心思路</td>
+<td>为<strong>同一段文本生成多个不同视角的表示向量</strong>（如主题、意图、关键词等）</td>
+<td>将文档划分为语义段（小粒度），为每段生成简洁<strong>标题（父文档）</strong>作为召回锚点</td>
+<td>将文本<strong>拆成 token 粒度</strong>，用户 query 也拆成 token，然后进行 token 级别的<strong>Late Interaction</strong> 匹配</td>
+</tr>
+<tr>
+<td>🎯 优势</td>
+<td><strong>多角度语义增强召回</strong>，能捕捉不同用户提问方式</td>
+<td>结构化文档、<strong>压缩检索空间</strong>，提高精确召回率</td>
+<td>更细粒度的匹配，<strong>可解释性强</strong>，适合长文高密度信息检索</td>
+</tr>
+<tr>
+<td>🧩 粒度</td>
+<td>Chunk&#x2F;Paragraph 级</td>
+<td>Paragraph + Title</td>
+<td>Token 级别</td>
+</tr>
+<tr>
+<td>🧠 表示方式</td>
+<td>多向量（multi-head）</td>
+<td>父子文档（title-child）</td>
+<td>Token-level 表示</td>
+</tr>
+<tr>
+<td>📦 模型类型</td>
+<td>通常是 dense encoder（可多次 encode）</td>
+<td>标题生成模型 + Dense encoder</td>
+<td>特殊结构模型（支持 Late Interaction），如 ColBERT 模型</td>
+</tr>
+<tr>
+<td>🧪 检索方式</td>
+<td>向量 ANN</td>
+<td>父文召回 + 子文 rerank</td>
+<td>Token-Level MaxSim 聚合</td>
+</tr>
+<tr>
+<td>🧰 代表实现</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.06983">HyDE-MRI</a>、[NeMo RAG]</td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.06983">RAPTOR (Hofstätter et al. 2023)</a></td>
+<td><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.12832">ColBERT</a>, <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.07835">ColBERTv2</a></td>
+</tr>
+</tbody></table>
+<p>​	每一种方法都有优劣，这时候你应该能很敏感的get到，如果能将三种方法综合在一起应该是个很棒的方案，那这个方案是否存在呢，肯定是存在的。如下流程整合：</p>
+<ol>
+<li><strong>文档分割（RAPTOR）</strong>：<ul>
+<li>用 RAPTOR 的方式划分语义段落，为每段生成标题（构建父子结构）；</li>
+</ul>
+</li>
+<li><strong>多表示索引（MRI）</strong>：<ul>
+<li>对每段生成多种视角的表示向量（主题向量 + 关键词向量 + 语义向量）；</li>
+</ul>
+</li>
+<li><strong>Token-level 检索（ColBERT）</strong>：<ul>
+<li>用户 Query 使用 ColBERT 拆成 token 粒度匹配以 rerank 最终结果。</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ragatouille <span class="keyword">import</span> RAGPretrainedModel</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> pipeline</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载 ColBERT 模型（用于 Token-level 检索）</span></span><br><span class="line">RAG = RAGPretrainedModel.from_pretrained(<span class="string">&quot;colbert-ir/colbertv2.0&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 用标题生成模型（模拟 RAPTOR 的“父文档”）</span></span><br><span class="line">title_generator = pipeline(<span class="string">&quot;text2text-generation&quot;</span>, model=<span class="string">&quot;google/flan-t5-base&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 Wikipedia 页面</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_wikipedia_page</span>(<span class="params">title: <span class="built_in">str</span></span>):</span><br><span class="line">    URL = <span class="string">&quot;https://en.wikipedia.org/w/api.php&quot;</span></span><br><span class="line">    params = &#123;<span class="string">&quot;action&quot;</span>: <span class="string">&quot;query&quot;</span>, <span class="string">&quot;format&quot;</span>: <span class="string">&quot;json&quot;</span>, <span class="string">&quot;titles&quot;</span>: title, <span class="string">&quot;prop&quot;</span>: <span class="string">&quot;extracts&quot;</span>, <span class="string">&quot;explaintext&quot;</span>: <span class="literal">True</span>&#125;</span><br><span class="line">    headers = &#123;<span class="string">&quot;User-Agent&quot;</span>: <span class="string">&quot;ColBERT-MRI-RAPTOR/0.0.1 (you@domain.com)&quot;</span>&#125;</span><br><span class="line">    resp = requests.get(URL, params=params, headers=headers)</span><br><span class="line">    page = <span class="built_in">next</span>(<span class="built_in">iter</span>(resp.json()[<span class="string">&quot;query&quot;</span>][<span class="string">&quot;pages&quot;</span>].values()))</span><br><span class="line">    <span class="keyword">return</span> page.get(<span class="string">&quot;extract&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文档拆分成段落并生成标题（RAPTOR思路）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">split_and_title</span>(<span class="params">document</span>):</span><br><span class="line">    chunks = [chunk <span class="keyword">for</span> chunk <span class="keyword">in</span> document.split(<span class="string">&quot;\n\n&quot;</span>) <span class="keyword">if</span> <span class="built_in">len</span>(chunk.strip()) &gt; <span class="number">100</span>]</span><br><span class="line">    titled_chunks = []</span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> chunks:</span><br><span class="line">        title = title_generator(<span class="string">f&quot;Generate title: <span class="subst">&#123;chunk[:<span class="number">200</span>]&#125;</span>&quot;</span>, max_new_tokens=<span class="number">12</span>)[<span class="number">0</span>][<span class="string">&quot;generated_text&quot;</span>]</span><br><span class="line">        titled_chunks.append(&#123;<span class="string">&quot;title&quot;</span>: title, <span class="string">&quot;content&quot;</span>: chunk&#125;)</span><br><span class="line">    <span class="keyword">return</span> titled_chunks</span><br><span class="line"></span><br><span class="line"><span class="comment"># MRI：多表示（示例：原文 + 关键词抽取 + 问题改写）</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">multi_view_representations</span>(<span class="params">titled_chunks</span>):</span><br><span class="line">    views = []</span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> titled_chunks:</span><br><span class="line">        views.append(chunk[<span class="string">&quot;content&quot;</span>])  <span class="comment"># 原始 chunk</span></span><br><span class="line">        views.append(chunk[<span class="string">&quot;title&quot;</span>])    <span class="comment"># RAPTOR 的标题</span></span><br><span class="line">        <span class="comment"># 关键词表示（模拟 MRI）</span></span><br><span class="line">        views.append(<span class="string">&quot;Keywords: &quot;</span> + <span class="string">&quot;, &quot;</span>.join(chunk[<span class="string">&quot;content&quot;</span>].split()[:<span class="number">10</span>]))</span><br><span class="line">    <span class="keyword">return</span> views</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建索引</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">index_document</span>(<span class="params">title</span>):</span><br><span class="line">    full_text = get_wikipedia_page(title)</span><br><span class="line">    titled_chunks = split_and_title(full_text)</span><br><span class="line">    mri_texts = multi_view_representations(titled_chunks)</span><br><span class="line">    RAG.index(collection=mri_texts, index_name=<span class="string">f&quot;RAG-MRI-RAPTOR-<span class="subst">&#123;title&#125;</span>&quot;</span>, max_document_length=<span class="number">180</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search</span>(<span class="params">query, k=<span class="number">3</span></span>):</span><br><span class="line">    results = RAG.search(query=query, k=k)</span><br><span class="line">    <span class="keyword">for</span> i, hit <span class="keyword">in</span> <span class="built_in">enumerate</span>(results, <span class="number">1</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Rank <span class="subst">&#123;i&#125;</span>: [Score: <span class="subst">&#123;hit[<span class="string">&#x27;score&#x27;</span>]:<span class="number">.2</span>f&#125;</span>]&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(hit[<span class="string">&#x27;content&#x27;</span>])</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;=&quot;</span>*<span class="number">80</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 示例运行</span></span><br><span class="line">index_document(<span class="string">&quot;Hayao Miyazaki&quot;</span>)</span><br><span class="line">search(<span class="string">&quot;Which animation studio did Hayao Miyazaki found?&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1238,191 +1407,6 @@ a[代码]--8118端口-->b[privoxy]--9050端口-->c[tor]--网桥/obfs4proxy-->d[�
 <p>比如说文本分割，框架提供的默认分割方法是分割到什么程度，我们需要的又是分割到什么程度，如果框架提供的分割粒度比较答，一篇文章分割之后，分割成了几个大段，我们后面匹配到了，一起放到大模型中生成回答也是一个巨大的计算量或者有些大模型都不支持，文本大了，相当于参数就多了，那生成回答的计算量就变大了，甚至有些参数都支持不了这么多参数。</p>
 <p>在比如说，在向量匹配的过程中，我们只能使用框架提供的匹配方法嘛，当然不是，毕竟框架不可能面面俱到，我们可能要做一些权重微调，或者换一种算法，再或者有的时候需要我们去关系型数据库中匹配。</p>
 <p>最后，既然大模型只是一个生成类人回答的作用，那我们是不是就可以把LLM就是一个接口，其中具体是什么大模型，我们不是特别关注，毕竟只要能给我们根据知识点生成一段通顺的回答就行，至于是LangChain还是chatGLM，又或者是阿里清华的大模型，我们都不是特别关注。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/18/%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">配置中心分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-04-18 20:33:29" itemprop="dateCreated datePublished" datetime="2024-04-18T20:33:29+08:00">2024-04-18</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>配置中心可以兼顾<strong>配置实时性、配置的流程管理、以及分布式场景</strong>的应用。</p>
-<p>配置实时性：传统的静态配置方式想要修改某个配置，则需要修改后重启，如果想要实现动态修改，可以使用数据库，采用轮询的方式，访问数据库获得配置数据。轮询频率低的话对配置数据变更的感知就慢，频率高的话，就会消耗过多的性能。</p>
-<p>配置管理流程：权限管理、灰度管理、版本管理、格式检验和安全配置</p>
-<p>分布式场景：随着采用分布式开发模式，项目之间的相互引用不断增多，相互之间的调用复杂度也指数上升，需要配置中心治理。</p>
-<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><p><strong>灰度发布</strong>：当配置修改影响较大时，需要先在部分实例中生效，验证配置变更符合预期之后再推送到所有实例。</p>
-<p><strong>权限管理</strong>：对配置变更的权限管控，以及对审计权限的管控</p>
-<p><strong>版本管理&amp;回滚</strong>：当配置变更不符合预期时，需要根据配置发布版本回滚</p>
-<p><strong>配置格式校验</strong>：配置数据一般会以一种配置格式存储，配置中心会对配置数据的格式进行校验，防止格式错误导致的各种问题</p>
-<p><strong>监听查询</strong>：当排查问题或者进行统计的时候，需要指导一个配置被哪些实例使用到，以及一个实例使用了哪些配置</p>
-<p><strong>多环境</strong>：生产环境中，配置中心常常需要涉及到多环境或者多集群，业务在开发环境和生产环境隔离开，或者根据不同的生产线存在多个生产环境，各环境隔离之后相互影响就小。</p>
-<p><strong>多集群</strong>：当对稳定性要求比较高，不允许各个环境相互影响的时候，需要将多环境通过多集群的方式进行物理隔离</p>
-<h3 id="常用配置中心"><a href="#常用配置中心" class="headerlink" title="常用配置中心"></a>常用配置中心</h3><h4 id="Apollo"><a href="#Apollo" class="headerlink" title="Apollo"></a>Apollo</h4><p><img src="/../images/spring-config/overall-architecture.png"></p>
-<h4 id="spring-cloud-config"><a href="#spring-cloud-config" class="headerlink" title="spring cloud config"></a>spring cloud config</h4><p><img src="/../images/spring-config/a3bb80c142c74634aa8ed67e8bf1ac3d.png" alt="overall-architecture"></p>
-<h4 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h4><p><img src="/../images/spring-config/1561217892717-1418fb9b-7faa-4324-87b9-f1740329f564.jpeg" alt="nacos_arch.jpg"></p>
-<h4 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h4><table>
-<thead>
-<tr>
-<th></th>
-<th>spring cloud config</th>
-<th>Apollo</th>
-<th>nacos</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>配置界面</td>
-<td>不支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>配置实时推送</td>
-<td>支持（spring cloud bus）</td>
-<td>支持（http长轮询）</td>
-<td>支持（http长轮询）</td>
-</tr>
-<tr>
-<td>版本管理</td>
-<td>支持（git）</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>配置回滚</td>
-<td>支持（git）</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>灰度发布</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>权限管理</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>多集群</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>多环境</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>监听查询</td>
-<td>支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>多语言</td>
-<td>java</td>
-<td>多语言</td>
-<td>多语言</td>
-</tr>
-<tr>
-<td>配置格式校验</td>
-<td>不支持</td>
-<td>支持</td>
-<td>支持</td>
-</tr>
-<tr>
-<td>分布式部署</td>
-<td>复杂</td>
-<td>复杂</td>
-<td>简单</td>
-</tr>
-<tr>
-<td>数据一致性</td>
-<td>git保证数据一致性，config service从git读取数据</td>
-<td>数据量模拟消息队列，Apollo定时读取消息队列</td>
-<td>http异步通知</td>
-</tr>
-<tr>
-<td>通信协议</td>
-<td>http、amqp</td>
-<td>http</td>
-<td>http</td>
-</tr>
-</tbody></table>
 
       
     </div>
