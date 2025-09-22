@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,104 +178,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/" class="post-title-link" itemprop="url">MySQL的回表</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-05-16 20:05:50" itemprop="dateCreated datePublished" datetime="2022-05-16T20:05:50+08:00">2022-05-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
-<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
-<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
-<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
-<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
-<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
-<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
-<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
-<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
-<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
-<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
-<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
-<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
-<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
-<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
-<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
-<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
-<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
-<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
-<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -751,7 +653,7 @@
 <p><img src="/../images/hexo/989fd0ab5cfeeb2da8a2f47f36c5c27f.png" alt="img"></p>
 <p>点击 Add SSH key。</p>
 <blockquote>
-<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#116;&#64;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#x63;&#x6f;&#109;">&#x67;&#105;&#116;&#64;&#103;&#105;&#116;&#x68;&#x75;&#x62;&#x2e;&#x63;&#x6f;&#109;</a></p>
+<p>测试是否成功： ssh -T <a href="mailto:&#x67;&#105;&#x74;&#64;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#46;&#x63;&#x6f;&#109;">&#x67;&#105;&#x74;&#64;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#46;&#x63;&#x6f;&#109;</a></p>
 </blockquote>
 <p>输入测试命令后，接着输入yes，出现下面这个提示说明成功：</p>
 <p><img src="/../images/hexo/b68af42afd637defd3a8cab7e281db22.png" alt="img"></p>

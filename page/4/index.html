@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,115 +178,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/30/CAP%E5%8E%9F%E5%88%99/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/03/30/CAP%E5%8E%9F%E5%88%99/" class="post-title-link" itemprop="url">CAP原则</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-03-30 18:35:20" itemprop="dateCreated datePublished" datetime="2023-03-30T18:35:20+08:00">2023-03-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
-<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
-<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
-<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
-<thead>
-<tr>
-<th>选项</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>一致性（Consistency</td>
-<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
-</tr>
-<tr>
-<td>可用性（Availability）</td>
-<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
-</tr>
-<tr>
-<td>分区容错性（Partition tolerance）</td>
-<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
-</tr>
-</tbody></table>
-<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
-<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
-<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
-<p>​			A、B、C三个分区，分区上的数据一致。现在操作A分区中的数据发生更改，在保证一直性的情况下，得先同步更改B、C分区上得数据。更改数据需要时间，在同步更改的这段时间中，是不是就不能对外提供服务。	如果要先保证可用性，那是不是就不能先同步更改B、C分区上的数据。由此就可以看出CAP不能同时存在。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>虽然CAP不能同时存在，但是在分布式系统中一般AP、CP也可以根据场景的不同解决我们的问题了。</p>
-<p>在可用性要求高的场景中，可以放弃一致性。这要求在数据不一致的情况下不影响我们的服务，比如NoSQL。</p>
-<p>在一致性要求高的场景中，可以放弃可用性。这种场景是对数据有很高的要求，比如转账服务，可以牺牲一段可用时间，以保证各分区数据同步一致。</p>
-<h4 id="折中方案"><a href="#折中方案" class="headerlink" title="折中方案"></a>折中方案</h4><p>在一致性要求比较高的场景中，同步各分区的时候，是不是需要同步到所有分区，如果同步一个或者大部分分区就可以的，那么这时候返回，是不是会提高可用性。这是一个在保证一致性的情况下提高可用性的办法，前提是同步到一个或大部分分区就可以保证我们的业务。</p>
-<p>归根究底，一致性和可用性不能同时兼得，一个增加另一个必然减少。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1591,6 +1482,104 @@
     如果在写完之后，那就不会回滚了，两种日志都写完了，能保证数据一致了。
 </code></pre>
 <p>3、在commit阶段提交redolog的时候发生异常，前面写完binlog就不会回滚了，那这里也不会回滚，能保证数据一致性。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/" class="post-title-link" itemprop="url">MySQL的回表</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-05-16 20:05:50" itemprop="dateCreated datePublished" datetime="2022-05-16T20:05:50+08:00">2022-05-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
+<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
+<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
+<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
+<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
+<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
+<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
+<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
+<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
+<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
+<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
+<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
+<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
+<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
+<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
+<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
+<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
+<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
+<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
+<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
 
       
     </div>

@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">46</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -178,137 +178,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/04/27/spring%E7%BC%93%E5%AD%98/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2024/04/27/spring%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">spring缓存</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-04-27 12:11:52" itemprop="dateCreated datePublished" datetime="2024-04-27T12:11:52+08:00">2024-04-27</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h3 id="各级缓存"><a href="#各级缓存" class="headerlink" title="各级缓存"></a>各级缓存</h3><p>spring中有三级缓存：一级二级三级。三个都是存储bean相关的内容，但是具体存储的内容有所差异。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>一级缓存</th>
-<th>二级缓存</th>
-<th>三级缓存</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>名称</td>
-<td>singletonObjects</td>
-<td>earlySingletonObjects</td>
-<td>singletonFactories</td>
-</tr>
-<tr>
-<td>类型</td>
-<td>ConcurrentHashMap</td>
-<td>HashMap</td>
-<td>HashMap</td>
-</tr>
-<tr>
-<td>定义</td>
-<td>定义是在DefaultSingletonBeanRegistry类中</td>
-<td>定义是在DefaultSingletonBeanRegistry类中</td>
-<td>定义是在DefaultSingletonBeanRegistry类中</td>
-</tr>
-<tr>
-<td>缓存内容</td>
-<td>存放就绪状态的Bean</td>
-<td>早期曝光的Bean</td>
-<td>创建用于获取Bean的工厂类-ObjectFactory实例</td>
-</tr>
-</tbody></table>
-<p><img src="/../images/spring-cache/image-20240427123420433.png" alt="image-20240427123420433"></p>
-<p>一级缓存：就绪状态的bean，保存在该缓存中的Bean所实现Aware子接口的方法已经回调完毕，自定义初始化方法已经执行完毕，也经过BeanPostProcessor实现类的postProcessorBeforeInitialization、postProcessorAfterInitialization方法处理。</p>
-<p>二级缓存：早期曝光的bean，一般只有处于循环引用状态的bean才会被保存在该缓存中，所实现的Aware子接口方法还未回调，自定义初始化方法还未执行。</p>
-<p>三级缓存：存放获取bean的工厂类-ObjectFactory实例，在IoC容器中，所有刚被创建出来的bean，默认都会保存到该缓存中。</p>
-<h3 id="解决循环依赖问题"><a href="#解决循环依赖问题" class="headerlink" title="解决循环依赖问题"></a>解决循环依赖问题</h3><p>什么是循环依赖：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceA</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceB circularServiceB;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CircularServiceB</span> &#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> CircularServiceA circularServiceA;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>在 A 和 B 循环依赖的场景中：</p>
-<p>B <code>populatedBean</code> 查找依赖项 A 的时候，从一级缓存中虽然未获取到 A，但是发现 A 在创建中。</p>
-<p>此时，从三级缓存中获取 A 的 <code>singletonFactory</code> 调用工厂方法，创建 <code>getEarlyBeanReference</code> A 的早期引用并返回。</p>
-<p>B 引用到 A ，B 就可以初始化完毕，然后 A 同样也可以初始化完毕了。</p>
-<p><img src="/../images/spring-cache/image-20240427154008953.png" alt="image-20240427154008953"></p>
-<h3 id="AOP代理"><a href="#AOP代理" class="headerlink" title="AOP代理"></a>AOP代理</h3><p>说是二级缓存其实已经能解决循环依赖的问题，但是为什么需要三级缓存呢。说是解决AOP代理的问题。</p>
-<p>如果只有二级缓存，虽然能解决循环依赖，但是在查询二级缓存中返回的实例，而不是我们需要的代理对象，所以添加了三级缓存，在三级对象中获取实例的时候，会经过判断，如果是代理对象则返回代理对象，如果是实例就返回实例。</p>
-<p>其实具体的我说的也不是很清楚，可以参考连接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/377878056">https://zhuanlan.zhihu.com/p/377878056</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 
@@ -1565,6 +1434,111 @@
 <p><img src="/../images/ai-chatgpt/795e4d0244dabc76f1cbae17e5eff242.webp" alt="img"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>​        网上好多资料说了一大堆高大尚的名词:深度学习、循环神经网络、自然语言处理技术、注意力机制、损失函数。这些都是具体实现，不做ai 的也没必要深入了解，知道chatGPT的大概原理也就够了。目前好多人说chatGPT的出现会对现在的社会造成巨大的冲击，绝大多数人都会失业。我想说这并不一定，上面也说了人工智能是根据概率推算结果的，这个概率是根据已有事件计算的，类似于绝大多数人说啥，他也会说啥。这也就是说，他是没有创造力的，他只能帮我们整理已有事件，不会突破已有的事件。比如说当绝大多数人都认为地球是-个平面的时候，chatGPT也会认为地球是一个平面，不会有思考发现地球是个球体。人工智能只是解放了我们生产力，让我们有更多的时间去完成一些创造性的事情。但是如果我们一直在做这种重复性的事情，没有思考创新，chatGPT的出现对我们来说绝对会是个巨大的灾难，至少摸鱼的机会会大大减少。</p>
 <p><img src="/../images/ai-chatgpt/eba3e800c5d91f0bd18bab2a2ac41e54.webp" alt="img"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/11/13/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/11/13/kafka%E4%BF%9D%E8%AF%81%E6%B6%88%E6%81%AF%E4%B8%8D%E4%B8%A2%E5%A4%B1/" class="post-title-link" itemprop="url">kafka保证消息不丢失</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-13 21:23:57" itemprop="dateCreated datePublished" datetime="2023-11-13T21:23:57+08:00">2023-11-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">中间件</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>在kafka的使用过程中，消息传递有下图三个步骤，消息的丢失也就在这三个步骤中：发送过程中丢失、同步过程中丢失、拉取过程中丢失。</p>
+<p><img src="/../images/kafka/image-20240331213103843.png" alt="image-20240331213103843"></p>
+<h3 id="发送过程中丢失"><a href="#发送过程中丢失" class="headerlink" title="发送过程中丢失"></a>发送过程中丢失</h3><h4 id="发送方式"><a href="#发送方式" class="headerlink" title="发送方式"></a>发送方式</h4><p>生产者的发送方式有三种：</p>
+<p>1、简单发送，不关心发送结果，所以发送失败消息丢失也不知道。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="comment">//这里只是把消息放进了一个缓冲区中，然后使用单独的线程将消息发送到服务端</span></span><br><span class="line">   producer.send(record);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(Exception)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、同步发送，等待发送返回</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line"><span class="keyword">try</span>&#123;</span><br><span class="line">   <span class="comment">//send方法返回的是Future&lt;RecordMetaData&gt; 对象，然后我们可以调用get()方法等待响应</span></span><br><span class="line">   Future&lt;RecordMetaData&gt; future = producer.send(record); </span><br><span class="line">   future.get();</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">catch</span>(Exception)&#123;</span><br><span class="line">   e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>3、异步发送，执行回调方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">DemoProducerCallback</span> <span class="keyword">implements</span> <span class="title class_">Callback</span>&#123;</span><br><span class="line">   <span class="meta">@override</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">onCompletion</span><span class="params">(RecordMetadata recordMetadata,Exception e)</span>&#123;</span><br><span class="line">       <span class="comment">//发生错误的回调方法,可以写入日志，或写入DB通过其它线程重重试，保证最终的数据送达</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line">ProducerRecord&lt;String,String&gt; record = <span class="keyword">new</span> <span class="title class_">ProducerRecord</span>&lt;&gt;(<span class="string">&quot;topicName&quot;</span>,<span class="string">&quot;key&quot;</span>,<span class="string">&quot;value&quot;</span>);</span><br><span class="line">producer.send(record，<span class="keyword">new</span> <span class="title class_">DemoProducerCallback</span>()))</span><br></pre></td></tr></table></figure>
+
+<p>在这三种发送方法中，第一种方法，无返回，不感知，所以也无法保证消息不丢失。所以要保证消息不丢失，只能选择第二种或者第三种，一般情况下更推荐第三种。</p>
+<h4 id="acks参数设置"><a href="#acks参数设置" class="headerlink" title="acks参数设置"></a>acks参数设置</h4><p>在生产者中有acks参数，该参数指定了kafka的多少个副本同步后才算消息发送成功。该参数取值范围：</p>
+<p>1、acks&#x3D;0，表示生产者在消息后不管有没有在leader磁盘上落盘，就认为消息发送成功。</p>
+<p>2、acks&#x3D;1，表示生产者在消息后，在leader磁盘上落盘，就认为消息发送成功，不管其他follower有没有同步。</p>
+<p>3、acks&#x3D;all，表示生产者在消息后，在leader磁盘上落盘，其他follower都同步落盘， 认为消息发送成功。</p>
+<p><img src="/../images/kafka/image-20240331222238322.png" alt="image-20240331222238322"></p>
+<h4 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h4><p>通过设置发送方式和acks参数，可以保证在发送方式中不丢失，甚至acks参数都可以保证后面的同步过程中消息不丢失。</p>
+<p>发送方式一般设置为异步发送，acks参数默认设置为1。</p>
+<h3 id="同步过程中丢失"><a href="#同步过程中丢失" class="headerlink" title="同步过程中丢失"></a>同步过程中丢失</h3><p>在同步过程中，除了上面说的答acks参数，还有其他副本机制保证消息不丢失。避免leader节点的崩溃导致消息的丢失。</p>
+<p>broker中的配置项,unclean.leader.election.enable &#x3D; false，表示不允许非ISR中的副本被选举为首领，以免数据丢失。</p>
+<p>ISR：是指与leader保持一定程度（这种范围是可通过参数进行配置的）同步的副本和 leader 共同被称为ISR</p>
+<p>OSR：与leader同步时，滞后很多的副本（不包括leader）被称为OSR</p>
+<p>AR，分区中所有的副本统称为AR。AR &#x3D; ISR + OSR</p>
+<h3 id="拉取过程中丢失"><a href="#拉取过程中丢失" class="headerlink" title="拉取过程中丢失"></a>拉取过程中丢失</h3><p>设置 enable.auto.commit &#x3D; false，在consumer端消费消息操作完成以后再手动提交 offset，类似于下文中的代码示例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">consumerMsg</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">        <span class="comment">//这里的poll(100)指的是kafka server端没有消息时，连接等待的时间，超过该时间立即返回空给consumer</span></span><br><span class="line">        ConsumerRecords&lt;String,String&gt; records = consomer.poll(<span class="number">100</span>);</span><br><span class="line">        <span class="keyword">for</span>(ConsumerRecord&lt;String,String&gt; record : records)&#123;</span><br><span class="line">            <span class="comment">// 这里是消费消息的逻辑（简单逻辑输入到控制台）</span></span><br><span class="line">            System.out.printIn(record.value));</span><br><span class="line">            <span class="comment">//提交偏移量</span></span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                consumer.commitSync();  <span class="comment">//同步提交 如果异步的话，可以使用 consumer.commitAsync();</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">catch</span>(CommitFailedException ex)&#123;</span><br><span class="line">                log.error(<span class="string">&quot;commit fail&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
       
     </div>
