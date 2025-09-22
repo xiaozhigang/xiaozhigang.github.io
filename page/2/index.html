@@ -1168,7 +1168,13 @@
 </ul>
 </li>
 </ul>
-<h5 id="加锁过程简要流程图（逻辑）"><a href="#加锁过程简要流程图（逻辑）" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程进入synchronized：</span><br><span class="line">    |</span><br><span class="line">    |-- 检查对象头Mark Word（是否偏向、锁状态）</span><br><span class="line">        |</span><br><span class="line">        |-- 如果空闲，则尝试通过CAS加锁（轻量级）</span><br><span class="line">        |</span><br><span class="line">        |-- 如果失败，有竞争，则升级为重量级锁（挂起线程）</span><br></pre></td></tr></table></figure>
+<h5 id="加锁过程简要流程图（逻辑）"><a href="#加锁过程简要流程图（逻辑）" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><pre class="mermaid">flowchart TD
+    A[线程进入 synchronized] --> B[检查对象头 Mark Word<br>是否偏向、锁状态]
+    B --> C{对象是否空闲?}
+    C -->|是| D[尝试通过 CAS 加锁 轻量级锁]
+    C -->|否| E{CAS 加锁是否成功?}
+    E -->|成功| F[获得锁 轻量级]
+    E -->|失败| G[有竞争 → 升级为重量级锁<br>线程挂起等待]</pre>
 
 
 
@@ -1193,7 +1199,10 @@
 <li>调用 <code>lock()</code> 会尝试通过 CAS 修改一个 <strong>state 状态变量</strong>，来标识是否持有锁。</li>
 <li>若获取失败，线程会被放入 AQS 的 <strong>双向等待队列</strong>中，等待唤醒。</li>
 </ul>
-<h5 id="加锁过程简要流程图（逻辑）-1"><a href="#加锁过程简要流程图（逻辑）-1" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">线程调用lock()：</span><br><span class="line">    |</span><br><span class="line">    |<span class="comment">-- 尝试通过CAS将state从0改为1（加锁）</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果成功，获得锁</span></span><br><span class="line">        |</span><br><span class="line">        |<span class="comment">-- 如果失败，进入AQS等待队列</span></span><br></pre></td></tr></table></figure>
+<h5 id="加锁过程简要流程图（逻辑）-1"><a href="#加锁过程简要流程图（逻辑）-1" class="headerlink" title="加锁过程简要流程图（逻辑）"></a>加锁过程简要流程图（逻辑）</h5><pre class="mermaid">flowchart TD
+    A[线程调用lock] --> B{CAS 尝试将 state 从 0 改为 1}
+    B -->|成功| C[获得锁]
+    B -->|失败| D[进入 AQS 等待队列]</pre>
 
 
 
