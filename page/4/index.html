@@ -150,7 +150,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">46</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -161,7 +161,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">34</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -178,6 +178,398 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/03/30/CAP%E5%8E%9F%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/03/30/CAP%E5%8E%9F%E5%88%99/" class="post-title-link" itemprop="url">CAP原则</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-30 18:35:20" itemprop="dateCreated datePublished" datetime="2023-03-30T18:35:20+08:00">2023-03-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h3 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h3><p>提到分布式，那么CAP原则是绕不过去的，那么什么是CAP原则呢。</p>
+<p>CAP原则：在一个分布式系统中，一致性（Consistency）、可用性（Availability）、分区容错性（Partition tolerance）不可能都同时满足，最多只能同时满足两个。</p>
+<p><img src="/../images/CAP/fenbushi-6b0609de-e2ce-4778-b76f-018af80c617f.jpg" alt="img"></p>
+<h3 id="详解"><a href="#详解" class="headerlink" title="详解"></a>详解</h3><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>一致性（Consistency</td>
+<td>指在分布式系统中，多个副本之间能够保持严格的数据一致性。</td>
+</tr>
+<tr>
+<td>可用性（Availability）</td>
+<td>指服务一直处于可用状态，每次请求都能获取非错响应</td>
+</tr>
+<tr>
+<td>分区容错性（Partition tolerance）</td>
+<td>指在分布式系统中，某个分区或副本出故障了，其他分区或副本能继续对外提供服务</td>
+</tr>
+</tbody></table>
+<h4 id="为什么不能CAP兼容"><a href="#为什么不能CAP兼容" class="headerlink" title="为什么不能CAP兼容"></a>为什么不能CAP兼容</h4><p>1、在分布式系统中，分区容错性肯定是必须的，所以必须要有P。</p>
+<p>2、添加C，就是添加一致性，那么就是要保证所有分区中的数据是一致的。假设有A、B、C三个分区，现在分区上的数据一致。</p>
+<p>3、添加A，添加可用性，保证服务一直可用，我们看能不能达到这种效果。</p>
+<p>​			A、B、C三个分区，分区上的数据一致。现在操作A分区中的数据发生更改，在保证一直性的情况下，得先同步更改B、C分区上得数据。更改数据需要时间，在同步更改的这段时间中，是不是就不能对外提供服务。	如果要先保证可用性，那是不是就不能先同步更改B、C分区上的数据。由此就可以看出CAP不能同时存在。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>虽然CAP不能同时存在，但是在分布式系统中一般AP、CP也可以根据场景的不同解决我们的问题了。</p>
+<p>在可用性要求高的场景中，可以放弃一致性。这要求在数据不一致的情况下不影响我们的服务，比如NoSQL。</p>
+<p>在一致性要求高的场景中，可以放弃可用性。这种场景是对数据有很高的要求，比如转账服务，可以牺牲一段可用时间，以保证各分区数据同步一致。</p>
+<h4 id="折中方案"><a href="#折中方案" class="headerlink" title="折中方案"></a>折中方案</h4><p>在一致性要求比较高的场景中，同步各分区的时候，是不是需要同步到所有分区，如果同步一个或者大部分分区就可以的，那么这时候返回，是不是会提高可用性。这是一个在保证一致性的情况下提高可用性的办法，前提是同步到一个或大部分分区就可以保证我们的业务。</p>
+<p>归根究底，一致性和可用性不能同时兼得，一个增加另一个必然减少。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/20/Java%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/20/Java%E4%B8%AD%E7%9A%84%E4%BB%A3%E7%90%86%E5%AF%B9%E8%B1%A1/" class="post-title-link" itemprop="url">Java中的代理对象</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-20 20:26:53" itemprop="dateCreated datePublished" datetime="2023-02-20T20:26:53+08:00">2023-02-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>​	在java中，我们用到的代理主要有两种：静态代理、动态代理。静态代理相对比较简单易懂，逻辑清晰；而动态代理逻辑就比较绕，比较复杂。相对的，一得一失，静态代理代码冗余不够灵活，而动态代理的代码就比较灵活方便。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>静态代理</th>
+<th>动态代理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>代理类生成时间</td>
+<td>编译期写死</td>
+<td>运行时动态生成</td>
+</tr>
+<tr>
+<td>开发成本</td>
+<td>高（每个接口都要写代理类）</td>
+<td>低（统一写 InvocationHandler &#x2F; MethodInterceptor）</td>
+</tr>
+<tr>
+<td>灵活性</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>较高（无反射）</td>
+<td>稍低（有反射&#x2F;字节码增强）</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>代理对象少，结构简单</td>
+<td>需要通用代理、AOP 框架（Spring）</td>
+</tr>
+</tbody></table>
+<h3 id="静态代理"><a href="#静态代理" class="headerlink" title="静态代理"></a>静态代理</h3><p><strong>写法</strong>：需要在代码里手动编写一个代理类，代理类和目标类实现同一个接口。</p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>编译期确定代理关系。</li>
+<li>代理类是提前写好的，结构固定。</li>
+<li>每增加一个接口或方法，都需要手动维护代理类，扩展性差。</li>
+</ul>
+<p><strong>优点</strong>：逻辑清晰，性能开销小（没有反射）。</p>
+<p><strong>缺点</strong>：代码冗余严重，不灵活。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addUser</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addUser</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;添加用户: &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态代理类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceProxy</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> UserService target;</span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">UserServiceProxy</span><span class="params">(UserService target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addUser</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;前置处理&quot;</span>);</span><br><span class="line">        target.addUser(name);</span><br><span class="line">        System.out.println(<span class="string">&quot;后置处理&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">UserService</span> <span class="variable">service</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserServiceProxy</span>(<span class="keyword">new</span> <span class="title class_">UserServiceImpl</span>());</span><br><span class="line">        service.addUser(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="动态代理"><a href="#动态代理" class="headerlink" title="动态代理"></a>动态代理</h3><p><strong>写法</strong>：在运行时动态生成代理类，不需要提前写死。</p>
+<ul>
+<li><strong>JDK 动态代理</strong>：基于接口 + <code>InvocationHandler</code> + 反射。</li>
+<li><strong>CGLIB 动态代理</strong>：基于字节码生成（子类继承目标类）。</li>
+</ul>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>运行期确定代理关系。</li>
+<li>不需要手动写代理类，灵活。</li>
+<li>依赖反射或字节码增强，性能比静态代理稍弱（但现代 JVM 优化后差距不大）。</li>
+</ul>
+<p><strong>优点</strong>：通用性强，减少代码冗余。</p>
+<p><strong>缺点</strong>：调试困难，可能有性能损耗。</p>
+<p>​	</p>
+<p>​	动态代理分为两类：JDK动态代理、CGLIB动态代理</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>JDK 动态代理</th>
+<th>CGLIB 代理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>代理对象</strong></td>
+<td>接口的实现类</td>
+<td>目标类的子类</td>
+</tr>
+<tr>
+<td><strong>是否需要接口</strong></td>
+<td>必须有接口</td>
+<td>不需要接口</td>
+</tr>
+<tr>
+<td><strong>底层实现</strong></td>
+<td>反射（Proxy + InvocationHandler）</td>
+<td>字节码增强（ASM + MethodInterceptor）</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>JDK 1.8 之前略慢，之后优化较好</td>
+<td>一般比反射快，但生成类开销大</td>
+</tr>
+<tr>
+<td><strong>限制</strong></td>
+<td>只能代理接口方法</td>
+<td>不能代理 final 类&#x2F;方法</td>
+</tr>
+</tbody></table>
+<h4 id="JDK动态代理"><a href="#JDK动态代理" class="headerlink" title="JDK动态代理"></a>JDK动态代理</h4><h5 id="接口-实现类"><a href="#接口-实现类" class="headerlink" title="接口 &amp; 实现类"></a>接口 &amp; 实现类</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">addUser</span><span class="params">(String name)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addUser</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;添加用户: &quot;</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="JDK-动态代理实现"><a href="#JDK-动态代理实现" class="headerlink" title="JDK 动态代理实现"></a>JDK 动态代理实现</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.InvocationHandler;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Proxy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JdkProxyDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">UserService</span> <span class="variable">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserServiceImpl</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">UserService</span> <span class="variable">proxy</span> <span class="operator">=</span> (UserService) Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;UserService.class&#125;,</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">InvocationHandler</span>() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;[JDK代理] 调用方法前: &quot;</span> + method.getName());</span><br><span class="line">                        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">                        System.out.println(<span class="string">&quot;[JDK代理] 调用方法后: &quot;</span> + method.getName());</span><br><span class="line">                        <span class="keyword">return</span> result;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        proxy.addUser(<span class="string">&quot;张三&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="CGLIB动态代理"><a href="#CGLIB动态代理" class="headerlink" title="CGLIB动态代理"></a>CGLIB动态代理</h4><h5 id="目标类（没有接口）"><a href="#目标类（没有接口）" class="headerlink" title="目标类（没有接口）"></a>目标类（没有接口）</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">OrderService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">createOrder</span><span class="params">(String orderId)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;创建订单: &quot;</span> + orderId);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="CGLIB-代理实现"><a href="#CGLIB-代理实现" class="headerlink" title="CGLIB 代理实现"></a>CGLIB 代理实现</h5><p>需要引入依赖（如果是 Spring Boot 项目已经有了 <code>spring-core</code>，包含 CGLIB）。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>cglib<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>cglib<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.3.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> net.sf.cglib.proxy.Enhancer;</span><br><span class="line"><span class="keyword">import</span> net.sf.cglib.proxy.MethodInterceptor;</span><br><span class="line"><span class="keyword">import</span> net.sf.cglib.proxy.MethodProxy;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CglibProxyDemo</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">OrderService</span> <span class="variable">target</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OrderService</span>();</span><br><span class="line"></span><br><span class="line">        <span class="type">OrderService</span> <span class="variable">proxy</span> <span class="operator">=</span> (OrderService) Enhancer.create(</span><br><span class="line">                OrderService.class,</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">MethodInterceptor</span>() &#123;</span><br><span class="line">                    <span class="meta">@Override</span></span><br><span class="line">                    <span class="keyword">public</span> Object <span class="title function_">intercept</span><span class="params">(Object obj, Method method, Object[] args, MethodProxy proxy)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">                        System.out.println(<span class="string">&quot;[CGLIB代理] 调用方法前: &quot;</span> + method.getName());</span><br><span class="line">                        <span class="type">Object</span> <span class="variable">result</span> <span class="operator">=</span> method.invoke(target, args);</span><br><span class="line">                        System.out.println(<span class="string">&quot;[CGLIB代理] 调用方法后: &quot;</span> + method.getName());</span><br><span class="line">                        <span class="keyword">return</span> result;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        proxy.createOrder(<span class="string">&quot;ORD123456&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/01/06/COLA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="xiaozhigang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="xiaozhigang">
+      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | xiaozhigang">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/01/06/COLA/" class="post-title-link" itemprop="url">COLA</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-01-06 08:10:50" itemprop="dateCreated datePublished" datetime="2023-01-06T08:10:50+08:00">2023-01-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">架构</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h2><p>四层结构</p>
+<p><img src="/../images/COLA/cola-arch.jpg" alt="cola-arch.jpg"></p>
+<ol>
+<li><p>适配层（Adapter Layer）：负责对前端展示（web，wireless，wap）的路由和适配，对于传统B&#x2F;S系统而言，adapter就相当于MVC中的controller；</p>
+</li>
+<li><p>应用层（Application Layer）：主要负责获取输入，组装上下文，参数校验，调用领域层做业务处理，如果需要的话，发送消息通知等。层次是开放的，应用层也可以绕过领域层，直接访问基础实施层；</p>
+</li>
+<li><p>领域层（Domain Layer）：主要是封装了核心业务逻辑，并通过领域服务（Domain Service）和领域对象（Domain Entity）的方法对App层提供业务实体和业务逻辑计算。领域是应用的核心，不依赖任何其他层次；</p>
+</li>
+<li><p>基础实施层（Infrastructure Layer）：主要负责技术细节问题的处理，比如数据库的CRUD、搜索引擎、文件系统、分布式服务的RPC等。此外，领域防腐的重任也落在这里，外部依赖需要通过gateway的转义处理，才能被上面的App层和Domain层使用。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/01/06/COLA/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1199,303 +1591,6 @@
     如果在写完之后，那就不会回滚了，两种日志都写完了，能保证数据一致了。
 </code></pre>
 <p>3、在commit阶段提交redolog的时候发生异常，前面写完binlog就不会回滚了，那这里也不会回滚，能保证数据一致性。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/16/MySQL%E7%9A%84%E5%9B%9E%E8%A1%A8/" class="post-title-link" itemprop="url">MySQL的回表</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-05-16 20:05:50" itemprop="dateCreated datePublished" datetime="2022-05-16T20:05:50+08:00">2022-05-16</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>说起回表，肯定要说起MySQL的存储结构B+树。</p>
-<p>每条数据是以主键和数据的形式存放在B+树的节点上，如果我们通过主键查询的话，直接通过和节点上的主键比较判断，相等的话直接取。</p>
-<p>其他索引是将索引和主键值放在一起的，通过索引查到主键，在通过主键去查找数据。这也就是为什么主键索引会比其他索引快。</p>
-<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>主键和数据是通过B+数的形式存储的，查的时候肯定也是通过树的查询方式查询的。如下图查询主键Id为4的数据，先根据根节点查询，4小于10，再往子节点查找，然后跟子节点的值比较，在2、4之间，再寻找这区间的节点，第一个值是3，不匹配，在查找下一个，值是4匹配，放回数据记录data。</p>
-<p><img src="/../images/MySQL-index/58766bb4795d68c3b07e87d644a4d428.webp" alt="img"></p>
-<h2 id="非主键索引查询"><a href="#非主键索引查询" class="headerlink" title="非主键索引查询"></a>非主键索引查询</h2><p>其实和主键查询差不多，只不过相当于两次主键索引查询，第一个查询到的不是数据，是主键值，再根据主键值，按照主键索引查询再来一次。如图，如果数据有一条数据是2019-04-01创建的，数据的主键id为4，我们想根据这个创建时间（不知道主键id）找到这条数据。那就是先根据创建时间找到主键4，后根据主键4找到记录数据data。</p>
-<p><img src="/../images/MySQL-index/2f0c5be33615ff0c340888bcc098a189.webp" alt="img"></p>
-<h2 id="回表"><a href="#回表" class="headerlink" title="回表"></a>回表</h2><p>分主键索引相当于两次查询，第一次查询主键，第二次查询数据，将第二次查询的数据结果放回给第一次查询结果，就叫回表。按照上面的图示，就是将data放回到创建时间的查询中。</p>
-<h3 id="覆盖查询"><a href="#覆盖查询" class="headerlink" title="覆盖查询"></a>覆盖查询</h3><p>使用非主键查询的时候，也会存在不用回表的情况，这种叫做覆盖查询。</p>
-<p>什么是覆盖查询呢，就是在我们使用索引的时候，索引本身包含的数据字段已经满足查询要求的字段了，就不用具体根据主键去找具体的记录数据了。</p>
-<p>如果有一份人员信息数据，存有名称，性别，出生日期和其他一些字段。由于通过出生日期和性别的查询较多，我们用这两个字段构建了一个联合索引。现在我们要查询2019-04-01出生的女孩人数。</p>
-<p>如图，联合索引按出生日期和性别联合构建的索引，先按出生日期排序，再按性别排序。通过索引，查询到只有一个主键为4满足，这时候我们需要计数，因为主键是唯一的，也不需要我们通过主键再次查询了，计算主键数量就够了，直接返回1。这就不用回表。</p>
-<p><img src="/../images/MySQL-index/c379c97c3c8519501326ec8dc6b7f60f.webp" alt="img"></p>
-<h3 id="最左覆盖原则"><a href="#最左覆盖原则" class="headerlink" title="最左覆盖原则"></a>最左覆盖原则</h3><p>上面我们说到根据联合索引查询，其实联合索引有两个值，我们只根据一个值去查询的，但也查询到了。这是为啥呢，这就是最左覆盖原则。根据我们的查询条件，会匹配索引，从左边第一个字段开始，所以我们查询的时候有条件过滤最好和索引顺序一直。如上图，我们查询的是整个表里面有女生多少人就没办法走联合索引了。</p>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>是不是觉得这个B+树还挺好用的，思路挺清晰的。但是如果我们的B+树层级很深，是不是查询比较的次数就多了，耗时也就多了，也就不好用了。所以大家知道B+树有多少层吗？</p>
-<p>B+树一般是3<del>4层，为啥说3</del>4层呢，这也是个计算值，我们看一下具体怎么计算的。</p>
-<p>MySQL的引擎是InnoDB，InnoDB默认页大小是16k，当然也可以设置，B+树的每个节点都是一页。从上面可以知道，节点分为数据节点和非数据节点，</p>
-<p>在数据节点中，通常数据大小为1k，16k &#x2F; 1k &#x3D; 16，也就是每个数据页中大概会存放16条数据。</p>
-<p>在非数据节点中，主要存放的是主键ID和指针，主键大概8字节，指针大概6字节，总共14字节，1k&#x3D;1024字节，整页可以存放1170个（16 * 1024 &#x2F; 14 &#x3D; 1170）。</p>
-<p>在3层的情况下，2层非数据节点，1层数据节点，可以存放大概21902400条数据。1170<em>1170</em>16&#x3D;21902400，已经到千万级别了，一个表里放千万条数据已经很大了，再大就要考虑分库分表了。</p>
-<p><img src="/../images/MySQL-index/20ae97fc3959cd209f27dabd2f6f43e8.webp" alt="img"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/05/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/05/08/HashMap%E5%92%8CConcurrentHashMap%E7%9A%84put%E6%96%B9%E6%B3%95%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">HashMap和ConcurrentHashMap的put方法详解</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-05-08 21:07:31" itemprop="dateCreated datePublished" datetime="2022-05-08T21:07:31+08:00">2022-05-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="结构简述"><a href="#结构简述" class="headerlink" title="结构简述"></a>结构简述</h2><p>HashMap和ConcurrentHashMap的结构都是一样的，jdk1.8之后都是  数组+链表+红黑树，链表长度超过8之后转红黑树。</p>
-<p>计算</p>
-<p>节点为6个的时候，链表的平均查询时间：(1+2+3+4+5+6)&#x2F; 6 &#x3D; 3.5，红黑树的平均查询时间 (1+2<em>2+3</em>3)&#x2F;6&#x3D;2.3</p>
-<p>节点为7个的时候，链表的平均查询时间：(1+2+3+4+5+6+7)&#x2F; 7 &#x3D; 4，红黑树的平均查询时间 (1+2<em>2+3</em>4)&#x2F;7&#x3D;2.4</p>
-<p>节点为8个的时候，链表的平均查询时间：(1+2+3+4+5+6+7+8)&#x2F; 8 &#x3D; 4.5，红黑树的平均查询时间 (1+2<em>2+3</em>4+1*4)&#x2F;8&#x3D;2.6</p>
-<p>链表的时间复杂度为O(n)，而树的时间复杂度为O(ln n)，上面计算有明显的效率变化，至于为啥选8这个阈值，应该是基于大量数据收集之后比较而定的。</p>
-<h3 id="结构图"><a href="#结构图" class="headerlink" title="结构图"></a>结构图</h3><p><img src="/../images/HashMap/e890825ae4e552904f23d0af9dd2dba8.webp"></p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/4c43ad59e6d9647f7a7ae3c1d2ed668e.webp" alt="img"></p>
-<h3 id="代码详解"><a href="#代码详解" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/4234473148fe5ddc2845eee9d7745e08.webp"></p>
-<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><h3 id="流程图-1"><a href="#流程图-1" class="headerlink" title="流程图"></a>流程图</h3><p><img src="/../images/HashMap/9087d590fa217eb27e7ca95bde84583f.webp"></p>
-<h3 id="代码详解-1"><a href="#代码详解-1" class="headerlink" title="代码详解"></a>代码详解</h3><p><img src="/../images/HashMap/937fe4d4a476d972924fa22f16d60852.webp"></p>
-<p><img src="/../images/HashMap/38df956bd67a2da550ba658d221286a5.webp"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/26/%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="xiaozhigang">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="xiaozhigang">
-      <meta itemprop="description" content="最后不知天在水，满船清梦压星河。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | xiaozhigang">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/04/26/%E6%95%B0%E7%BB%84%E5%92%8C%E9%93%BE%E8%A1%A8%E7%9A%84%E5%8C%BA%E5%88%AB/" class="post-title-link" itemprop="url">数组和链表的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-04-26 22:06:29" itemprop="dateCreated datePublished" datetime="2022-04-26T22:06:29+08:00">2022-04-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>虽然网上已经有很多了，但是我还是尝试总结一下，添加一点自己的心得。</p>
-<p>总体来说，数组和链表是两种数据结构，所有的异同都是这两种数据结构的特点导致的。这两种数宝结构是计算机的基本数据结构，基态所有都是基于这两种数据结构实现的，只不过在细节上有区别。</p>
-<h2 id="简述"><a href="#简述" class="headerlink" title="简述"></a>简述</h2><p>数组：多用于读多写少的情况，读取O(1)，写入O(n)，修改O(1)，删除O(n)；需要连续内存。</p>
-<p>链表：多用于读少写多的情况，读取O(n)，写入O(1)，修改O(n)，删除O(1)；不需要连续内存。</p>
-<h2 id="数据结构差异"><a href="#数据结构差异" class="headerlink" title="数据结构差异"></a>数据结构差异</h2><p>​        从下图很明显就能看出两者的差别。数组需要连续，即连在一起，而链表不需要，只需要有个指针指向下一个。但是这个指向下一个的指针，也需要占用内存，导致链表中的单个元素比数组中的一个元素的内存大。</p>
-<p><img src="/../images/java-link/image-20240326230530963.png" alt="image-20240326230530963"></p>
-<h2 id="增删改查的效率差异"><a href="#增删改查的效率差异" class="headerlink" title="增删改查的效率差异"></a>增删改查的效率差异</h2><p>上面的数据结构差异，不可避免的导致了读写性能的差异。</p>
-<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>就像把人都聚集在一起，排好大小个顺序放在一个房间(连续内存)里。</p>
-<pre><code>查：一般我们查，都是按下标去查数组里的元素，也就相当于知道按大小顺序排的第多少个，直接找到就行。O(1)
-
-改：既然我们能查到某个元素，改的话就是换掉这个元素。就相当于找到某个位置的人，把这个人换掉，一个位置换个人而已。O(1)
-
-增：这时候你需要增加一个人（元素）进来，找到位置，这时候这位置上原本是有人（元素）的，那现在插入的人（元素）来了，这位置和后面位置的人都要向后移一位。   O(n)
-
-删：这刚好和上面的增操作是相反操作。找到合适位置后，踢出这个人（元素），后面位置上的人（元素）都要前进一位。O(n)
-</code></pre>
-<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><p> 就像我们把一个一个人分开，他们每个人只知道排在自己后面的人在什么位置(也可以知道前一个人)，类似于手拉手排队一样。</p>
-<pre><code>查：这时候没有具体位置给我们，因为我们也不知道每个人（元素）的具体位置。只是因为大家手拉手（指针）的原因，前一个人能找到排在他后面位置的人。那我们找一个人的时候，就需要每个人都问一边，问一下是不是我们要找的人，不是的话再找下一个，直至找到或者找完。O(n)
-
-改：和上面相同，既然能找到，就能换掉，只不过这次换有点特殊。每个人都是手拉手（指针），我们换掉之后要保证他们还是手拉手（指针）。O(n)
-
-增：这时候你需要增加一个人（元素）进来，找到位置，这时候这位置上原本是有人（元素）的，后面的位置也可能是有人（元素）的，此时我们不要移动后面的人，只需要前后位置人的手牵到的是新增人员（元素）的手行，这样就减少了移动的操作。O(1)
-
-删：这刚好和上面的增操作是相反操作。找到合适位置后，踢出这个人（元素），这位置前后面位置上的人（元素）手拉手就行。O(1)
-</code></pre>
-<p><img src="/../images/java-link/d16999981a659815687de65c2c060f35.webp" alt="img"></p>
-<h2 id="空间差异"><a href="#空间差异" class="headerlink" title="空间差异"></a>空间差异</h2><h3 id="数组-1"><a href="#数组-1" class="headerlink" title="数组"></a>数组</h3><p>上面也说到了，数组就像把人都聚集在一起，排好大小个顺序放在一个房间(连续内存)里，那对房子的要求就比较高，需要有足够大的房子。如果新增一人，房间（连续内存）不够大了，那所有的人都要换一个大一点的房子进去按顺序排着。这样就不利于扩展，大家都知道大房子（连续内存）是稀缺资源。</p>
-<h3 id="链表-1"><a href="#链表-1" class="headerlink" title="链表"></a>链表</h3><p>而链表就比较友好了，有块空地(内存)就行，因为不需要房子(连续内存)，这样对于空间(内存)利用率就比较高，能把所有没有房子(非连续内存)的地方都用上，这样就比较适合添加人。</p>
-<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>其实计算机的所有底层内存逻辑基本都按这个连续和不连续的模式来的。比如二叉树这种数据结构，说白了也就是链表的一种变种，由链表的指向下一个变成指向下两个。</p>
-<p>除此之外，在jvm底层的垃圾回收，基本也是按照这种套路，新老代的垃圾回收，各种回收算法。比如标记清理、标记整理。</p>
-<p>标记清理: 只是把内存中无效的对象删掉，可以想象，一块内存中，其中有的对象被删了有的没删，这就导致这部分内存可用性就低，因为内存被没删的内存分隔成一小段一小段的，不是连续的。虽然空间利用率不高，但是这种办法简单，只要删掉无效的对象就行。</p>
-<p>标记整理: 算法的前部分和标记-清理算法一样，将无效对象删掉，但是资格算法还有后续，将剩余的对象整理一起，放在内存的一端，这样空出的内存就又连续上了。这种算法对空间的利用率就比较好，但是比较麻烦，毕竟要整理嘛。</p>
-<p><img src="/../images/java-link/cf72233c16942487ce3bd3f0d82b4652.webp" alt="img"></p>
 
       
     </div>
